@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Libre+Baskerville:wght@400;700&display=swap');
+
+:root { --cream:#f7f3eb; --navy:#17283b; --gold:#c89b4a; --teal:#377d7b; }
+* { box-sizing:border-box; }
+html { background:var(--cream); }
+body { margin:0; color:var(--navy); background:var(--cream); font-family:'DM Sans', sans-serif; }
+a { color:inherit; }
+main { min-height:100svh; }
+.shell { width:min(1120px, calc(100% - 40px)); margin:0 auto; }
+.eyebrow { letter-spacing:.16em; text-transform:uppercase; font-size:.72rem; font-weight:600; }
+.serif { font-family:'Libre Baskerville', Georgia, serif; }
+.button { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 22px; border:1px solid var(--gold); background:var(--gold); color:var(--navy); text-decoration:none; font-weight:600; border-radius:2px; transition:transform .2s ease, background .2s ease; }
+.button:hover, .button:focus-visible { transform:translateY(-2px); background:#d6ae63; }
+.button.secondary { background:transparent; color:var(--navy); }
+.button:focus-visible, a:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
+@media (prefers-reduced-motion:reduce) { *, *::before, *::after { transition:none !important; } }
