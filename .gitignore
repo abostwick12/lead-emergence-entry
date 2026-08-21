@@ -5,6 +5,9 @@ node_modules
 coverage
 playwright-report
 test-results
+.vercel/
 *.tsbuildinfo
 supabase/.temp/
 supabase/.branches/
+AGENTS.md
+CLAUDE.md

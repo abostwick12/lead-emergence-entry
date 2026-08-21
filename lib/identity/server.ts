@@ -10,8 +10,8 @@ export async function requireCanonicalIdentity() {
   return { supabase, user };
 }
 
-export async function getActiveProducts(userId: string, supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>): Promise<Product[]> {
-  const { data, error } = await supabase.schema('entry_identity').from('product_entitlements').select('product').eq('canonical_user_id', userId).eq('status', 'ACTIVE');
+export async function getActiveProducts(supabase: Awaited<ReturnType<typeof createSupabaseServerClient>>): Promise<Product[]> {
+  const { data, error } = await supabase.rpc('get_my_active_entry_products');
   if (error) throw new Error('Unable to load product access');
-  return (data ?? []).map((row) => row.product as Product);
+  return (data ?? []).map((row: { product: Product }) => row.product);
 }

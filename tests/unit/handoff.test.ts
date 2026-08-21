@@ -22,7 +22,10 @@ describe('handoff protocol', () => {
     const expired = await token({ exp: Math.floor(Date.now() / 1000) - 1 });
     await expect(jwtVerify(expired.token, expired.publicKey)).rejects.toThrow();
     const valid = await token();
-    const modified = `${valid.token.slice(0, -1)}${valid.token.endsWith('a') ? 'b' : 'a'}`;
+    const parts = valid.token.split('.');
+    const signature = parts[2];
+    const replacement = signature[0] === 'a' ? 'b' : 'a';
+    const modified = `${parts[0]}.${parts[1]}.${replacement}${signature.slice(1)}`;
     await expect(jwtVerify(modified, valid.publicKey)).rejects.toThrow();
   });
 
