@@ -1,6 +1,6 @@
 # Entry → Consulting one-login SSO
 
-Status on 2026-08-21: **implemented and locally accepted; not ready for production cutover**. This document is the Entry-side architecture, operating contract, deployment order, rollback plan, and cutover checklist. Production changes, real users, DNS, and traffic remain outside this change.
+Status on 2026-08-21: **READY FOR PRODUCTION CUTOVER; cutover is not authorized or executed**. Development implementation, security review, hosted acceptance, rollback preparation, and both repository quality gates are complete. This document is the Entry-side architecture, operating contract, deployment order, rollback plan, and cutover checklist. Production changes, real users, DNS, and traffic remain outside this change.
 
 ## Authority boundary
 
@@ -168,7 +168,7 @@ On 2026-08-21, isolated development and hosted-preview testing passed:
 - explicit existing-account linking and active/no-membership/removed-membership/wrong-tenant/private-record authorization cases;
 - Consulting-only logout followed by passwordless reauthorization from the surviving Entry session;
 - Entry dev hosted `site_url`, exact callback, OAuth server, confidential Consulting client, consent route, and one-key JWKS configuration;
-- dedicated hosted Consulting dev project with the exact 20-migration chain and 358 pgTAP assertions;
+- dedicated hosted Consulting dev project with the exact 21-migration chain and 361 local/CI pgTAP assertions, plus hosted catalog verification of the approved service-only prospect-note RLS hardening;
 - protected Vercel previews completing the full Entry entitlement and Consulting local-authorization matrices without a second Consulting password page or browser console errors;
 - real local mailbox password recovery with old-password rejection and zero browser errors.
 
@@ -182,8 +182,8 @@ Do not cut over until every item below is complete:
 - production Entry Auth has the approved public `site_url`, exact callback/recovery allow-list, OAuth server, and separately rotated Consulting client registration;
 - leaked-password protection is enabled or an explicitly approved compensating control/risk acceptance exists;
 - the production Consulting target has the prerequisite canonical-link migration and new OIDC-link migration, plus the approved environment-specific provider, origins, exact callbacks, and rotated credentials;
-- the owner approves or explicitly accepts the documented service-only `consulting_private.prospect_notes` RLS hardening decision before the production migration window;
+- the production Consulting migration plan includes the approved `20260822025341_harden_prospect_notes_rls.sql` service-only defense-in-depth migration;
 - Backup/restore evidence, credential rotation, monitoring dashboards/alerts, operator ownership, rollback rehearsal, real-user duplicate/conflict review, support messaging, and explicit cutover approval are recorded.
 - a production-window synthetic canary repeats first-time, returning, denial, logout, and local-revocation paths before real-user linking.
 
-Development acceptance is complete. Production configuration, migration, merging, canary execution, and real-user linking remain separately approved actions; merge alone does not authorize infrastructure or traffic changes.
+Development acceptance is complete and the system is **READY FOR PRODUCTION CUTOVER**. Production configuration, migration, merging, canary execution, and real-user linking remain separately approved actions; merge alone does not authorize infrastructure or traffic changes.
