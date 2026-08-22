@@ -159,7 +159,7 @@ Incident order:
 
 ## Current verification evidence
 
-On 2026-08-21, isolated development testing passed:
+On 2026-08-21, isolated development and hosted-preview testing passed:
 
 - clean Entry database rebuild and 44 pgTAP assertions;
 - 13 unit tests, lint, typecheck, production build, schema lint, and dependency audit with zero vulnerabilities;
@@ -167,20 +167,23 @@ On 2026-08-21, isolated development testing passed:
 - `ACTIVE`, `SUSPENDED`, `REVOKED`, absent, and revoked-with-remembered-grant cases;
 - explicit existing-account linking and active/no-membership/removed-membership/wrong-tenant/private-record authorization cases;
 - Consulting-only logout followed by passwordless reauthorization from the surviving Entry session;
+- Entry dev hosted `site_url`, exact callback, OAuth server, confidential Consulting client, consent route, and one-key JWKS configuration;
+- dedicated hosted Consulting dev project with the exact 20-migration chain and 358 pgTAP assertions;
+- protected Vercel previews completing the full Entry entitlement and Consulting local-authorization matrices without a second Consulting password page or browser console errors;
 - real local mailbox password recovery with old-password rejection and zero browser errors.
 
-The isolated Vercel previews validate deployability, routes, redirects, CSP/security headers, and fail-closed configuration only. They intentionally use dummy backends and do not constitute hosted cross-product SSO acceptance.
+Hosted acceptance used only reserved `.test` identities and synthetic Consulting fixtures in the dedicated development backend. It did not read or write the shared Consulting/Ministry project, production users, or production traffic.
 
-## Production cutover gate — currently blocked
+## Production cutover gate — development proof complete
 
 Do not cut over until every item below is complete:
 
-- Entry production-shaped Auth has the correct public `site_url`, exact callback/recovery allow-list, OAuth server, and separately rotated client registration. The current writable development project still reports a localhost site URL, and configuration push was not authorized by its current credentials.
-- Leaked-password protection is enabled or an explicitly approved compensating control/risk acceptance exists.
-- The shared Consulting target has its prerequisite canonical-link migration and the new OIDC-link migration. Current read-only inspection found the prerequisite absent from the live schema despite migration-history drift.
-- The Consulting custom provider uses the intended environment-specific client and exact scopes/callbacks. Current read-only inspection found provider configuration drift.
-- A production-shaped hosted development environment completes the entire matrix above with synthetic users and no shared production data.
+- both separate code PRs are green, reviewed, and merged in the approved order;
+- production Entry Auth has the approved public `site_url`, exact callback/recovery allow-list, OAuth server, and separately rotated Consulting client registration;
+- leaked-password protection is enabled or an explicitly approved compensating control/risk acceptance exists;
+- the production Consulting target has the prerequisite canonical-link migration and new OIDC-link migration, plus the approved environment-specific provider, origins, exact callbacks, and rotated credentials;
+- the owner approves or explicitly accepts the documented service-only `consulting_private.prospect_notes` RLS hardening decision before the production migration window;
 - Backup/restore evidence, credential rotation, monitoring dashboards/alerts, operator ownership, rollback rehearsal, real-user duplicate/conflict review, support messaging, and explicit cutover approval are recorded.
-- Both code PRs are green and reviewed. Merge alone does not authorize infrastructure or production changes.
+- a production-window synthetic canary repeats first-time, returning, denial, logout, and local-revocation paths before real-user linking.
 
-Until those items are cleared, the only valid release decision is **NOT READY FOR PRODUCTION CUTOVER**.
+Development acceptance is complete. Production configuration, migration, merging, canary execution, and real-user linking remain separately approved actions; merge alone does not authorize infrastructure or traffic changes.
