@@ -58,11 +58,16 @@ Workspace's explicit password login remains rollback-only during the SSO proving
 
 A production merge, hosted provider change, secret entry, synthetic Production canary, and real-user activation each remain separately approval-gated.
 
-## Local candidate evidence — 2026-08-22
+## Candidate evidence — 2026-08-22
 
 - typecheck, lint, and Next.js `16.3.1` production build: pass;
 - unit tests: 15/15 pass, including ambiguous client/callback fail-closed mapping;
 - unchanged Entry schema: local database lint passes with no errors and all 44 entitlement/identity pgTAP assertions pass;
 - full dependency audit: 0 findings;
-- sensitive-data scan: pass across six preserved commits and the authored working tree; no secret was found;
-- no hosted Entry client, callback, provider secret, destination, deployment, or user was changed by this validation.
+- sensitive-data scan: pass across preserved repository history and the authored working tree; no secret was found;
+- Preview destination and application origin are aligned to the dedicated Workspace and Entry branch aliases;
+- `ENTRY_PERSONAL_OAUTH_REDIRECT_ORIGIN` targets the dedicated Personal Supabase Auth origin, not the Workspace application origin;
+- Preview deployment `dpl_9ngWJuLsURVYaw9LNzFV5jD6ueXd` is READY, its public login and JWKS contracts pass, and its bounded runtime-log query contains no error-level or 5xx event;
+- no OAuth client, provider secret, Production Entry project/alias, real user, billing, or cutover was created or changed.
+
+Authenticated Vercel inventory currently contains only the Preview-specific Entry project. No live Entry custom-domain alias is designated, and the public `www.leademergence.com` login remains the Ministry application. Before Production acceptance, explicitly designate or provision the live Entry project/origin; do not repurpose the Ministry host implicitly.
