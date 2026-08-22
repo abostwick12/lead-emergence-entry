@@ -1,6 +1,6 @@
 # Entry -> Workspace one-login SSO
 
-Status: implementation is locally validated; hosted configuration, interactive acceptance, and production cutover are not authorized or executed.
+Status: implementation is locally validated; the dedicated Entry Vercel authority and custom domain are provisioned, while the production identity backend, OAuth clients/providers, deployment, interactive acceptance, and production cutover remain incomplete.
 
 ## Boundary
 
@@ -70,4 +70,6 @@ A production merge, hosted provider change, secret entry, synthetic Production c
 - Preview deployment `dpl_9ngWJuLsURVYaw9LNzFV5jD6ueXd` is READY, its public login and JWKS contracts pass, and its bounded runtime-log query contains no error-level or 5xx event;
 - no OAuth client, provider secret, Production Entry project/alias, real user, billing, or cutover was created or changed.
 
-Authenticated Vercel inventory currently contains only the Preview-specific Entry project. No live Entry custom-domain alias is designated, and the public `www.leademergence.com` login remains the Ministry application. Before Production acceptance, explicitly designate or provision the live Entry project/origin; do not repurpose the Ministry host implicitly.
+The dedicated Vercel project `lead-emergence-entry` (`prj_Sjv0ZfqFzf7dOOime4bEWZukmaCD`) now owns the verified DNS-only custom domain `https://entry.leademergence.com`. It is connected to `abostwick12/lead-emergence-entry`, uses `main` as its eventual production branch, and is pinned to Next.js on Node `24.x`. Its Production configuration contains the exact Entry, Workspace, Consulting, Ministry, and Supabase Auth origins plus a newly generated, environment-specific RSA handoff keypair and redemption secret. Credential values exist only in Vercel's secret/config store.
+
+No deployment or traffic is assigned to the new project. Its Supabase URL/keys and Personal/Consulting OAuth client IDs remain absent by design. The only current Entry backend is the isolated development project `vnjdubrnmxvmsccxmhst`; before deployment, create and secure a distinct production Entry identity project, apply the reviewed Entry migrations, configure exact Auth redirects/OAuth clients, and complete synthetic acceptance. `www.leademergence.com` remains the Ministry application and was not repurposed.

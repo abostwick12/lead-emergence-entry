@@ -11,3 +11,5 @@ supabase/.temp/
 supabase/.branches/
 AGENTS.md
 CLAUDE.md
+
+.vercel
