@@ -1,4 +1,4 @@
-select plan(19);
+select plan(26);
 
 -- Schema and policy posture.
 select ok((select relrowsecurity from pg_class where oid = 'entry_identity.identity_profiles'::regclass), 'profile RLS enabled');
@@ -9,6 +9,20 @@ select ok((select relrowsecurity from pg_class where oid = 'entry_identity.ident
 select ok(not exists (select 1 from information_schema.role_table_grants where table_schema = 'entry_identity' and grantee = 'anon'), 'anon has no Entry table grants');
 select ok(not exists (select 1 from information_schema.role_table_grants where table_schema = 'entry_identity' and grantee = 'authenticated' and privilege_type in ('INSERT', 'DELETE')), 'authenticated has no broad mutation grants');
 select ok((select proconfig @> array['search_path=entry_identity, pg_catalog'] from pg_proc where oid = 'entry_identity.redeem_handoff_nonce(uuid,entry_identity.entry_product,uuid)'::regprocedure), 'redeemer search_path constrained');
+select ok(to_regprocedure('public.rls_auto_enable()') is null or not exists (
+  select 1
+  from pg_proc p,
+       aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) acl
+  where p.oid = to_regprocedure('public.rls_auto_enable()')
+    and acl.grantee = 0
+    and acl.privilege_type = 'EXECUTE'
+), 'PUBLIC cannot execute the automatic RLS event trigger helper');
+select ok(to_regprocedure('public.rls_auto_enable()') is null or not has_function_privilege('anon', to_regprocedure('public.rls_auto_enable()'), 'execute'), 'anon cannot execute the automatic RLS event trigger helper');
+select ok(to_regprocedure('public.rls_auto_enable()') is null or not has_function_privilege('authenticated', to_regprocedure('public.rls_auto_enable()'), 'execute'), 'authenticated cannot execute the automatic RLS event trigger helper');
+select ok(to_regclass('entry_identity.identity_audit_events_canonical_user_id_idx') is not null, 'audit canonical-user foreign key is indexed');
+select ok(to_regclass('entry_identity.product_entitlements_granted_by_idx') is not null, 'entitlement grantor foreign key is indexed');
+select ok(to_regclass('entry_identity.product_handoff_nonces_canonical_user_id_idx') is not null, 'nonce canonical-user foreign key is indexed');
+select ok(to_regclass('entry_identity.product_identity_links_canonical_user_id_idx') is not null, 'identity-link canonical-user foreign key is indexed');
 
 -- Synthetic authenticated identities and fixtures.
 insert into auth.users (id, aud, role, email, email_confirmed_at, raw_user_meta_data, created_at, updated_at) values

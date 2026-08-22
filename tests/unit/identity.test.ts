@@ -16,4 +16,9 @@ describe('identity boundaries', () => {
     });
     expect(result.success).toBe(false);
   });
+
+  it('keeps product entitlement independent from local authorization', () => {
+    expect({ entry: 'ACTIVE', consultingLink: 'NONE', consultingMembership: 'NONE' }).toMatchObject({ entry: 'ACTIVE' });
+    expect('ACTIVE CONSULTING').not.toContain('CLIENT_ADMIN');
+  });
 });

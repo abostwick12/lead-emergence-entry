@@ -3,7 +3,7 @@ project_id = "lead-emergence-entry"
 [api]
 enabled = true
 port = 55421
-schemas = ["public", "graphql_public", "entry_identity"]
+schemas = ["public", "graphql_public"]
 extra_search_path = ["public", "extensions"]
 max_rows = 1000
 
@@ -42,7 +42,17 @@ enabled = false
 
 [auth]
 enabled = true
-site_url = "http://127.0.0.1:55421"
-additional_redirect_urls = ["http://localhost:3000/**", "http://127.0.0.1:3000/**"]
+site_url = "http://127.0.0.1:3300"
+additional_redirect_urls = [
+  "http://127.0.0.1:3300/auth/callback",
+  "http://localhost:3300/auth/callback",
+  "http://127.0.0.1:3300/auth/callback?next=%2Fupdate-password",
+  "http://localhost:3300/auth/callback?next=%2Fupdate-password",
+]
 enable_signup = true
 enable_refresh_token_rotation = true
+
+[auth.oauth_server]
+enabled = true
+authorization_url_path = "/oauth/consent"
+allow_dynamic_registration = false

@@ -1,0 +1,138 @@
+name: Entry quality gates
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/entry-quality.yml"
+      - "package.json"
+      - "package-lock.json"
+      - "app/**"
+      - "lib/**"
+      - "scripts/**"
+      - "supabase/**"
+      - "tests/**"
+      - "next.config.ts"
+      - "proxy.ts"
+      - "tsconfig.json"
+      - "docs/architecture/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: entry-quality-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  entry-quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.invalid
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: entry-ci-public-key-placeholder
+      APP_ORIGIN: https://entry.example.test
+      PERSONAL_PRODUCT_URL: https://personal.example.test
+      MINISTRY_PRODUCT_URL: https://ministry.example.test
+      CONSULTING_PRODUCT_URL: https://consulting.example.test
+      ENTRY_ISSUER: https://entry.example.test
+      ENTRY_CONSULTING_OAUTH_CLIENT_ID: entry-consulting-ci-fixture
+      ENTRY_CONSULTING_OAUTH_REDIRECT_ORIGIN: https://consulting-auth.example.test
+
+    steps:
+      - name: Check out Entry repository
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+          cache: npm
+
+      - name: Install pinned tooling
+        run: npm ci
+
+      - name: Verify changed-file whitespace
+        run: |
+          base_ref="${GITHUB_BASE_REF:-main}"
+          git diff --check "origin/${base_ref}...HEAD"
+
+      - name: Verify Entry application
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test:unit
+          npm run build
+          npm audit --audit-level=high
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Start isolated Supabase database
+        run: npm run db:start
+
+      - name: Lint Entry schemas
+        run: npm run db:lint
+
+      - name: Run adversarial pgTAP suite
+        run: npm run test:db
+
+      - name: Verify password recovery in browser
+        shell: bash
+        run: |
+          set -euo pipefail
+          eval "$(npx supabase status -o env)"
+
+          export NEXT_PUBLIC_SUPABASE_URL="$API_URL"
+          export NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY="$PUBLISHABLE_KEY"
+          export SUPABASE_SECRET_KEY="$SECRET_KEY"
+          export APP_ORIGIN="http://127.0.0.1:3300"
+          export ENTRY_APP_ORIGIN="$APP_ORIGIN"
+          export LOCAL_ENTRY_SUPABASE_URL="$API_URL"
+          export LOCAL_ENTRY_PUBLISHABLE_KEY="$PUBLISHABLE_KEY"
+          export LOCAL_ENTRY_SECRET_KEY="$SECRET_KEY"
+          export LOCAL_ENTRY_MAILPIT_URL="$MAILPIT_URL"
+          export ENTRY_RECOVERY_TEST_EMAIL="codex-entry-ci-recovery@example.test"
+          recovery_nonce="$(openssl rand -hex 12)"
+          export ENTRY_RECOVERY_OLD_PASSWORD="CiOld-${recovery_nonce}-Aa1!"
+          export ENTRY_RECOVERY_NEW_PASSWORD="CiNew-${recovery_nonce}-Bb2!"
+          export CONSULTING_PRODUCT_URL="http://127.0.0.1:3400"
+          export ENTRY_CONSULTING_OAUTH_REDIRECT_ORIGIN="http://127.0.0.1:54321"
+
+          npm run dev -- -p 3300 -H 127.0.0.1 > /tmp/entry-dev.log 2>&1 &
+          entry_server_pid=$!
+          cleanup() {
+            kill "$entry_server_pid" 2>/dev/null || true
+            wait "$entry_server_pid" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          ready=false
+          for _ in $(seq 1 60); do
+            if curl --fail --silent --show-error "$APP_ORIGIN/forgot-password" > /dev/null; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          if [ "$ready" != true ]; then
+            cat /tmp/entry-dev.log
+            exit 1
+          fi
+
+          npm run sso:test:recovery
+
+      - name: Upload recovery evidence
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: entry-recovery-evidence
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Remove disposable database
+        if: always()
+        run: npm run db:stop

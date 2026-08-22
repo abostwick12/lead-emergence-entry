@@ -13,7 +13,12 @@
     "typecheck": "tsc --noEmit",
     "test": "npm run test:unit",
     "test:unit": "vitest run",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "sso:test:recovery": "node scripts/sso/run-recovery-acceptance.mjs",
+    "db:start": "supabase start",
+    "db:lint": "supabase db lint --local --schema entry_identity,public --level warning --fail-on error",
+    "test:db": "supabase test db --local supabase/tests",
+    "db:stop": "supabase stop --no-backup"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
@@ -35,6 +40,7 @@
     "eslint": "latest",
     "eslint-config-next": "^16.3.1",
     "jsdom": "latest",
+    "supabase": "2.113.0",
     "typescript": "latest",
     "vitest": "^4.1.11"
   }
