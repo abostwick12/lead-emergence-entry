@@ -1,6 +1,6 @@
 # Entry -> Workspace one-login SSO
 
-Status: implementation is locally validated; the dedicated Entry Vercel authority and custom domain are provisioned, while the production identity backend, OAuth clients/providers, deployment, interactive acceptance, and production cutover remain incomplete.
+Status: implementation is locally validated; the dedicated Entry Vercel authority and custom domain are provisioned and paused, while the production identity backend, OAuth clients/providers, interactive acceptance, and production cutover remain incomplete.
 
 ## Boundary
 
@@ -72,4 +72,4 @@ A production merge, hosted provider change, secret entry, synthetic Production c
 
 The dedicated Vercel project `lead-emergence-entry` (`prj_Sjv0ZfqFzf7dOOime4bEWZukmaCD`) now owns the verified DNS-only custom domain `https://entry.leademergence.com`. It is connected to `abostwick12/lead-emergence-entry`, uses `main` as its eventual production branch, and is pinned to Next.js on Node `24.x`. Its Production configuration contains the exact Entry, Workspace, Consulting, Ministry, and Supabase Auth origins plus a newly generated, environment-specific RSA handoff keypair and redemption secret. Credential values exist only in Vercel's secret/config store.
 
-No deployment or traffic is assigned to the new project. Its Supabase URL/keys and Personal/Consulting OAuth client IDs remain absent by design. The only current Entry backend is the isolated development project `vnjdubrnmxvmsccxmhst`; before deployment, create and secure a distinct production Entry identity project, apply the reviewed Entry migrations, configure exact Auth redirects/OAuth clients, and complete synthetic acceptance. `www.leademergence.com` remains the Ministry application and was not repurposed.
+Connecting the repository caused Vercel's first Git build, deployment `dpl_9Ys7K8fSZHwEnqa5gdpwGgAByzSe`, to be classified automatically as Production and assigned the new aliases. Because its Supabase URL/keys and Personal/Consulting OAuth client IDs are intentionally absent, the project was immediately paused; `https://entry.leademergence.com` now returns Vercel's `503 DEPLOYMENT_PAUSED` with HSTS. Do not unpause or promote traffic until the distinct production Entry identity project, reviewed Entry migrations, exact Auth redirects/OAuth clients, and synthetic acceptance are complete and separately authorized. The only current Entry backend remains the isolated development project `vnjdubrnmxvmsccxmhst`; `www.leademergence.com` remains the Ministry application and was not repurposed.
