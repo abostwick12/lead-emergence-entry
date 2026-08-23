@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { safeEntryReturnPath } from '@/lib/navigation';
+import { emailOtpDestination, safeEmailOtpType, safeEntryReturnPath } from '@/lib/navigation';
 import { productOAuthStartUrl, isTrustedOAuthFormOrigin, safeOAuthRedirect, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
 
 describe('Entry OAuth navigation contracts', () => {
@@ -15,6 +15,16 @@ describe('Entry OAuth navigation contracts', () => {
     expect(safeEntryReturnPath('/\\attacker.example')).toBe('/workspaces');
     expect(safeEntryReturnPath('/oauth/consent?authorization_id=ok&next=https://attacker.example')).toBe('/workspaces');
     expect(safeEntryReturnPath('/auth/callback?code=stolen')).toBe('/workspaces');
+  });
+
+  it('accepts only supported email OTP types and forces password setup after invitations', () => {
+    expect(safeEmailOtpType('invite')).toBe('invite');
+    expect(safeEmailOtpType('recovery')).toBe('recovery');
+    expect(safeEmailOtpType('not-a-real-type')).toBeNull();
+    expect(emailOtpDestination('invite', '/workspaces')).toBe('/update-password');
+    expect(emailOtpDestination('recovery', '/account')).toBe('/update-password');
+    expect(emailOtpDestination('email', '/account')).toBe('/account');
+    expect(emailOtpDestination('email', 'https://attacker.example')).toBe('/workspaces');
   });
 
   it('builds the direct Consulting OAuth start without credentials', () => {
