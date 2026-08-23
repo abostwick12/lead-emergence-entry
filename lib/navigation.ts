@@ -1,3 +1,7 @@
+import type { EmailOtpType } from '@supabase/supabase-js';
+
+const emailOtpTypes = new Set<EmailOtpType>(['signup', 'invite', 'magiclink', 'recovery', 'email_change', 'email']);
+
 export function safeEntryReturnPath(value: string | null | undefined) {
   const fallback = '/workspaces';
   if (!value || !value.startsWith('/') || value.startsWith('//')) return fallback;
@@ -16,4 +20,13 @@ export function safeEntryReturnPath(value: string | null | undefined) {
   } catch {
     return fallback;
   }
+}
+
+export function safeEmailOtpType(value: string | null): EmailOtpType | null {
+  return value && emailOtpTypes.has(value) ? value : null;
+}
+
+export function emailOtpDestination(type: EmailOtpType, requestedPath: string | null) {
+  if (type === 'invite' || type === 'recovery') return '/update-password';
+  return safeEntryReturnPath(requestedPath);
 }

@@ -116,8 +116,9 @@ Use a reviewed change window and stop on any failed gate.
 6. In the Consulting target, first apply its prerequisite `20260819110000_consulting_prospect_321.sql` if absent, then `20260821171434_entry_oidc_identity_linking.sql`.
 7. Register/configure the environment-specific Consulting custom provider and fixed callback URLs.
 8. Deploy Consulting while preserving `/login?legacy=1` and the transitional handoff.
-9. Run the full hosted acceptance matrix with synthetic identities before any real user is invited.
-10. Enable traffic only after the named release owner records approval. DNS or production cutover is a separate action.
+9. Configure the Invite User email template to send `token_hash` and `type=invite` to `/auth/confirm`; verify that accepting an invitation establishes the cookie session and routes to `/update-password`.
+10. Run the full hosted acceptance matrix with synthetic identities before any real user is invited.
+11. Enable traffic only after the named release owner records approval. DNS or production cutover is a separate action.
 
 Never compensate for a failed migration with destructive production rollback. Prefer forward repair, restore only under the approved database recovery plan, and keep the legacy login route available.
 
