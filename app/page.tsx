@@ -1,5 +1,5 @@
-import Link from 'next/link';
+import { LandingExperience } from './landing-experience';
 
 export default function HomePage() {
-  return <main><div className="shell" style={{paddingTop:32}}><header style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}><span className="eyebrow">Lead Emergence</span><Link href="/login">Sign in</Link></header><section style={{maxWidth:720, padding:'18vh 0 12vh'}}><p className="eyebrow" style={{color:'var(--teal)'}}>A place to lead from</p><h1 className="serif" style={{fontSize:'clamp(2.8rem, 8vw, 6.5rem)', lineHeight:1.03, fontWeight:400, margin:'24px 0'}}>Lead from reality,<br />not reaction.</h1><p style={{fontSize:'1.2rem', lineHeight:1.7, maxWidth:560}}>AI can help you accomplish more. Lead Emergence is designed to help you become more capable of leading what matters.</p><div style={{display:'flex', gap:14, flexWrap:'wrap', marginTop:36}}><Link className="button" href="/signup">Enter Lead Emergence</Link><Link className="button secondary" href="/login">Returning user sign in</Link></div></section><footer style={{borderTop:'1px solid #d9d1c3', padding:'22px 0 32px', fontSize:'.9rem'}}>See clearly. Align deliberately. Build what matters.</footer></div></main>;
+  return <LandingExperience />;
 }
