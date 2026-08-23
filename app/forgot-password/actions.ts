@@ -27,6 +27,10 @@ export async function requestPasswordRecovery(formData: FormData) {
       redirect('/forgot-password?error=unavailable');
     }
   } catch (error) {
+    // Next.js implements redirect() by throwing a control-flow error. Preserve
+    // that signal so it is not misreported as an application failure.
+    if (error instanceof Error && error.message === 'NEXT_REDIRECT') throw error;
+
     console.error('Password recovery action failed', {
       message: error instanceof Error ? error.message : String(error),
     });
