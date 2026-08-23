@@ -1,19 +1,19 @@
-export function consultingOAuthStartUrl(
+export function productOAuthStartUrl(
   productBaseUrl: string,
   allowLocalHttp = process.env.NODE_ENV !== 'production',
 ) {
   const destination = new URL(productBaseUrl);
-  if (destination.username || destination.password) throw new Error('Consulting destination cannot contain credentials');
+  if (destination.username || destination.password) throw new Error('Product destination cannot contain credentials');
   if (destination.protocol !== 'https:'
     && !(allowLocalHttp && destination.protocol === 'http:' && ['127.0.0.1', 'localhost'].includes(destination.hostname))) {
-    throw new Error('Consulting destination must use HTTPS');
+    throw new Error('Product destination must use HTTPS');
   }
   return new URL('/auth/entry', destination).toString();
 }
 
 export function safeOAuthRedirect(
   value: string,
-  expectedOrigin = process.env.ENTRY_CONSULTING_OAUTH_REDIRECT_ORIGIN,
+  expectedOrigin: string | undefined,
   allowLocalHttp = process.env.NODE_ENV !== 'production',
 ) {
   try {
@@ -27,6 +27,27 @@ export function safeOAuthRedirect(
     // Invalid URL.
   }
   return null;
+}
+
+export function uniqueOAuthRedirectProduct<T extends string>(
+  candidate: string,
+  products: readonly T[],
+  expectedOrigin: (product: T) => string | undefined,
+): T | null {
+  const matches = products.filter((product) => Boolean(safeOAuthRedirect(candidate, expectedOrigin(product))));
+  return matches.length === 1 ? matches[0] : null;
+}
+
+export function uniqueConfiguredProduct<T extends string>(
+  candidate: string,
+  products: readonly T[],
+  configuredValue: (product: T) => string | undefined,
+): T | null {
+  const matches = products.filter((product) => {
+    const configured = configuredValue(product);
+    return Boolean(configured) && candidate === configured;
+  });
+  return matches.length === 1 ? matches[0] : null;
 }
 
 export function isTrustedOAuthFormOrigin(requestUrl: string, suppliedOrigin: string | null, appOrigin: string | undefined) {

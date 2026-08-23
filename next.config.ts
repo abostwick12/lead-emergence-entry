@@ -27,7 +27,9 @@ function configuredHttpsOrigin(name: string) {
 function contentSecurityPolicy() {
   const supabase = supabaseOrigin();
   const consultingOAuthRedirect = configuredHttpsOrigin('ENTRY_CONSULTING_OAUTH_REDIRECT_ORIGIN');
+  const personalOAuthRedirect = configuredHttpsOrigin('ENTRY_PERSONAL_OAUTH_REDIRECT_ORIGIN');
   const consultingProduct = configuredHttpsOrigin('CONSULTING_PRODUCT_URL');
+  const personalProduct = configuredHttpsOrigin('PERSONAL_PRODUCT_URL');
   const connect = ["'self'", supabase, supabase ? `wss://${new URL(supabase).host}` : null, isProduction ? null : 'ws:']
     .filter(Boolean)
     .join(' ');
@@ -36,7 +38,7 @@ function contentSecurityPolicy() {
     "base-uri 'self'",
     "object-src 'none'",
     "frame-ancestors 'none'",
-    `form-action ${["'self'", consultingOAuthRedirect, consultingProduct].filter(Boolean).join(' ')}`,
+    `form-action ${["'self'", personalOAuthRedirect, consultingOAuthRedirect, personalProduct, consultingProduct].filter(Boolean).join(' ')}`,
     "img-src 'self' data: blob:",
     "font-src 'self' data:",
     "style-src 'self' 'unsafe-inline'",

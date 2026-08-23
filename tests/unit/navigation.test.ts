@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { safeEntryReturnPath } from '@/lib/navigation';
-import { consultingOAuthStartUrl, isTrustedOAuthFormOrigin, safeOAuthRedirect } from '@/lib/oauth/contracts';
+import { productOAuthStartUrl, isTrustedOAuthFormOrigin, safeOAuthRedirect, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
 
 describe('Entry OAuth navigation contracts', () => {
   it('restores the exact internal consent continuation', () => {
@@ -18,11 +18,11 @@ describe('Entry OAuth navigation contracts', () => {
   });
 
   it('builds the direct Consulting OAuth start without credentials', () => {
-    expect(consultingOAuthStartUrl('https://consulting.example.test/base')).toBe('https://consulting.example.test/auth/entry');
-    expect(consultingOAuthStartUrl('http://127.0.0.1:3400/base', true)).toBe('http://127.0.0.1:3400/auth/entry');
-    expect(() => consultingOAuthStartUrl('https://user:password@consulting.example.test')).toThrow();
-    expect(() => consultingOAuthStartUrl('http://consulting.example.test', false)).toThrow();
-    expect(() => consultingOAuthStartUrl('file:///tmp/consulting', true)).toThrow();
+    expect(productOAuthStartUrl('https://workspace.example.test/base')).toBe('https://workspace.example.test/auth/entry');
+    expect(productOAuthStartUrl('http://127.0.0.1:3400/base', true)).toBe('http://127.0.0.1:3400/auth/entry');
+    expect(() => productOAuthStartUrl('https://user:password@consulting.example.test')).toThrow();
+    expect(() => productOAuthStartUrl('http://consulting.example.test', false)).toThrow();
+    expect(() => productOAuthStartUrl('file:///tmp/consulting', true)).toThrow();
   });
 
   it('allows only same-origin decisions and safe OAuth callbacks', () => {
@@ -32,6 +32,36 @@ describe('Entry OAuth navigation contracts', () => {
     expect(safeOAuthRedirect('http://127.0.0.1:54321/auth/v1/callback?code=ok', 'http://127.0.0.1:54321', true)?.port).toBe('54321');
     expect(safeOAuthRedirect('https://other-auth.example.test/auth/v1/callback?code=ok', 'https://consulting-auth.example.test')).toBeNull();
     expect(safeOAuthRedirect('https://consulting-auth.example.test/other/callback?code=ok', 'https://consulting-auth.example.test')).toBeNull();
-    expect(safeOAuthRedirect('javascript:alert(1)')).toBeNull();
+    expect(safeOAuthRedirect('javascript:alert(1)', 'https://consulting-auth.example.test')).toBeNull();
+  });
+
+  it('maps a callback only when it belongs to exactly one product', () => {
+    const products = ['PERSONAL', 'CONSULTING'] as const;
+    const origins = {
+      PERSONAL: 'https://personal-auth.example.test',
+      CONSULTING: 'https://consulting-auth.example.test',
+    };
+    expect(uniqueOAuthRedirectProduct(
+      'https://personal-auth.example.test/auth/v1/callback?code=ok',
+      products,
+      (product) => origins[product],
+    )).toBe('PERSONAL');
+    expect(uniqueOAuthRedirectProduct(
+      'https://attacker.example.test/auth/v1/callback?code=ok',
+      products,
+      (product) => origins[product],
+    )).toBeNull();
+    expect(uniqueOAuthRedirectProduct(
+      'https://shared-auth.example.test/auth/v1/callback?code=ok',
+      products,
+      () => 'https://shared-auth.example.test',
+    )).toBeNull();
+  });
+
+  it('maps a client only when its identifier is unique to one product', () => {
+    const products = ['PERSONAL', 'CONSULTING'] as const;
+    expect(uniqueConfiguredProduct('personal-client', products, (product) => `${product.toLowerCase()}-client`)).toBe('PERSONAL');
+    expect(uniqueConfiguredProduct('unknown-client', products, (product) => `${product.toLowerCase()}-client`)).toBeNull();
+    expect(uniqueConfiguredProduct('shared-client', products, () => 'shared-client')).toBeNull();
   });
 });
