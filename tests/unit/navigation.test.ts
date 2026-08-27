@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { emailOtpDestination, safeEmailOtpType, safeEntryReturnPath } from '@/lib/navigation';
+import { emailOtpDestination, entryLoginPath, safeEmailOtpType, safeEntryReturnPath } from '@/lib/navigation';
 import { productOAuthStartUrl, isTrustedOAuthFormOrigin, safeOAuthRedirect, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
 
 describe('Entry OAuth navigation contracts', () => {
@@ -7,6 +7,16 @@ describe('Entry OAuth navigation contracts', () => {
     const continuation = '/oauth/consent?authorization_id=4e5dbf87-cfcb-4ac6-897a-b28812fa60ba';
     expect(safeEntryReturnPath(continuation)).toBe(continuation);
     expect(safeEntryReturnPath('/update-password')).toBe('/update-password');
+  });
+
+  it('preserves only exact internal product handoffs through the canonical login', () => {
+    expect(safeEntryReturnPath('/handoff/personal')).toBe('/handoff/personal');
+    expect(safeEntryReturnPath('/handoff/ministry')).toBe('/handoff/ministry');
+    expect(safeEntryReturnPath('/handoff/consulting')).toBe('/handoff/consulting');
+    expect(entryLoginPath('/handoff/ministry')).toBe('/login?next=%2Fhandoff%2Fministry');
+    expect(safeEntryReturnPath('/handoff/unknown')).toBe('/workspaces');
+    expect(safeEntryReturnPath('/handoff/personal?next=https://attacker.example')).toBe('/workspaces');
+    expect(safeEntryReturnPath('/handoff/personal#fragment')).toBe('/workspaces');
   });
 
   it('rejects external, scheme-relative, backslash, and unrelated continuations', () => {
