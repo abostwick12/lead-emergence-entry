@@ -12,7 +12,7 @@ function privateKey() {
 }
 
 export async function createProductHandoff(product: Product): Promise<{ destination: string; token: string }> {
-  const { supabase, user } = await requireCanonicalIdentity();
+  const { supabase, user } = await requireCanonicalIdentity(`/handoff/${product.toLowerCase()}`);
   const products = await getActiveProducts(supabase);
   if (!products.includes(product)) throw new Error('Product access unavailable');
   const jti = randomUUID();
