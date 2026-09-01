@@ -29,6 +29,30 @@ export function safeOAuthRedirect(
   return null;
 }
 
+export function safeExactOAuthRedirect(value: string, expectedRedirectUri: string | null | undefined) {
+  try {
+    const destination = new URL(value);
+    const expected = expectedRedirectUri ? new URL(expectedRedirectUri) : null;
+    if (!expected || destination.origin !== expected.origin || destination.pathname !== expected.pathname) return null;
+    if (destination.username || destination.password || destination.hash) return null;
+    for (const [key, expectedValue] of expected.searchParams) {
+      if (!destination.searchParams.getAll(key).includes(expectedValue)) return null;
+    }
+    for (const [key, destinationValue] of destination.searchParams) {
+      const expectedValues = expected.searchParams.getAll(key);
+      if (expectedValues.length > 0 && expectedValues.includes(destinationValue)) continue;
+      // Supabase adds only the authorization response values after preserving
+      // the registered redirect URI. Do not allow a client-controlled extra.
+      if ((key === 'code' || key === 'state' || key === 'error' || key === 'error_description')
+        && expectedValues.length === 0) continue;
+      return null;
+    }
+    return destination;
+  } catch {
+    return null;
+  }
+}
+
 export function uniqueOAuthRedirectProduct<T extends string>(
   candidate: string,
   products: readonly T[],
