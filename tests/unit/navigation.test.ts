@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { emailOtpDestination, entryLoginPath, safeEmailOtpType, safeEntryReturnPath } from '@/lib/navigation';
-import { productOAuthStartUrl, isTrustedOAuthFormOrigin, safeOAuthRedirect, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
+import { productOAuthStartUrl, isTrustedOAuthFormOrigin, safeExactOAuthRedirect, safeOAuthRedirect, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
 
 describe('Entry OAuth navigation contracts', () => {
   it('restores the exact internal consent continuation', () => {
@@ -53,6 +53,22 @@ describe('Entry OAuth navigation contracts', () => {
     expect(safeOAuthRedirect('https://other-auth.example.test/auth/v1/callback?code=ok', 'https://consulting-auth.example.test')).toBeNull();
     expect(safeOAuthRedirect('https://consulting-auth.example.test/other/callback?code=ok', 'https://consulting-auth.example.test')).toBeNull();
     expect(safeOAuthRedirect('javascript:alert(1)', 'https://consulting-auth.example.test')).toBeNull();
+  });
+
+  it('allows an MCP authorization response only at the exact registered redirect URI', () => {
+    const registered = 'http://127.0.0.1:49321/callback?channel=desktop';
+    expect(safeExactOAuthRedirect(
+      'http://127.0.0.1:49321/callback?channel=desktop&code=ok&state=state',
+      registered,
+    )?.port).toBe('49321');
+    expect(safeExactOAuthRedirect(
+      'http://127.0.0.1:49322/callback?channel=desktop&code=ok',
+      registered,
+    )).toBeNull();
+    expect(safeExactOAuthRedirect(
+      'http://127.0.0.1:49321/callback?channel=desktop&code=ok&next=https://attacker.example',
+      registered,
+    )).toBeNull();
   });
 
   it('maps a callback only when it belongs to exactly one product', () => {
