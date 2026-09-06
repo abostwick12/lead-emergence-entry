@@ -1,0 +1,22 @@
+{
+  "name": "lead-emergence-brand-film",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "render": "node render.mjs",
+    "check": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "remotion": "4.0.521",
+    "@remotion/bundler": "4.0.521",
+    "@remotion/renderer": "4.0.521",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "@types/react": "19.2.18",
+    "@types/node": "26.2.0"
+  }
+}

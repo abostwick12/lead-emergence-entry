@@ -14,3 +14,4 @@ CLAUDE.md
 
 .vercel
 .env*.local
+.film-local/

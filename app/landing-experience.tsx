@@ -1,48 +1,59 @@
 import Link from 'next/link';
+import { HeroSequence, ConversationExample } from './landing-motion';
 import styles from './landing-experience.module.css';
 
-const CONSULTING_URL = process.env.NEXT_PUBLIC_CONSULTING_URL || 'https://consulting.leademergence.com';
-const WORKSPACE_URL = process.env.NEXT_PUBLIC_WORKSPACE_URL || 'https://workspace.leademergence.com';
-
-const stages = [
-  ['01', 'SEE', 'Start with reality.', 'Notice what is actually happening before reaching for a solution.'],
-  ['02', 'REFRAME', 'Make meaning clear.', 'Name the pattern, challenge the assumption, and find a better question.'],
-  ['03', 'ALIGN', 'Create coherence.', 'Put people, purpose, and systems into a relationship that can hold.'],
-  ['04', 'BUILD', 'Grow capability.', 'Turn insight into practice, rhythm, and structures people can use.'],
-  ['05', 'PRODUCE', 'Let results emerge.', 'Create value that strengthens both the work and the people doing it.'],
+export const EMERGENCE_STAGES = [
+  { name: 'SEE REALITY', short: 'SEE', phrase: 'Notice what is actually here.' },
+  { name: 'REFRAME REALITY', short: 'REFRAME', phrase: 'The first interpretation is only a beginning.' },
+  { name: 'ALIGN WITH REALITY', short: 'ALIGN', phrase: 'Find what can move together.' },
+  { name: 'BUILD CAPABILITY', short: 'BUILD', phrase: 'Give clarity a way to become action.' },
+  { name: 'PRODUCE VALUE', short: 'PRODUCE', phrase: 'Let the work change something real.' },
+  { name: 'NEW REALITY', short: 'NEW REALITY', phrase: 'Stand somewhere you could not before.' },
+  { name: 'SEE AGAIN', short: 'SEE AGAIN', phrase: 'A new vantage point. A better next question.' },
 ] as const;
 
+export function MountainMark() {
+  return <svg viewBox="0 0 52 30" fill="none" aria-hidden="true"><path d="M2 27 19 8l8 10M14 14 25 2l25 25M21 12l4 5 4-5M33 20l4-4" stroke="currentColor" strokeWidth="1.3" /></svg>;
+}
+
 export function LandingExperience() {
-  return (
-    <main className={styles.page}>
-      <header className={styles.nav}>
-        <Link href="/" className={styles.wordmark} aria-label="Lead Emergence home"><i>Lead</i> Emergence<span>PEOPLE · PURPOSE · SYSTEMS</span></Link>
-        <nav aria-label="Main navigation"><a href="#approach">Approach</a><a href="#products">Products</a><Link className={styles.navButton} href="/login">Returning user <span aria-hidden="true">→</span></Link></nav>
-      </header>
-
-      <section className={styles.hero} aria-labelledby="hero-title">
-        <div className={styles.heroRule} aria-hidden="true" />
-        <p className={styles.eyebrow}>LEADERSHIP TECHNOLOGY</p>
-        <h1 id="hero-title">Lead from reality,<br /><em>not reaction.</em></h1>
-        <p className={styles.heroCopy}>Lead Emergence helps leaders see clearly, make better decisions, and build organizations where people, purpose, and systems can flourish together.</p>
-        <div className={styles.heroActions}><Link className={styles.primaryButton} href="/signup">Enter Lead Emergence <span aria-hidden="true">→</span></Link><a className={styles.textLink} href={`${CONSULTING_URL}/intake/consulting`}>Talk with a consultant <span aria-hidden="true">→</span></a></div>
-        <p className={styles.heroNote}><span aria-hidden="true">◆</span> One identity. Separate product permissions. Your data stays in the workspace it belongs to.</p>
+  return <main className={styles.page}>
+    <a className={styles.skipLink} href="#leader">Skip the visual introduction</a>
+    <header className={styles.nav}>
+      <Link href="/" className={styles.wordmark} aria-label="Lead Emergence home"><MountainMark /><span>LEAD EMERGENCE</span></Link>
+      <div className={styles.navActions}><a href="#sotf" className={styles.pilotNote}>SOTF fellows · 14 days free</a><Link className={styles.signIn} href="/login">Sign In</Link></div>
+    </header>
+    <HeroSequence stages={EMERGENCE_STAGES} />
+    <div className={styles.narrative}>
+      <svg className={styles.journeyThread} viewBox="0 0 1200 4200" preserveAspectRatio="none" fill="none" aria-hidden="true"><defs><linearGradient id="journey-color" x1="0" x2="0" y1="0" y2="1"><stop stopColor="#72ccdc" /><stop offset=".7" stopColor="#72ccdc" /><stop offset="1" stopColor="#e7bd75" /></linearGradient></defs><path d="M84 0V150C84 240 120 270 120 350V650C120 740 500 690 500 820S980 950 980 1130V1330C980 1470 80 1440 80 1630V1920C80 2070 1060 2040 1060 2230V2520C1060 2700 180 2730 180 2900V3250C180 3460 920 3500 920 3730S820 4050 720 4200" stroke="url(#journey-color)" strokeWidth="1.5" vectorEffect="non-scaling-stroke" /></svg>
+      <section className={`${styles.section} ${styles.leader}`} id="leader" aria-labelledby="leader-title">
+        <div><p className={styles.eyebrow}>Leadership starts here</p><h2 id="leader-title">Everything starts<br />with the leader.</h2><p className={styles.lede}>With the way you pay attention, make meaning,<br className={styles.desktopBreak} /> and choose what comes next.</p></div>
+        <div className={styles.threeMoves}><p><em>See</em> what is actually happening.</p><p><em>Name</em> what it means.</p><p><em>Move</em> with intention.</p><span>The next move creates a new reality.<br />Then you see again.</span></div>
       </section>
-
-      <section className={styles.approach} id="approach" aria-labelledby="approach-title">
-        <div className={styles.sectionIntro}><p className={styles.eyebrow}>THE EMERGENCE ROADMAP</p><h2 id="approach-title">A continuous practice for the work that matters.</h2><p>Technology is most useful when it helps people pay attention, reason together, and act with intention. The roadmap keeps those moves connected.</p></div>
-        <div className={styles.stageGrid}>{stages.map(([number, label, title, copy]) => <article key={number}><span>{number}</span><p className={styles.stageLabel}>{label}</p><h3>{title}</h3><p>{copy}</p></article>)}</div>
-      </section>
-
-      <section className={styles.products} id="products" aria-labelledby="products-title">
-        <div className={styles.sectionIntro}><p className={styles.eyebrow}>CHOOSE YOUR NEXT STEP</p><h2 id="products-title">One practice. Two ways to enter.</h2><p>Start where you are. Move between products only when your role and authorization call for it.</p></div>
-        <div className={styles.productGrid}>
-          <article className={styles.productCard}><div className={styles.cardIcon} aria-hidden="true">◎</div><p className={styles.eyebrow}>TRANSFORMATION</p><h3>Lead Emergence Consulting</h3><p>Work with a consultant to understand your organization, align the people doing the work, and make change traceable.</p><div className={styles.cardActions}><a className={styles.primaryButton} href={`${CONSULTING_URL}/intake/consulting`}>Start client intake <span aria-hidden="true">→</span></a><a className={styles.secondaryLink} href={`${CONSULTING_URL}/login`}>Consultant or client login</a></div></article>
-          <article className={`${styles.productCard} ${styles.workspaceCard}`}><div className={styles.cardIcon} aria-hidden="true">✦</div><p className={styles.eyebrow}>PERSONAL WORKSPACE</p><h3>Lead from your own workspace</h3><p>Build a durable personal operating system for leadership, reflection, and the next decision in front of you.</p><div className={styles.cardActions}><a className={styles.primaryButton} href={WORKSPACE_URL}>Open Workspace <span aria-hidden="true">→</span></a><Link className={styles.secondaryLink} href="/signup">Create your identity</Link></div></article>
+      <section className={`${styles.section} ${styles.conversation}`} id="conversation" aria-labelledby="conversation-title">
+        <div className={styles.conversationIntro}><p className={styles.eyebrow}>Real conversation. Real coordination.</p><h2 id="conversation-title">The interface stays familiar.<br /><em>The work stays connected.</em></h2><p className={styles.lede}>Bring a decision, a conversation, or a question you cannot quite name. Lead Emergence gives the useful parts somewhere to go.</p>
+          <ol className={styles.contextInputs}><li><span>01</span><div><h3>Your context</h3><p>The criteria, experience, and evidence you choose to confirm.</p></div></li><li><span>02</span><div><h3>A clearer decision</h3><p>See the fit, the tension, and what is still unknown.</p></div></li><li><span>03</span><div><h3>A useful next move</h3><p>Prepare the conversation. Keep the promise. Review what changed.</p></div></li><li><span>04</span><div><h3>Continuity</h3><p>Return to the decision with the learning already connected.</p></div></li></ol>
         </div>
+        <ConversationExample />
       </section>
+      <section className={`${styles.section} ${styles.interfaces}`} aria-labelledby="interfaces-title">
+        <div><p className={styles.eyebrow}>Same work. Your way.</p><h2 id="interfaces-title">Work here—or work<br />through ChatGPT.</h2></div><div><p className={styles.lede}>Use conversation to think, research, rehearse, and decide. Use Workspace to review evidence, correct the details, and keep the next move connected.</p><p className={styles.quiet}>Your authorized connection can resume the transition work you deliberately saved. It does not automatically read all of your chats.</p><Link className={styles.lightButton} href="/login">Sign in to Lead Emergence <span aria-hidden="true">→</span></Link><p className={styles.caption}>After shared sign-in, choose an experience you can access.</p></div>
+      </section>
+      <section className={`${styles.section} ${styles.sotf}`} id="sotf" aria-labelledby="sotf-title">
+        <div><p className={styles.eyebrow}>A concrete place to begin · SOTF Bundle</p><h2 id="sotf-title">Learn your way<br />into the right work.</h2><p className={styles.lede}>A transition becomes more useful when each conversation changes the next decision.</p></div>
+        <div className={styles.pilotStory}><p>Bring a role that looks promising. Find the question your résumé cannot answer. Prepare a conversation with someone who can. Keep the evidence, the relationship, and what you promised connected.</p><p>Then arrive at your next coaching session with what changed, what is stuck, and the decision that needs a human perspective.</p><div className={styles.pilotInvitation}><strong>SOTF fellows · a free 14-day pilot</strong><p>Pilot access is offered by invitation. Your authorized destinations appear after shared sign-in.</p><Link className={styles.goldButton} href="/login">Start your SOTF Bundle <span aria-hidden="true">→</span></Link></div><p className={styles.caption}>The pilot prepares messages and invitations for your review; you complete them manually. It works with the transition information you deliberately save.</p></div>
+      </section>
+      <section className={`${styles.section} ${styles.questions}`} aria-labelledby="questions-title">
+        <div><p className={styles.eyebrow}>Start wherever the work is</p><h2 id="questions-title">Bring the question<br />already in front of you.</h2></div><div>{['Help me decide what deserves my attention.', 'What am I assuming without realizing it?', 'Connect this opportunity to what I said I wanted.', 'Prepare me for this conversation.', 'Turn these notes into a clear next step.', 'What should change after what I learned this week?'].map((question) => <a key={question} href="#conversation">{question}<span aria-hidden="true">↗</span></a>)}</div>
+      </section>
+      <section className={styles.invitation} aria-labelledby="invitation-title">
+        <Terrain /><div className={styles.invitationCopy}><h2 id="invitation-title">A clearer view.<br /><em>A more intentional next move.</em></h2><p>The work you bring is where we begin.</p><Link className={styles.lightButton} href="/login">Sign In <span aria-hidden="true">→</span></Link></div>
+      </section>
+    </div>
+    <footer className={styles.footer}><Link href="/" className={styles.wordmark}><MountainMark /><span>LEAD EMERGENCE</span></Link><p>See. Reframe. Align. Build. Produce. See again.</p><span>A more human future.</span></footer>
+  </main>;
+}
 
-      <footer className={styles.footer}><span className={styles.wordmark}><i>Lead</i> Emergence<span>PEOPLE · PURPOSE · SYSTEMS</span></span><p>See clearly. Align deliberately. Build what matters.</p><Link href="/login">Sign in <span aria-hidden="true">→</span></Link></footer>
-    </main>
-  );
+function Terrain() {
+  return <svg className={styles.terrain} viewBox="0 0 1440 560" preserveAspectRatio="xMidYMax slice" fill="none" aria-hidden="true"><defs><linearGradient id="terrain-fill" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#112d46" /><stop offset="1" stopColor="#06111b" /></linearGradient><radialGradient id="terrain-light"><stop stopColor="#efc88b" stopOpacity=".7" /><stop offset=".17" stopColor="#d9a859" stopOpacity=".2" /><stop offset="1" stopColor="#d9a859" stopOpacity="0" /></radialGradient></defs><path d="M0 205 60 220 120 167 184 197 235 174 310 248 400 204 502 239 610 223 703 253 804 191 895 226 1006 170 1120 74 1220 129 1305 119 1440 180V560H0Z" fill="url(#terrain-fill)" />{Array.from({length:14},(_,i)=><path key={i} d={`M0 ${255+i*21}C200 ${140+i*25} 280 ${370+i*12} 510 ${330+i*13}S820 ${260+i*16} 1120 ${74+i*16}Q1290 ${200+i*15} 1440 ${214+i*20}`} stroke={i===4?'#a88d61':'#31516a'} strokeWidth={i===4?1.4:.7} opacity={i===4?.8:.5} />)}<ellipse cx="1120" cy="80" rx="140" ry="90" fill="url(#terrain-light)"/><path d="M0 454C250 488 340 330 535 380S820 510 1120 80" stroke="#ddbd84" strokeWidth="1.5"/><circle cx="1120" cy="80" r="3" fill="#fff0ca" /></svg>;
 }

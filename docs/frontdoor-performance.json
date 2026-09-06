@@ -1,0 +1,60 @@
+{
+  "measuredAt": "2026-09-06T23:30:31.894Z",
+  "environment": "Local production build in headless Chrome on Windows. Synthetic lab measurements, not field or physical-device results.",
+  "results": [
+    {
+      "profile": "1440px desktop; unthrottled loopback",
+      "lcpMs": 3868,
+      "initialEncodedBytes": 206481,
+      "resourceCount": 15,
+      "longTasks": [
+        206,
+        536
+      ],
+      "overflow": false,
+      "videoRequests": 0,
+      "scroll": {
+        "elapsedSeconds": 2.672,
+        "mainThreadTaskSeconds": 0.312106,
+        "scriptSeconds": 0.03334799999999999,
+        "layoutSeconds": 0.011294999999999944,
+        "mainThreadBusyFraction": 0.1168061377245509,
+        "gpuProcessCpuSeconds": 2.718293,
+        "hardwareGpuUtilization": "Not exposed by this headless test; GPU-process CPU time is not GPU utilization."
+      },
+      "videoRequestsAfterScroll": 1
+    },
+    {
+      "profile": "390px mobile emulation; 4x CPU slowdown; 1.6 Mbps; 100ms RTT",
+      "lcpMs": 11124,
+      "initialEncodedBytes": 181567,
+      "resourceCount": 15,
+      "longTasks": [
+        215,
+        55,
+        2795,
+        80,
+        86,
+        52,
+        70,
+        146,
+        136,
+        85,
+        90,
+        69
+      ],
+      "overflow": false,
+      "videoRequests": 0,
+      "scroll": {
+        "elapsedSeconds": 5.845,
+        "mainThreadTaskSeconds": 4.3028980000000026,
+        "scriptSeconds": 0.572786,
+        "layoutSeconds": 0.13560400000000072,
+        "mainThreadBusyFraction": 0.7361673224978619,
+        "gpuProcessCpuSeconds": 0.5514350000000006,
+        "hardwareGpuUtilization": "Not exposed by this headless test; GPU-process CPU time is not GPU utilization."
+      },
+      "videoRequestsAfterScroll": 0
+    }
+  ]
+}
