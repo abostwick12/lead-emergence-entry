@@ -1,5 +1,15 @@
 import { expect, test } from '@playwright/test';
 
+test('public sign in uses the canonical Entry form and defaults to the chooser', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('header').getByRole('link', { name: 'Sign In', exact: true }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole('heading', { name: 'Sign in', exact: true })).toBeVisible();
+  await expect(page.locator('form')).toHaveCount(1);
+  await expect(page.locator('input[name="next"]')).toHaveValue('/workspaces');
+  await expect(page.locator('input[type="password"]')).toHaveCount(1);
+});
+
 test('one public front door, concrete example, and no initial film request', async ({ page }, testInfo) => {
   const media: string[] = []; const errors: string[] = [];
   page.on('request', request => { if (request.url().includes('.mp4')) media.push(request.url()); });
