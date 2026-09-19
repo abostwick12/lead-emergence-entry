@@ -11,6 +11,14 @@ export async function signUp(formData: FormData) {
   if (!parsed.success) redirect('/signup?error=invalid_details');
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signUp({ email: parsed.data.email, password: parsed.data.password, options: { data: { display_name: parsed.data.name }, emailRedirectTo: `${process.env.APP_ORIGIN}/auth/callback` } });
-  if (error) redirect('/signup?error=unable_to_create');
+  if (error) {
+    console.error('Entry signup request rejected', {
+      name: error.name,
+      code: error.code,
+      status: error.status,
+      message: error.message,
+    });
+    redirect('/signup?error=unable_to_create');
+  }
   redirect('/login?message=check_email');
 }
