@@ -3,14 +3,16 @@ import type { FC } from 'react';
 
 const FPS = 24;
 const STAGE_FRAMES = 6 * FPS;
+// The title-free Hero compositions rely on the canonical customer-facing HTML overlay.
+// Brand-Film intentionally renders stage labels only, so it does not paraphrase that approved copy.
 const stages = [
-  { label: 'SEE REALITY', title: 'Before the next move,\nsee what is here.', image: 'leader-dusk.webp', scale: [1, 1.035], focus: '63% 44%' },
-  { label: 'REFRAME REALITY', title: 'A different view\nchanges the question.', image: 'reframe.webp', scale: [1.09, 1.025], focus: '65% 65%' },
-  { label: 'ALIGN WITH REALITY', title: 'Find what can\nmove together.', image: 'alignment.webp', scale: [1.035, 1.065], focus: '65% 48%' },
-  { label: 'BUILD CAPABILITY', title: 'Give clarity\na way to move.', image: 'reframe.webp', scale: [1.19, 1.09], focus: '72% 75%' },
-  { label: 'CULTIVATE VALUE', title: 'Create the conditions\nfor real value to grow.', image: 'alignment.webp', scale: [1.11, 1.015], focus: '66% 55%' },
-  { label: 'NEW REALITY', title: 'Stand somewhere\nnew.', image: 'new-reality.webp', scale: [1.055, 1], focus: '66% 47%' },
-  { label: 'SEE AGAIN', title: 'From here,\nsee again.', image: 'new-reality.webp', scale: [1, 1.025], focus: '61% 51%' },
+  { label: 'SEE REALITY', image: 'leader-dusk.webp', scale: [1, 1.035], focus: '63% 44%' },
+  { label: 'REFRAME REALITY', image: 'reframe.webp', scale: [1.09, 1.025], focus: '65% 65%' },
+  { label: 'ALIGN WITH REALITY', image: 'alignment.webp', scale: [1.035, 1.065], focus: '65% 48%' },
+  { label: 'BUILD CAPABILITY', image: 'reframe.webp', scale: [1.19, 1.09], focus: '72% 75%' },
+  { label: 'CULTIVATE VALUE', image: 'alignment.webp', scale: [1.11, 1.015], focus: '66% 55%' },
+  { label: 'NEW REALITY', image: 'new-reality.webp', scale: [1.055, 1], focus: '66% 47%' },
+  { label: 'SEE AGAIN', image: 'new-reality.webp', scale: [1, 1.025], focus: '61% 51%' },
 ] as const;
 
 const BrandFilm: FC<{ titles: boolean }> = ({ titles }) => {
@@ -40,7 +42,6 @@ const BrandFilm: FC<{ titles: boolean }> = ({ titles }) => {
     </svg>
     {titles ? <div style={{ position:'absolute',left:width*.055,top:height*.54,width:width*(portrait?.85:.65),color:'#edf0e9',opacity:titleOpacity,transform:`translateY(${interpolate(localFrame,[0,28],[9,0],{extrapolateRight:'clamp'})}px)` }}>
       <div style={{ fontFamily:'Arial, sans-serif',fontSize:portrait?12:14,letterSpacing:'.22em',marginBottom:22,color:stageIndex>4?'#e6c18d':'#d5e7e8' }}>{String(stageIndex+1).padStart(2,'0')} — {stages[stageIndex].label}</div>
-      <div style={{ fontFamily:'Georgia, serif',fontSize:portrait?42:62,lineHeight:1.08,letterSpacing:'-.025em',whiteSpace:'pre-line',textShadow:'0 2px 18px rgba(0,0,0,.4)' }}>{stages[stageIndex].title}</div>
     </div> : null}
   </AbsoluteFill>;
 };

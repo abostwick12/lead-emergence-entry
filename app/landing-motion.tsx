@@ -3,17 +3,15 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styles from './landing-experience.module.css';
 
-type Stage = { name: string; short: string; phrase: string };
+type Stage = { name: string; short: string; philosophy: string; description: string };
 export function HeroSequence({ stages }: { stages: readonly Stage[] }) {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
-  const filmDialog = useRef<HTMLDialogElement>(null);
   const failed = useRef(false);
   const [stage, setStage] = useState(0);
   const [paused, setPaused] = useState(false);
   const [videoSrc, setVideoSrc] = useState<string>();
   const [ready, setReady] = useState(false);
-  const [watching, setWatching] = useState(false);
   const syncStage = useCallback(() => {
     const element = video.current;
     if (!element || !Number.isFinite(element.duration) || element.duration <= 0) return;
@@ -39,18 +37,16 @@ export function HeroSequence({ stages }: { stages: readonly Stage[] }) {
     if (paused) element.pause();
     else void element.play().catch(() => undefined);
   }, [paused, ready, videoSrc]);
-  function closeFilm() { setWatching(false); }
   return <section ref={root} className={styles.heroSequence} data-paused={paused} aria-labelledby="hero-title">
     <div className={styles.heroPinned}>
       <div className={styles.heroImage}><Image src="/brand/leader-dusk.webp" alt="" fill sizes="100vw" preload /></div>
       {videoSrc ? <video ref={video} className={styles.heroVideo} data-ready={ready} src={videoSrc} muted loop autoPlay playsInline preload="metadata" aria-hidden="true" tabIndex={-1} onLoadedMetadata={syncStage} onCanPlay={() => { setReady(true); syncStage(); }} onTimeUpdate={syncStage} onError={() => { failed.current = true; setReady(false); setVideoSrc(undefined); setStage(0); }} /> : null}
       <div className={styles.heroShade} />
-      <div className={styles.heroContent}><p className={styles.stageName}>{String(stage + 1).padStart(2,'0')} <span aria-hidden="true">—</span> {stages[stage].name}</p><h1 id="hero-title">Before you decide<br />what to do,</h1><p className={styles.heroLine}>you have to see what is actually here.</p><p className={styles.stagePhrase}>{stages[stage].phrase}</p></div>
-      <div className={styles.heroBottom}><div className={styles.motionControls}><a href="#leader">Scroll into the work <span aria-hidden="true">↓</span></a><div><button className={styles.watchFilm} onClick={() => { setWatching(true); filmDialog.current?.showModal(); }}>Watch the film <span aria-hidden="true">↗</span></button><button className={styles.pauseMotion} onClick={() => setPaused(!paused)} aria-pressed={paused}>{paused ? 'Resume visual motion' : 'Pause visual motion'}</button></div></div>
-        <ol className={styles.stageLine} aria-label="The seven-stage Lead Emergence progression">{stages.map((item,index)=><li key={item.name} data-current={stage===index}><span className={styles.stageDot} aria-hidden="true"/><span aria-hidden="true">{String(index+1).padStart(2,'0')}</span><span className={styles.stageFull}>{item.name}: {item.phrase}</span></li>)}</ol>
+      <div className={styles.heroContent}><p className={styles.stageName}>{String(stage + 1).padStart(2,'0')} <span aria-hidden="true">—</span> {stages[stage].name}</p><h1 id="hero-title">{stages[stage].philosophy}</h1><p className={styles.heroDescription} data-hero-description>{stages[stage].description}</p></div>
+      <div className={styles.heroBottom}><div className={styles.motionControls}><a href="#leader">Scroll into the work <span aria-hidden="true">↓</span></a><button className={styles.pauseMotion} onClick={() => setPaused(!paused)} aria-pressed={paused}>{paused ? 'Resume visual motion' : 'Pause visual motion'}</button></div>
+        <ol className={styles.stageLine} aria-label="The seven-stage Lead Emergence progression">{stages.map((item,index)=><li key={item.name} data-current={stage===index}><span className={styles.stageDot} aria-hidden="true"/><span aria-hidden="true">{String(index+1).padStart(2,'0')}</span><span className={styles.stageFull}>{item.name}: {item.philosophy} {item.description}</span></li>)}</ol>
       </div>
     </div>
-    <dialog ref={filmDialog} className={styles.filmDialog} aria-labelledby="film-title" onClose={closeFilm}><div><h2 id="film-title">Lead Emergence — See again</h2><button onClick={() => filmDialog.current?.close()} autoFocus>Close film</button></div>{watching ? <video controls autoPlay playsInline preload="metadata" src="/film/lead-emergence-seven-stages.mp4" aria-label="Silent seven-stage Lead Emergence brand film" /> : null}<p>A silent, 42-second visual journey. All seven stages are also available as text on this page.</p></dialog>
   </section>;
 }
 

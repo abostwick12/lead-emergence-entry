@@ -1,5 +1,5 @@
 {
-  "renderedAt": "2026-09-19T16:48:20.616Z",
+  "renderedAt": "2026-09-19T17:32:45.047Z",
   "renderer": "Remotion 4.0.521",
   "source": "Generated illustrative keyframes; no claim of captured live-action footage",
   "variants": [
@@ -24,7 +24,7 @@
     {
       "id": "Brand-Film",
       "file": "public/film/lead-emergence-seven-stages.mp4",
-      "bytes": 6795609,
+      "bytes": 6273531,
       "width": 1280,
       "height": 720,
       "fps": 24,

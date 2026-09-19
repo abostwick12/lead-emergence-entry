@@ -3,13 +3,13 @@ import { HeroSequence, ConversationExample } from './landing-motion';
 import styles from './landing-experience.module.css';
 
 export const EMERGENCE_STAGES = [
-  { name: 'SEE REALITY', short: 'SEE', phrase: 'Notice what is actually here.' },
-  { name: 'REFRAME REALITY', short: 'REFRAME', phrase: 'The first interpretation is only a beginning.' },
-  { name: 'ALIGN WITH REALITY', short: 'ALIGN', phrase: 'Find what can move together.' },
-  { name: 'BUILD CAPABILITY', short: 'BUILD', phrase: 'Give clarity a way to become action.' },
-  { name: 'CULTIVATE VALUE', short: 'CULTIVATE', phrase: 'Create the conditions for real value to grow.' },
-  { name: 'NEW REALITY', short: 'NEW REALITY', phrase: 'Stand somewhere you could not before.' },
-  { name: 'SEE AGAIN', short: 'SEE AGAIN', phrase: 'A new vantage point. A better next question.' },
+  { name: 'SEE REALITY', short: 'SEE', philosophy: "Before you take the first step, you have to see where you're actually standing.", description: 'Lead Emergence helps you be more present today, so you can see through the noise, separate signal from urgency, and notice what is actually happening.' },
+  { name: 'REFRAME REALITY', short: 'REFRAME', philosophy: "What if the problem isn't what you're seeing, but the framework you inherited?", description: 'Lead Emergence helps you challenge the assumptions underneath your first conclusion, especially the ones you didn’t realize you were carrying, and start recognizing potential instead of only seeing problems.' },
+  { name: 'ALIGN WITH REALITY', short: 'ALIGN', philosophy: "Alignment doesn't mean agreement. It means enough shared understanding to move together.", description: "Lead Emergence helps you connect what you're seeing with the people, priorities, and constraints around you so you can find what can actually move together." },
+  { name: 'BUILD CAPABILITY', short: 'BUILD', philosophy: 'Clarity gives vision somewhere to go.', description: "Lead Emergence helps turn what you've learned into decisions, practices, and capabilities you can actually use." },
+  { name: 'CULTIVATE VALUE', short: 'CULTIVATE', philosophy: "The work isn't only what we produce. It's what the work produces in us.", description: 'Lead Emergence helps you notice value beyond the output: what the work is building in you, in other people, and in the systems around you.' },
+  { name: 'NEW REALITY', short: 'NEW REALITY', philosophy: "The goal was never the plan. It was a reality that didn't exist before.", description: 'Lead Emergence helps you move from insight to change, so the way you lead, work, and live is actually different than it was before.' },
+  { name: 'SEE AGAIN', short: 'SEE AGAIN', philosophy: "Every new vantage point reveals what the old one couldn't.", description: 'Lead Emergence helps you learn from what changed, see what is emerging now, and begin the process again from a different place.' },
 ] as const;
 
 export function MountainMark() {
