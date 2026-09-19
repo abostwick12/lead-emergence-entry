@@ -8,7 +8,7 @@ const stages = [
   { label: 'REFRAME REALITY', title: 'A different view\nchanges the question.', image: 'reframe.webp', scale: [1.09, 1.025], focus: '65% 65%' },
   { label: 'ALIGN WITH REALITY', title: 'Find what can\nmove together.', image: 'alignment.webp', scale: [1.035, 1.065], focus: '65% 48%' },
   { label: 'BUILD CAPABILITY', title: 'Give clarity\na way to move.', image: 'reframe.webp', scale: [1.19, 1.09], focus: '72% 75%' },
-  { label: 'PRODUCE VALUE', title: 'Let the work change\nsomething real.', image: 'alignment.webp', scale: [1.11, 1.015], focus: '66% 55%' },
+  { label: 'CULTIVATE VALUE', title: 'Create the conditions\nfor real value to grow.', image: 'alignment.webp', scale: [1.11, 1.015], focus: '66% 55%' },
   { label: 'NEW REALITY', title: 'Stand somewhere\nnew.', image: 'new-reality.webp', scale: [1.055, 1], focus: '66% 47%' },
   { label: 'SEE AGAIN', title: 'From here,\nsee again.', image: 'new-reality.webp', scale: [1, 1.025], focus: '61% 51%' },
 ] as const;

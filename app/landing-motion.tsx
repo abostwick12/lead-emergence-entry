@@ -8,55 +8,42 @@ export function HeroSequence({ stages }: { stages: readonly Stage[] }) {
   const root = useRef<HTMLElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const filmDialog = useRef<HTMLDialogElement>(null);
-  const progress = useRef(0);
   const failed = useRef(false);
   const [stage, setStage] = useState(0);
   const [paused, setPaused] = useState(false);
   const [videoSrc, setVideoSrc] = useState<string>();
   const [ready, setReady] = useState(false);
   const [watching, setWatching] = useState(false);
-  const syncVideo = useCallback(() => {
+  const syncStage = useCallback(() => {
     const element = video.current;
-    if (paused || !element || element.seeking || !Number.isFinite(element.duration)) return;
-    const target = Math.min(element.duration - .05, progress.current * element.duration);
-    if (Math.abs(element.currentTime - target) > .09) element.currentTime = target;
-  }, [paused]);
+    if (!element || !Number.isFinite(element.duration) || element.duration <= 0) return;
+    setStage(Math.min(stages.length - 1, Math.floor((element.currentTime / element.duration) * stages.length)));
+  }, [stages.length]);
   useEffect(() => {
     const media = window.matchMedia('(prefers-reduced-motion: reduce)');
     const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
-    let frame = 0;
-    function update() {
-      frame = 0;
-      if (!root.current) return;
-      if (media.matches) {
-        setVideoSrc(undefined); setReady(false); setStage(0);
-        root.current.style.setProperty('--hero-progress', '0');
-        return;
-      }
-      if (paused) return;
-      const bounds = root.current.getBoundingClientRect();
-      if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
-      progress.current = Math.min(1, Math.max(0, -bounds.top / Math.max(1, bounds.height - window.innerHeight)));
-      root.current.style.setProperty('--hero-progress', String(progress.current));
-      setStage(Math.min(stages.length - 1, Math.floor(progress.current * stages.length)));
-      // Intentional scroll only. Reduced motion, data saving and skipped heroes keep the poster.
-      if (progress.current > .01 && window.innerWidth > 760 && !saveData && !failed.current) {
-        setVideoSrc((current) => current ?? '/film/lead-emergence-hero.mp4');
-      }
-      syncVideo();
+    function updateSource() {
+      const canUseMotion = !media.matches && !saveData && !failed.current;
+      setVideoSrc(canUseMotion ? window.innerWidth > 760 ? '/film/lead-emergence-hero.mp4' : '/film/lead-emergence-hero-mobile.mp4' : undefined);
+      setReady(false);
+      if (!canUseMotion) setStage(0);
     }
-    function schedule() { if (!frame) frame = requestAnimationFrame(update); }
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    media.addEventListener('change', schedule);
-    schedule();
-    return () => { window.removeEventListener('scroll', schedule); window.removeEventListener('resize', schedule); media.removeEventListener('change', schedule); cancelAnimationFrame(frame); };
-  }, [paused, stages.length, syncVideo]);
+    media.addEventListener('change', updateSource);
+    window.addEventListener('resize', updateSource);
+    updateSource();
+    return () => { media.removeEventListener('change', updateSource); window.removeEventListener('resize', updateSource); };
+  }, []);
+  useEffect(() => {
+    const element = video.current;
+    if (!element || !ready) return;
+    if (paused) element.pause();
+    else void element.play().catch(() => undefined);
+  }, [paused, ready, videoSrc]);
   function closeFilm() { setWatching(false); }
   return <section ref={root} className={styles.heroSequence} data-paused={paused} aria-labelledby="hero-title">
     <div className={styles.heroPinned}>
       <div className={styles.heroImage}><Image src="/brand/leader-dusk.webp" alt="" fill sizes="100vw" preload /></div>
-      {videoSrc ? <video ref={video} className={styles.heroVideo} data-ready={ready} src={videoSrc} muted playsInline preload="auto" aria-hidden="true" tabIndex={-1} onLoadedMetadata={syncVideo} onLoadedData={() => { setReady(true); syncVideo(); }} onSeeked={syncVideo} onError={() => { failed.current = true; setReady(false); setVideoSrc(undefined); }} /> : null}
+      {videoSrc ? <video ref={video} className={styles.heroVideo} data-ready={ready} src={videoSrc} muted loop autoPlay playsInline preload="metadata" aria-hidden="true" tabIndex={-1} onLoadedMetadata={syncStage} onCanPlay={() => { setReady(true); syncStage(); }} onTimeUpdate={syncStage} onError={() => { failed.current = true; setReady(false); setVideoSrc(undefined); setStage(0); }} /> : null}
       <div className={styles.heroShade} />
       <div className={styles.heroContent}><p className={styles.stageName}>{String(stage + 1).padStart(2,'0')} <span aria-hidden="true">—</span> {stages[stage].name}</p><h1 id="hero-title">Before you decide<br />what to do,</h1><p className={styles.heroLine}>you have to see what is actually here.</p><p className={styles.stagePhrase}>{stages[stage].phrase}</p></div>
       <div className={styles.heroBottom}><div className={styles.motionControls}><a href="#leader">Scroll into the work <span aria-hidden="true">↓</span></a><div><button className={styles.watchFilm} onClick={() => { setWatching(true); filmDialog.current?.showModal(); }}>Watch the film <span aria-hidden="true">↗</span></button><button className={styles.pauseMotion} onClick={() => setPaused(!paused)} aria-pressed={paused}>{paused ? 'Resume visual motion' : 'Pause visual motion'}</button></div></div>

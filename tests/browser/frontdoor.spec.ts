@@ -10,7 +10,7 @@ test('public sign in uses the canonical Entry form and defaults to the chooser',
   await expect(page.locator('input[type="password"]')).toHaveCount(1);
 });
 
-test('one public front door, concrete example, and no initial film request', async ({ page }, testInfo) => {
+test('one public front door, concrete example, and looping hero film', async ({ page }, testInfo) => {
   const media: string[] = []; const errors: string[] = [];
   page.on('request', request => { if (request.url().includes('.mp4')) media.push(request.url()); });
   page.on('pageerror', error => errors.push(error.message));
@@ -22,8 +22,10 @@ test('one public front door, concrete example, and no initial film request', asy
   expect(authLinks).toBeGreaterThanOrEqual(3);
   expect(await page.locator('a').evaluateAll(links => links.map(link => link.getAttribute('href')).filter(href => href?.includes('login') && href !== '/login'))).toEqual([]);
   expect(await page.locator('input[type="password"]').count()).toBe(0);
-  await page.waitForTimeout(400);
-  expect(media).toEqual([]);
+  const film = page.locator('video[aria-hidden="true"]');
+  await expect(film).toHaveAttribute('data-ready','true');
+  await expect(film).toHaveAttribute('loop','');
+  expect(media.some(url => url.includes('lead-emergence-hero'))).toBe(true);
   await page.screenshot({ path: 'test-results/hero-' + testInfo.project.name + '.png' });
   // Jumping directly to useful content must not start a discarded hero download.
   await page.getByRole('checkbox', { name: /decision ownership is non-negotiable/ }).check();
@@ -37,11 +39,12 @@ test('one public front door, concrete example, and no initial film request', asy
   expect(errors).toEqual([]);
 });
 
-test('scroll film seeks, pauses, and yields to ordinary scrolling', async ({ page }, testInfo) => {
+test('looping hero updates stage copy and respects its pause control', async ({ page }, testInfo) => {
   await page.goto('/');
-  await page.evaluate(() => window.scrollTo(0, 90));
   if (testInfo.project.name === 'mobile') {
-    await expect(page.locator('video[aria-hidden="true"]')).toHaveCount(0);
+    const film = page.locator('video[aria-hidden="true"]');
+    await expect(film).toHaveAttribute('data-ready','true');
+    await expect(film).toHaveAttribute('src', /lead-emergence-hero-mobile\.mp4/);
     await page.getByRole('button', { name: 'Watch the film' }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
     await page.keyboard.press('Escape');
@@ -51,11 +54,12 @@ test('scroll film seeks, pauses, and yields to ordinary scrolling', async ({ pag
   }
   const film = page.locator('video[aria-hidden="true"]');
   await expect(film).toHaveAttribute('data-ready','true');
-  await expect.poll(() => film.evaluate((element: HTMLVideoElement) => element.currentTime)).toBeGreaterThan(1);
+  await expect.poll(() => film.evaluate((element: HTMLVideoElement) => element.currentTime)).toBeGreaterThan(.1);
+  await film.evaluate((element: HTMLVideoElement) => new Promise<void>((resolve) => { element.addEventListener('seeked', () => resolve(), { once: true }); element.currentTime = element.duration * 4 / 7 + .02; }));
+  await expect(page.getByText('CULTIVATE VALUE', { exact: false }).first()).toBeVisible();
   await page.getByRole('button', { name: 'Pause visual motion' }).click();
   await page.waitForTimeout(150);
   const before = await film.evaluate((element: HTMLVideoElement) => element.currentTime);
-  await page.evaluate(() => window.scrollBy(0, 100));
   await page.waitForTimeout(180);
   expect(await film.evaluate((element: HTMLVideoElement) => element.currentTime)).toBeCloseTo(before,1);
   await page.getByRole('button', { name: 'Resume visual motion' }).click();
@@ -75,7 +79,7 @@ test('reduced motion and blocked media preserve the complete story', async ({ pa
   await page.goto('/');
   const list = page.getByRole('list', { name: 'The seven-stage Lead Emergence progression' });
   await expect(list.getByRole('listitem')).toHaveCount(7);
-  for (const name of ['SEE REALITY','REFRAME REALITY','ALIGN WITH REALITY','BUILD CAPABILITY','PRODUCE VALUE','NEW REALITY','SEE AGAIN']) await expect(list.getByText(name + ':', { exact: false })).toBeVisible();
+  for (const name of ['SEE REALITY','REFRAME REALITY','ALIGN WITH REALITY','BUILD CAPABILITY','CULTIVATE VALUE','NEW REALITY','SEE AGAIN']) await expect(list.getByText(name + ':', { exact: false })).toBeVisible();
   await list.scrollIntoViewIfNeeded();
   expect(media).toEqual([]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

@@ -7,7 +7,7 @@ export const EMERGENCE_STAGES = [
   { name: 'REFRAME REALITY', short: 'REFRAME', phrase: 'The first interpretation is only a beginning.' },
   { name: 'ALIGN WITH REALITY', short: 'ALIGN', phrase: 'Find what can move together.' },
   { name: 'BUILD CAPABILITY', short: 'BUILD', phrase: 'Give clarity a way to become action.' },
-  { name: 'PRODUCE VALUE', short: 'PRODUCE', phrase: 'Let the work change something real.' },
+  { name: 'CULTIVATE VALUE', short: 'CULTIVATE', phrase: 'Create the conditions for real value to grow.' },
   { name: 'NEW REALITY', short: 'NEW REALITY', phrase: 'Stand somewhere you could not before.' },
   { name: 'SEE AGAIN', short: 'SEE AGAIN', phrase: 'A new vantage point. A better next question.' },
 ] as const;
@@ -50,7 +50,7 @@ export function LandingExperience() {
         <Terrain /><div className={styles.invitationCopy}><h2 id="invitation-title">A clearer view.<br /><em>A more intentional next move.</em></h2><p>The work you bring is where we begin.</p><Link className={styles.lightButton} href="/login">Sign In <span aria-hidden="true">→</span></Link></div>
       </section>
     </div>
-    <footer className={styles.footer}><Link href="/" className={styles.wordmark}><MountainMark /><span>LEAD EMERGENCE</span></Link><p>See. Reframe. Align. Build. Produce. See again.</p><span>A more human future.</span></footer>
+    <footer className={styles.footer}><Link href="/" className={styles.wordmark}><MountainMark /><span>LEAD EMERGENCE</span></Link><p>See. Reframe. Align. Build. Cultivate value. See again.</p><span>A more human future.</span></footer>
   </main>;
 }
 

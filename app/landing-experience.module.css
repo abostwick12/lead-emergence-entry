@@ -15,9 +15,9 @@
 .pilotNote { color:#d8ddd9; }
 .signIn { border:1px solid #9ba6a388; padding:9px 24px; border-radius:4px; color:#f0f3ef; background:#07121b55; }
 .signIn:hover { border-color:var(--warm); }
-.heroSequence { position:relative; height:170svh; --hero-progress:0; }
-.heroPinned { position:sticky; top:0; height:100svh; min-height:660px; overflow:hidden; isolation:isolate; }
-.heroImage { position:absolute; inset:0; z-index:-3; transform:scale(calc(1.035 + var(--hero-progress)*.045)) translateX(calc(var(--hero-progress)*-12px)); }
+.heroSequence { position:relative; min-height:660px; }
+.heroPinned { position:relative; height:100svh; min-height:660px; overflow:hidden; isolation:isolate; }
+.heroImage { position:absolute; inset:0; z-index:-3; transform:scale(1.035); }
 .heroImage img { object-fit:cover; object-position:62% 43%; }
 .heroShade { position:absolute; inset:0; z-index:-2; background:linear-gradient(90deg,#030b13b8 0%,#07111b22 63%,#04101a00),linear-gradient(0deg,#05101a 0%,#05101a22 30%,#01050b22 75%); }
 .heroContent { position:absolute; left:clamp(24px,4.5vw,72px); right:24px; bottom:180px; max-width:940px; }
@@ -120,7 +120,7 @@
   .navActions { gap:12px; }
   .pilotNote { display:none; }
   .signIn { padding:7px 15px; font-size:12px; }
-  .heroSequence { height:145svh; }
+  .heroSequence { min-height:720px; }
   .heroPinned { min-height:720px; }
   .heroContent { left:24px; right:20px; bottom:198px; }
   .heroContent h1 { font-size:clamp(47px,8.7vw,65px); }
@@ -158,7 +158,7 @@
   .desktopBreak { display:none; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .heroSequence { height:auto; }
+  .heroSequence { min-height:0; }
   .heroPinned { position:relative; height:auto; min-height:780px; padding:420px 24px 0; }
   .heroImage { transform:none!important; max-height:760px; }
   .heroContent { position:relative; inset:auto; margin:0 auto; width:100%; max-width:1280px; }
