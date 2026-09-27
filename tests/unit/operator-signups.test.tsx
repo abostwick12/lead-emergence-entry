@@ -23,7 +23,7 @@ import { loadAuthorizedEntrySignups } from '@/lib/operator/signup-directory';
 
 type ListUsers = (options: { page: number; perPage: number }) => Promise<{
   data: {
-    users: Array<{ email?: string; created_at?: string; [key: string]: unknown }>;
+    users: Array<{ email?: string | null; created_at?: string; [key: string]: unknown }>;
     nextPage: number | null;
   } | null;
   error: { message?: string } | null;
@@ -73,7 +73,7 @@ describe('Entry operator signup directory', () => {
       })
       .mockResolvedValueOnce({
         data: {
-          users: [{ email: 'third@example.com', created_at: '2026-09-03T00:00:00Z', last_sign_in_at: 'not-returned' }],
+          users: [{ created_at: '2026-09-03T00:00:00Z', phone: 'not-returned' }],
           nextPage: null,
         },
         error: null,
@@ -87,7 +87,7 @@ describe('Entry operator signup directory', () => {
     expect(listUsers).toHaveBeenNthCalledWith(1, { page: 1, perPage: 2 });
     expect(listUsers).toHaveBeenNthCalledWith(2, { page: 2, perPage: 2 });
     expect(result).toEqual([
-      { email: 'third@example.com', created_at: '2026-09-03T00:00:00Z' },
+      { email: null, created_at: '2026-09-03T00:00:00Z' },
       { email: 'second@example.com', created_at: '2026-09-02T00:00:00Z' },
       { email: 'first@example.com', created_at: '2026-09-01T00:00:00Z' },
     ]);
@@ -112,6 +112,7 @@ describe('Entry operator signup directory', () => {
   });
 
   it('shows an error instead of an apparently complete list when loading fails', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     mocks.getUser.mockResolvedValue({
       data: { user: { app_metadata: { entry_signup_reader: true } } },
       error: null,
@@ -123,6 +124,10 @@ describe('Entry operator signup directory', () => {
     expect(html).toContain('Account directory unavailable');
     expect(html).toContain('No partial account list is shown.');
     expect(html).not.toContain('<table');
+    expect(consoleError).toHaveBeenCalledWith('Entry signup directory load failed', {
+      code: 'admin_request_failed',
+    });
+    consoleError.mockRestore();
   });
 
   it('renders only approved account fields for an authorized reader', async () => {
@@ -132,13 +137,18 @@ describe('Entry operator signup directory', () => {
     });
     mocks.listUsers.mockResolvedValue({
       data: {
-        users: [{
-          email: 'reader-visible@example.com',
-          created_at: '2026-09-04T00:00:00Z',
-          phone: '555-not-visible',
-          last_sign_in_at: 'not-visible',
-          app_metadata: { internal: 'not-visible' },
-        }],
+        users: [
+          {
+            email: 'reader-visible@example.com',
+            created_at: '2026-09-04T00:00:00Z',
+            last_sign_in_at: 'not-visible',
+            app_metadata: { internal: 'not-visible' },
+          },
+          {
+            created_at: '2026-09-03T00:00:00Z',
+            phone: '555-not-visible',
+          },
+        ],
         nextPage: null,
       },
       error: null,
@@ -149,6 +159,7 @@ describe('Entry operator signup directory', () => {
     expect(html).toContain('reader-visible@example.com');
     expect(html).toContain('Account created');
     expect(html).toContain('2026-09-04T00:00:00Z');
+    expect(html).toContain('No email');
     expect(html).not.toContain('555-not-visible');
     expect(html).not.toContain('last_sign_in_at');
     expect(html).not.toContain('not-visible');

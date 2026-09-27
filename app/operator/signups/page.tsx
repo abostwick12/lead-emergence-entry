@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { loadAuthorizedEntrySignups } from '@/lib/operator/signup-directory';
+import { EntrySignupDirectoryError, loadAuthorizedEntrySignups } from '@/lib/operator/signup-directory';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 function DirectoryUnavailable() {
@@ -20,7 +20,10 @@ export default async function OperatorSignupsPage() {
   let signups;
   try {
     signups = await loadAuthorizedEntrySignups(user);
-  } catch {
+  } catch (error) {
+    console.error('Entry signup directory load failed', {
+      code: error instanceof EntrySignupDirectoryError ? error.code : 'unexpected_error',
+    });
     return <DirectoryUnavailable />;
   }
   if (signups === null) notFound();
@@ -39,8 +42,8 @@ export default async function OperatorSignupsPage() {
             </tr>
           </thead>
           <tbody>
-            {signups.map((signup) => <tr key={`${signup.email}:${signup.created_at}`}>
-              <td style={{ padding: '12px 8px', borderBottom: '1px solid #ebe5db' }}>{signup.email}</td>
+            {signups.map((signup, index) => <tr key={`${signup.email ?? 'no-email'}:${signup.created_at}:${index}`}>
+              <td style={{ padding: '12px 8px', borderBottom: '1px solid #ebe5db' }}>{signup.email ?? 'No email'}</td>
               <td style={{ padding: '12px 8px', borderBottom: '1px solid #ebe5db' }}><time dateTime={signup.created_at}>{signup.created_at}</time></td>
             </tr>)}
           </tbody>
