@@ -1,0 +1,34 @@
+{
+  "renderedAt": "2026-09-06T23:04:11.021Z",
+  "renderer": "Remotion 4.0.521",
+  "source": "Generated illustrative keyframes; no claim of captured live-action footage",
+  "variants": [
+    {
+      "id": "Hero-Desktop",
+      "file": "public/film/lead-emergence-hero.mp4",
+      "bytes": 6187436,
+      "width": 1280,
+      "height": 720,
+      "fps": 24,
+      "seconds": 42
+    },
+    {
+      "id": "Hero-Mobile",
+      "file": "public/film/lead-emergence-hero-mobile.mp4",
+      "bytes": 4345220,
+      "width": 540,
+      "height": 960,
+      "fps": 24,
+      "seconds": 42
+    },
+    {
+      "id": "Brand-Film",
+      "file": "public/film/lead-emergence-seven-stages.mp4",
+      "bytes": 6775589,
+      "width": 1280,
+      "height": 720,
+      "fps": 24,
+      "seconds": 42
+    }
+  ]
+}
