@@ -42,16 +42,15 @@ async function recoveryLink() {
       const detail = await detailResponse.json();
       const body = `${detail.HTML ?? ''}\n${detail.Text ?? ''}`.replaceAll('&amp;', '&');
       const links = body.match(/https?:\/\/[^\s"'<>]+/g) ?? [];
-      const link = links.find((value) => value.includes('/auth/v1/verify') && value.includes('type=recovery'));
+      const link = links.find((value) => value.includes('/recover/confirm#token_hash='));
       if (link) {
-        // Local GoTrue may render the Docker bridge address in Mailpit. Keep the
-        // signed path/query intact while routing the browser through the public
-        // local API address supplied by `supabase status`.
         const recoveryUrl = new URL(link);
-        const publicLocalApi = new URL(supabaseUrl);
-        recoveryUrl.protocol = publicLocalApi.protocol;
-        recoveryUrl.host = publicLocalApi.host;
-        return recoveryUrl.toString();
+        if (recoveryUrl.origin !== new URL(appOrigin).origin || recoveryUrl.pathname !== '/recover/confirm') {
+          throw new Error('Local recovery email did not link to the Entry confirmation page');
+        }
+        const tokenHash = new URLSearchParams(recoveryUrl.hash.slice(1)).get('token_hash');
+        if (!tokenHash) throw new Error('Local recovery email did not include a recovery token hash');
+        return tokenHash;
       }
     }
     await new Promise((resolve) => setTimeout(resolve, 250));
@@ -76,7 +75,11 @@ try {
     page.getByRole('button', { name: 'Send reset link' }).click(),
   ]);
   await page.getByRole('status').filter({ hasText: 'a reset link has been sent' }).waitFor();
-  await page.goto(await recoveryLink(), { waitUntil: 'networkidle' });
+  const tokenHash = await recoveryLink();
+  await page.goto(`${appOrigin}/recover/confirm`, { waitUntil: 'networkidle' });
+  await page.getByRole('heading', { name: 'Confirm account recovery' }).waitFor();
+  await page.evaluate((hash) => window.history.replaceState(null, '', `#token_hash=${encodeURIComponent(hash)}`), tokenHash);
+  await page.getByRole('button', { name: 'Continue to choose a password' }).click();
   await page.waitForURL('**/update-password', { timeout: 30_000 });
   await page.getByLabel('New password').fill(recoveredPassword);
   await Promise.all([

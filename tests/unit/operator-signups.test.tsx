@@ -160,6 +160,8 @@ describe('Entry operator signup directory', () => {
     expect(html).toContain('Account created');
     expect(html).toContain('2026-09-04T00:00:00Z');
     expect(html).toContain('No email');
+    expect(html).toContain('Request recovery email');
+    expect(html).not.toContain('token_hash');
     expect(html).not.toContain('555-not-visible');
     expect(html).not.toContain('last_sign_in_at');
     expect(html).not.toContain('not-visible');
