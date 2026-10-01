@@ -139,7 +139,7 @@ The release evidence must include all of the following against production-shaped
 | Consultant-private material | Empty/denied for client session while a server-side control proves the fixture exists. |
 | Existing Consulting account | Link only after explicit authenticated confirmation; no email-only merge. |
 | Consulting logout | Consulting session clears; Entry session can authorize again without password. |
-| Entry recovery | Mail delivered, callback exchanged, password changed, recovery session signed out, old password rejected. |
+| Entry recovery | Mail delivered, customer explicitly confirms and verifies the recovery token, password changed, recovery session signed out, old password rejected. |
 | Error/tamper | Unknown client, callback, mode cookie, provider subject, open redirect, and replay all fail closed. |
 
 ## Observability and incident operation

@@ -1,5 +1,5 @@
 begin;
-select plan(36);
+select plan(37);
 
 select is(
   (select enabled from entry_identity.billing_cutover_control
@@ -31,7 +31,20 @@ insert into auth.users(id,aud,role,email,email_confirmed_at,raw_user_meta_data,c
 values
   ('00000000-0000-4000-8000-00000000e001','authenticated','authenticated','slice-d-entry-billing@example.invalid',now(),'{}',now(),now()),
   ('00000000-0000-4000-8000-00000000e002','authenticated','authenticated','slice-d-entry-legacy@example.invalid',now(),'{}',now(),now()),
-  ('00000000-0000-4000-8000-00000000e003','authenticated','authenticated','slice-d-entry-offer@example.invalid',now(),'{}',now(),now());
+  ('00000000-0000-4000-8000-00000000e003','authenticated','authenticated','slice-d-entry-offer@example.invalid',now(),'{}',now(),now()),
+  ('00000000-0000-4000-8000-00000000e004','authenticated','authenticated','slice-d-entry-null-authority@example.invalid',now(),'{}',now(),now());
+
+insert into entry_identity.product_entitlements (
+  canonical_user_id, product, status, source, authority_kind
+) values (
+  '00000000-0000-4000-8000-00000000e004','PERSONAL','ACTIVE','historical_import',null
+);
+select results_eq(
+  $$select count(*) from entry_identity.personal_projection_outbox
+    where canonical_user_id = '00000000-0000-4000-8000-00000000e004'$$,
+  array[0::bigint],
+  'An active Personal entitlement with NULL authority does not enqueue'
+);
 
 insert into entry_identity.personal_billing_accounts(
   canonical_user_id,selected_offer,stripe_checkout_session_id,normalized_state

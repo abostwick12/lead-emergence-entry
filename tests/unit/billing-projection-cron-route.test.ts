@@ -126,15 +126,16 @@ describe('Entry PERSONAL projection drain cron route', () => {
 
   it('keeps the cron credential server-only and schedules exactly one five-minute job', () => {
     const envExample = readFileSync(path.resolve('.env.example'), 'utf8');
-    const vercelConfig = JSON.parse(readFileSync(path.resolve('vercel.json'), 'utf8')) as {
-      crons: Array<{ path: string; schedule: string }>;
-    };
+    const schedulerMigration = readFileSync(
+      path.resolve('supabase/migrations/20260921210000_entry_projection_drain_scheduler.sql'),
+      'utf8',
+    );
 
     expect(envExample).toContain('\nCRON_SECRET=');
     expect(envExample).not.toContain('NEXT_PUBLIC_CRON_SECRET');
-    expect(vercelConfig.crons).toEqual([{
-      path: '/api/internal/cron/personal-projection-drain',
-      schedule: '*/5 * * * *',
-    }]);
+    expect(schedulerMigration.match(/\bcron\.schedule\s*\(/g)).toHaveLength(1);
+    expect(schedulerMigration).toMatch(/select cron\.schedule\(\s*'entry_personal_projection_outbox_drain',\s*'\*\/5 \* \* \* \*',/);
+    expect(schedulerMigration).toContain("url := 'https://entry.leademergence.com/api/internal/cron/personal-projection-drain'");
+    expect(schedulerMigration).toMatch(/'Authorization',\s*'Bearer '\s*\|\|\s*\(\s*select decrypted_secret\s+from vault\.decrypted_secrets\s+where name = 'cron_secret'/);
   });
 });
