@@ -50,7 +50,7 @@ async function recoveryLink() {
         }
         const tokenHash = new URLSearchParams(recoveryUrl.hash.slice(1)).get('token_hash');
         if (!tokenHash) throw new Error('Local recovery email did not include a recovery token hash');
-        return tokenHash;
+        return recoveryUrl.toString();
       }
     }
     await new Promise((resolve) => setTimeout(resolve, 250));
@@ -75,10 +75,15 @@ try {
     page.getByRole('button', { name: 'Send reset link' }).click(),
   ]);
   await page.getByRole('status').filter({ hasText: 'a reset link has been sent' }).waitFor();
-  const tokenHash = await recoveryLink();
-  await page.goto(`${appOrigin}/recover/confirm`, { waitUntil: 'networkidle' });
+  const recoveryUrl = await recoveryLink();
+  try {
+    await page.goto(recoveryUrl, { waitUntil: 'networkidle' });
+  } catch {
+    throw new Error('Browser could not open the delivered recovery link');
+  }
   await page.getByRole('heading', { name: 'Confirm account recovery' }).waitFor();
-  await page.evaluate((hash) => window.history.replaceState(null, '', `#token_hash=${encodeURIComponent(hash)}`), tokenHash);
+  await page.getByRole('button', { name: 'Continue to choose a password' }).waitFor();
+  assert.equal(new URL(page.url()).pathname, '/recover/confirm');
   await page.getByRole('button', { name: 'Continue to choose a password' }).click();
   await page.waitForURL('**/update-password', { timeout: 30_000 });
   await page.getByLabel('New password').fill(recoveredPassword);
@@ -105,7 +110,7 @@ try {
   if (newPassword.error) throw newPassword.error;
   await verifier.auth.signOut({ scope: 'local' });
   assert.deepEqual(errors, []);
-  console.log(JSON.stringify({ status: 'PASS', recoveryEmailDelivered: true, callbackExchanged: true, passwordChanged: true, recoverySessionSignedOut: true, browserErrors: errors }));
+  console.log(JSON.stringify({ status: 'PASS', recoveryEmailDelivered: true, recoveryTokenVerified: true, passwordChanged: true, recoverySessionSignedOut: true, browserErrors: errors }));
 } finally {
   await browser.close();
   const removed = await admin.auth.admin.deleteUser(prepared.data.user.id);
