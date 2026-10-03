@@ -1,5 +1,8 @@
 # Entry -> Workspace one-login SSO
 
+> **Status clarification - October 3, 2026:** Historical implementation checkpoint. The status below predates deployed Entry-to-Workspace production infrastructure and does not establish its current acceptance. Preserve the identity boundary and flow specification; refresh canonical evidence for live provider state, release provenance and remaining client acceptance.
+> Current authority: [production state](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/status/PRODUCTION_STATE.md) and [roadmap](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/ROADMAP.md).
+
 Status: implementation is locally validated; the dedicated Entry Vercel authority and custom domain are provisioned and paused, while the production identity backend, OAuth clients/providers, interactive acceptance, and production cutover remain incomplete.
 
 ## Boundary

@@ -17,6 +17,10 @@ The neutral Lead Emergence entry and canonical identity boundary.
 - Consulting domain data or authorization
 - Product roles, organizations, engagements, workspaces, or record visibility
 
+## Production source and release status
+
+Current launch gates and timestamped production evidence live in the [canonical roadmap](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/ROADMAP.md) and [production state](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/status/PRODUCTION_STATE.md). Repository main is not proof of the deployed upload. The October 3 audit found that retained production source contains billing/projection paths absent from main; complete the reviewed release-baseline reconciliation before another production release. Historical foundation and Preview notes below do not authorize provisioning, migration, or cutover.
+
 ## Local setup
 
 1. Install Node.js 24 or newer.
