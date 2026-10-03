@@ -81,6 +81,47 @@ describe('Entry PERSONAL projection delivery', () => {
     expect(state.delivered).toEqual([item.deliveryId]);
   });
 
+  it('times out a stalled delivery, proceeds to the next item, and retries the same delivery later', async () => {
+    const later = { ...item, deliveryId: '00000000-0000-4000-8000-0000000000d2', projectionVersion: 42 };
+    const state = retryableStore([item, later]);
+    let timeoutSignal: AbortSignal | null | undefined;
+    const fetchImpl = vi.fn<typeof fetch>()
+      .mockImplementationOnce((_input, init) => new Promise<Response>((_resolve, reject) => {
+        timeoutSignal = init?.signal;
+        if (timeoutSignal?.aborted) {
+          reject(timeoutSignal.reason);
+        } else {
+          timeoutSignal?.addEventListener('abort', () => reject(timeoutSignal?.reason), { once: true });
+        }
+      }))
+      .mockImplementation(async () => Response.json({ accepted: true }));
+
+    const first = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+    });
+    expect(timeoutSignal?.aborted).toBe(true);
+    expect(timeoutSignal?.reason.name).toBe('TimeoutError');
+    expect(first).toEqual({ claimed: 2, delivered: 1, failed: 1 });
+    expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(
+      item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE',
+    );
+    expect(state.delivered).toEqual([later.deliveryId]);
+
+    const retry = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+    });
+    expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
+    expect(state.delivered).toEqual([later.deliveryId, item.deliveryId]);
+    const sentIds = fetchImpl.mock.calls.map(([, init]) => JSON.parse(String(init?.body)).delivery_id);
+    expect(sentIds).toEqual([item.deliveryId, later.deliveryId, item.deliveryId]);
+
+    const afterDelivery = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+    });
+    expect(afterDelivery).toEqual({ claimed: 0, delivered: 0, failed: 0 });
+    expect(fetchImpl).toHaveBeenCalledTimes(3);
+  }, 10_000);
+
   it('does not redeliver an item after its successful delivery is recorded', async () => {
     const state = retryableStore([item]);
     const fetchImpl = vi.fn(async () => Response.json({ accepted: true }));

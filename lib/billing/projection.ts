@@ -132,6 +132,7 @@ export async function drainPersonalProjectionOutbox({
           'x-le-projection-signature': signPersonalProjection(secret, timestamp, body),
         },
         body,
+        signal: AbortSignal.timeout(3_000),
       });
       if (!response.ok) {
         await store.markFailed(item.deliveryId, `WORKSPACE_HTTP_${response.status}`);

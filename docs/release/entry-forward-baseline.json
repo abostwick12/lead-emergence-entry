@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 78 selected source paths, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 76 selected source paths unchanged and retain original source provenance for two explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -192,7 +192,9 @@
       "path": "lib/billing/projection.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739"
+      "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
+      "forwardRepairId": "projection-transport-timeout",
+      "repairedBlob": "1f21874af23425047ad79cae810c73cfa0f20e23"
     },
     {
       "path": "lib/billing/reconciliation.ts",
@@ -444,7 +446,9 @@
       "path": "tests/unit/billing-projection.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd"
+      "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
+      "forwardRepairId": "projection-transport-timeout",
+      "repairedBlob": "15d537e078908faba1134671b318a172d3cf8519"
     },
     {
       "path": "tests/unit/billing-reconciliation.test.ts",
@@ -487,6 +491,21 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "8918c1c6ed972c68b967a505516b5ff773b77d4c"
+    }
+  ],
+  "forwardRepairs": [
+    {
+      "id": "projection-transport-timeout",
+      "baseCandidate": "e57fecbac7594234254ab3f9d2ada0ade2dd2fa1",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-03",
+      "authorization": "your approved for the repair",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769754",
+      "scope": "Add a 3000 ms per-request abort signal and regression coverage for cancellation, progression and retry; no whole-batch deadline or production change.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ]
     }
   ]
 }
