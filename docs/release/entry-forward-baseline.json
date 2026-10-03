@@ -1,0 +1,511 @@
+{
+  "purpose": "Source preservation for Phase 0.6; not deployment or production acceptance.",
+  "main": "0b278fe7254c86e18adcd1215af86d54e36f3411",
+  "retainedProductionSource": "4127cec96379841e3741fd0f9997e10697b31cc7",
+  "dependencyCandidate": "6854c08b99bf22136428c5f5461bae1891aa9064",
+  "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
+  "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
+  "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
+  "sourcePolicy": "Preserve 76 selected source paths unchanged and retain original source provenance for two explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "environmentNamesAddedWithEmptyValues": [
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "STRIPE_INDIVIDUAL_MONTHLY_PRICE_ID",
+    "STRIPE_SETUP_PRICE_ID",
+    "STRIPE_SOTF_COUPON_ID",
+    "STRIPE_PORTAL_CONFIGURATION_ID",
+    "WORKSPACE_PERSONAL_PROJECTION_URL",
+    "WORKSPACE_PROJECTION_HMAC_SECRET",
+    "CRON_SECRET"
+  ],
+  "excludedRecoveryMigration": "supabase/migrations/20261001140000_reject_null_personal_projection_authority.sql",
+  "records": [
+    {
+      "path": "app/account/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "2e98148b6092dc8b6063c01a01d7441edf705267"
+    },
+    {
+      "path": "app/api/billing/checkout/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "947ade8b17e6f5fd4890e0f02c7989940aed90f8"
+    },
+    {
+      "path": "app/api/billing/portal/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "28bcff9508290134669ed333b315cc7b73fc8726"
+    },
+    {
+      "path": "app/api/billing/resume/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d6256de2fa249ac1606277d919de796ffb428bc0"
+    },
+    {
+      "path": "app/api/billing/stripe/webhook/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "1a1bdffcb37d4d29278f5b9b2f3ee2c2ed97c72e"
+    },
+    {
+      "path": "app/api/internal/cron/personal-projection-drain/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "5941b3b9d9dbbb5c64c4d0c74350e9e373e58be0"
+    },
+    {
+      "path": "app/globals.css",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0127ab09335529a80c9495916efb1a7c38cdd853"
+    },
+    {
+      "path": "app/icon.svg",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "995a258c1a51cf631e2b5ae2dbddb4269f40b358"
+    },
+    {
+      "path": "app/landing-experience.module.css",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "471d6d62fadf6eb1c48d3462c0f983d5f7e493c5"
+    },
+    {
+      "path": "app/landing-experience.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d8bed678972147cac1f6515a929520d235e771d4"
+    },
+    {
+      "path": "app/landing-motion.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23"
+    },
+    {
+      "path": "app/oauth/consent/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "56b09ea2fd4d2f6a4fb2e9855da38cb15a165d99"
+    },
+    {
+      "path": "app/signup/actions.ts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "7c452d740a8f370a83a744cf9280b6aeb12e8830"
+    },
+    {
+      "path": "app/workspaces/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "4a50febc229626c769c8a5d751a908aa79a78f42"
+    },
+    {
+      "path": "docs/frontdoor-handoff.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "6cb2360a3d441a4aaef6302988dd3395c4445bdc"
+    },
+    {
+      "path": "docs/frontdoor-performance.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "07d001ceb3142bb3475af23be2559f1bfffd02be"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f8743b3404ff5f7ee208bedf20d1f8120732776b"
+    },
+    {
+      "path": "film/CREATIVE-BRIEF.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "092f70bd880d80911e61aa9c89c2c4a694a4c60b"
+    },
+    {
+      "path": "film/README.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f3ceddadced20acca42478ee2ab0d46fa08f8f8a"
+    },
+    {
+      "path": "film/package-lock.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "203b9bcfa73131171886c3659ae98ee5f9f1e435"
+    },
+    {
+      "path": "film/package.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a65a9b6fd249c7d27dd0c4388a03a3c4370a3b28"
+    },
+    {
+      "path": "film/render-evidence.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "eb3a32c5ccf165637e8f7a2acdcd39dbec7e832d"
+    },
+    {
+      "path": "film/render.mjs",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "60c8efa1217d43732299400c0be34980689a5ea7"
+    },
+    {
+      "path": "film/src/index.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "51ed4dc917e4b29a5d656f3e12b4f14719156de0"
+    },
+    {
+      "path": "film/tsconfig.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a0cbe44d778db9b8afe5cb76c572765fefde525b"
+    },
+    {
+      "path": "lib/billing/checkout.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3dd5531d644b2fdd92cb511ce68d477575e0716b"
+    },
+    {
+      "path": "lib/billing/config.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "84b18b529ae8b3b4ada233ca99c3253f83f494ff"
+    },
+    {
+      "path": "lib/billing/lifecycle.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "627133beb1600b43f8e38110118973fbb24595ac"
+    },
+    {
+      "path": "lib/billing/projection.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
+      "forwardRepairId": "projection-transport-timeout",
+      "repairedBlob": "1f21874af23425047ad79cae810c73cfa0f20e23"
+    },
+    {
+      "path": "lib/billing/reconciliation.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4"
+    },
+    {
+      "path": "lib/billing/store.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "ef238eeb06f827e0c98d5f5eccff56b9f3b49b49"
+    },
+    {
+      "path": "lib/billing/stripe.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d39bc2793ed4eff57cb42933db83cc3caed70baf"
+    },
+    {
+      "path": "lib/identity/automatic-personal.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "eb5a74c4e9c515e3c2ac7b7a3164d816ae814b1d"
+    },
+    {
+      "path": "lib/oauth/server.ts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "020309bc1708ce9106fece24002aeae901131480"
+    },
+    {
+      "path": "package-lock.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
+      "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e"
+    },
+    {
+      "path": "package.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
+      "sourceBlob": "85ecbaf0e0e61ff3b74ef2ad3c5a7638ac94aac2"
+    },
+    {
+      "path": "playwright.frontdoor.config.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "008fa9df1e6600ca09ff3b2cd21029b1d1f95da7"
+    },
+    {
+      "path": "public/brand/alignment.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "4b70e7ccd3190645fce83b3a9881da5e3669dcfe"
+    },
+    {
+      "path": "public/brand/leader-dusk-small.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d366c96a996434822282b84020574675841a8e99"
+    },
+    {
+      "path": "public/brand/leader-dusk.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "c74619ae88150d2a5adfc62464488e603cabf8db"
+    },
+    {
+      "path": "public/brand/new-reality.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "925ba943d602e033fe7d45fb693019bde3f196cb"
+    },
+    {
+      "path": "public/brand/reframe.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "2a96fe74d0178d487d456f6abb751ef3fed8bd39"
+    },
+    {
+      "path": "public/film/lead-emergence-hero-mobile.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "6fa9dd9f44a46d9218e6117289a65b91734a701c"
+    },
+    {
+      "path": "public/film/lead-emergence-hero.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "072ffbdbe0c2e74c3dd72d2ba638bf5a39de7703"
+    },
+    {
+      "path": "public/film/lead-emergence-seven-stages.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "554f32a88e4070b061b9d1a03fba4d7131e28376"
+    },
+    {
+      "path": "scripts/measure-frontdoor.mjs",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a2f087aa6b5c9d5a065a563b586718f5426ff013"
+    },
+    {
+      "path": "supabase/migrations/20260919120000_entry_service_entitlement_status_read.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "fc3ba17a946dbc35c83fa84478771fce3bf3afca"
+    },
+    {
+      "path": "supabase/migrations/20260919180000_phase_2_2_billing_authority_foundation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "b14aaecef83185cc6c8083f8cf4412067e128771"
+    },
+    {
+      "path": "supabase/migrations/20260919200000_entry_checkout_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "62dbfcf3e978f112304cf2c50fe1964cc3a423d1"
+    },
+    {
+      "path": "supabase/migrations/20260919201000_correct_entry_checkout_session_column.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3a45cefd9f0c25b2006574e468102e0a495a66e6"
+    },
+    {
+      "path": "supabase/migrations/20260919210000_entry_stripe_reconciliation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "85ca3c208a40a49937f0fdfb22d491d59d7747fc"
+    },
+    {
+      "path": "supabase/migrations/20260919220000_sponsored_access_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "75e3e1bbe3acbfe3213348cb5f218e236556f1a5"
+    },
+    {
+      "path": "supabase/migrations/20260919230000_personal_projection_outbox.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "8c1e22dc7e704cd461005355a8e581fb89eea82d"
+    },
+    {
+      "path": "supabase/migrations/20260919232000_correct_personal_projection_delivery_state_cast.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "c606dbeaeb20f7d97b24ca908334f77e2c8358b0"
+    },
+    {
+      "path": "supabase/migrations/20260919240000_entry_customer_lifecycle.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "58f25ee62fd1c44a43331a29c62f32704ac71d92"
+    },
+    {
+      "path": "supabase/migrations/20260921210000_entry_projection_drain_scheduler.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "fdc73348b4ccb9466f076db032ef9b6de83d9bbd"
+    },
+    {
+      "path": "supabase/tests/entitlement_status_api.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "702a4b4f6e241cb012d08d0ff78971ab6744bf75"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_billing_foundation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f3b00e487fd323ade2026553d946b31e2a8b7418"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_checkout_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0984bf10c88e3d2c25324b90a02996b817bf19b9"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_customer_lifecycle.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "faab209a2387bed11b2481909dc79217aec847bb"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_personal_projection_outbox.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "ed3114f11779009f427259a5f371e393dd7c9565"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_sponsored_access_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "065b963f6483595076ba12a883ba46876d06431d"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_stripe_reconciliation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "bcc6e41c091ebbeac614bb7ea1fb504dd6ed883e"
+    },
+    {
+      "path": "tests/browser/frontdoor.spec.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "378056a26a8ebf82adaef0a91af70d82651e41bd"
+    },
+    {
+      "path": "tests/unit/automatic-personal.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "466cf22526959ff298c424366ed9c9c4b5386739"
+    },
+    {
+      "path": "tests/unit/billing-checkout-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "037ad72eda41fb189d5dc1ff8122863b5422ef32"
+    },
+    {
+      "path": "tests/unit/billing-checkout.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "bc395759aca24426e42354a11c79732f528bc2b9"
+    },
+    {
+      "path": "tests/unit/billing-lifecycle-routes.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3856c9236c68d51df450fc910d9bb1ed9e8339e7"
+    },
+    {
+      "path": "tests/unit/billing-lifecycle.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f"
+    },
+    {
+      "path": "tests/unit/billing-projection-cron-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
+      "sourceBlob": "6de594083d6a04deb5a57e225bb7cd88d6bd953a"
+    },
+    {
+      "path": "tests/unit/billing-projection.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
+      "forwardRepairId": "projection-transport-timeout",
+      "repairedBlob": "15d537e078908faba1134671b318a172d3cf8519"
+    },
+    {
+      "path": "tests/unit/billing-reconciliation.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354"
+    },
+    {
+      "path": "tests/unit/billing-webhook-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0a4928f9857c308b673ee1fdee3cb16a7e4606a3"
+    },
+    {
+      "path": "tests/unit/oauth-server.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "72ea94e2c19d86e5678c5f55aca5bfb95d70723b"
+    },
+    {
+      "path": "tests/unit/workspaces-empty-state.test.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "668831452b22cb78d088b857d3ac017ed7448bfe"
+    },
+    {
+      "path": "tsconfig.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "e019e177a4ad46c51688e69dedde825a628d2aa4"
+    },
+    {
+      "path": "vercel.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "20fc77e7e7cfe269f473bba59884e6ba05afe1af"
+    },
+    {
+      "path": "vitest.config.mts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "8918c1c6ed972c68b967a505516b5ff773b77d4c"
+    }
+  ],
+  "forwardRepairs": [
+    {
+      "id": "projection-transport-timeout",
+      "baseCandidate": "e57fecbac7594234254ab3f9d2ada0ade2dd2fa1",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-03",
+      "authorization": "your approved for the repair",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769754",
+      "scope": "Add a 3000 ms per-request abort signal and regression coverage for cancellation, progression and retry; no whole-batch deadline or production change.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ]
+    }
+  ]
+}
