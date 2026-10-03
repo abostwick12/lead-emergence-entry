@@ -122,6 +122,65 @@ describe('Entry PERSONAL projection delivery', () => {
     expect(fetchImpl).toHaveBeenCalledTimes(3);
   }, 10_000);
 
+  it.each([200, 503])('cancels the unused HTTP %i response body before recording its result', async (status) => {
+    const state = retryableStore([item]);
+    const events: string[] = [];
+    const cancel = vi.fn(async () => {
+      await Promise.resolve();
+      events.push('cancelled');
+    });
+    vi.mocked(state.store.markDelivered).mockImplementationOnce(async () => { events.push('delivered'); });
+    vi.mocked(state.store.markFailed).mockImplementationOnce(async () => { events.push('failed'); });
+    const response = new Response(new ReadableStream({ cancel }), { status });
+    const result = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret,
+      fetchImpl: vi.fn(async () => response),
+    });
+    expect(cancel).toHaveBeenCalledOnce();
+    const recorded = vi.mocked(status === 200 ? state.store.markDelivered : state.store.markFailed);
+    expect(recorded).toHaveBeenCalledOnce();
+    expect(cancel.mock.invocationCallOrder[0]).toBeLessThan(recorded.mock.invocationCallOrder[0]);
+    expect(events).toEqual(['cancelled', status === 200 ? 'delivered' : 'failed']);
+    expect(result).toEqual({ claimed: 1, delivered: status === 200 ? 1 : 0, failed: status === 200 ? 0 : 1 });
+    if (status === 503) {
+      expect(state.store.markFailed).toHaveBeenCalledWith(item.deliveryId, 'WORKSPACE_HTTP_503');
+    }
+  });
+
+  it('accepts a successful response with no body', async () => {
+    const state = retryableStore([item]);
+    const result = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret,
+      fetchImpl: vi.fn(async () => new Response(null, { status: 204 })),
+    });
+    expect(result).toEqual({ claimed: 1, delivered: 1, failed: 0 });
+    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId);
+    expect(state.store.markFailed).not.toHaveBeenCalled();
+  });
+
+  it('retains a delivery for retry when response body cancellation rejects', async () => {
+    const state = retryableStore([item]);
+    const cancel = vi.fn(async () => { throw new Error('private response cleanup detail'); });
+    const fetchImpl = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response(new ReadableStream({ cancel }), { status: 200 }))
+      .mockImplementation(async () => new Response(null, { status: 204 }));
+    const first = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+    });
+    expect(cancel).toHaveBeenCalledOnce();
+    expect(first).toEqual({ claimed: 1, delivered: 0, failed: 1 });
+    expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
+    expect(state.store.markDelivered).not.toHaveBeenCalled();
+
+    const retry = await drainPersonalProjectionOutbox({
+      store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+    });
+    expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
+    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId);
+    expect(fetchImpl.mock.calls.map(([, init]) => JSON.parse(String(init?.body)).delivery_id))
+      .toEqual([item.deliveryId, item.deliveryId]);
+  });
+
   it('does not redeliver an item after its successful delivery is recorded', async () => {
     const state = retryableStore([item]);
     const fetchImpl = vi.fn(async () => Response.json({ accepted: true }));

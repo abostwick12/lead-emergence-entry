@@ -134,6 +134,7 @@ export async function drainPersonalProjectionOutbox({
         body,
         signal: AbortSignal.timeout(3_000),
       });
+      await response.body?.cancel();
       if (!response.ok) {
         await store.markFailed(item.deliveryId, `WORKSPACE_HTTP_${response.status}`);
         failed += 1;

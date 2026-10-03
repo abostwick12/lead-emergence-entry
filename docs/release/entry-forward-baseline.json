@@ -193,8 +193,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
-      "forwardRepairId": "projection-transport-timeout",
-      "repairedBlob": "1f21874af23425047ad79cae810c73cfa0f20e23"
+      "repairedBlob": "61590f9c1b0a7858bea7ae00e7dd541282ea3fd3",
+      "forwardRepairIds": [
+        "projection-transport-timeout",
+        "projection-response-cleanup"
+      ]
     },
     {
       "path": "lib/billing/reconciliation.ts",
@@ -447,8 +450,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
-      "forwardRepairId": "projection-transport-timeout",
-      "repairedBlob": "15d537e078908faba1134671b318a172d3cf8519"
+      "repairedBlob": "df1c05d4899a6fb6f6165fd5f312d73e8a0dfc99",
+      "forwardRepairIds": [
+        "projection-transport-timeout",
+        "projection-response-cleanup"
+      ]
     },
     {
       "path": "tests/unit/billing-reconciliation.test.ts",
@@ -502,6 +508,24 @@
       "authorization": "your approved for the repair",
       "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769754",
       "scope": "Add a 3000 ms per-request abort signal and regression coverage for cancellation, progression and retry; no whole-batch deadline or production change.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ],
+      "resultBlobs": {
+        "lib/billing/projection.ts": "1f21874af23425047ad79cae810c73cfa0f20e23",
+        "tests/unit/billing-projection.test.ts": "15d537e078908faba1134671b318a172d3cf8519"
+      }
+    },
+    {
+      "id": "projection-response-cleanup",
+      "baseCandidate": "4b6199302b792ccf9deb21ad494d41a48e19b2db",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-03",
+      "authorization": "the next repair is approved",
+      "authorizationSource": "https://sotfcoaching.slack.com/archives/C0C7AUR6YG0/p1791047792189449",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174057464",
+      "scope": "Cancel unused response bodies before recording HTTP results, retain bodyless responses and sanitized retry on cancellation rejection; preserve the existing timeout and retry semantics. No production change.",
       "paths": [
         "lib/billing/projection.ts",
         "tests/unit/billing-projection.test.ts"
