@@ -78,6 +78,10 @@ export async function POST(request: Request) {
         eventType: event.type,
         reason: error.code,
       });
+      if (error.code === 'CHECKOUT_OWNERSHIP_MISMATCH'
+        && event.type === 'checkout.session.expired') {
+        return NextResponse.json({ received: true, result: 'IGNORED' });
+      }
       return NextResponse.json({ error: error.code }, { status: 400 });
     }
     console.error('Stripe reconciliation failed', {

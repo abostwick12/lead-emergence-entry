@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 76 selected source paths unchanged and retain original source provenance for two explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 74 selected source paths unchanged and retain original source provenance for four explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -48,7 +48,11 @@
       "path": "app/api/billing/stripe/webhook/route.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "1a1bdffcb37d4d29278f5b9b2f3ee2c2ed97c72e"
+      "sourceBlob": "1a1bdffcb37d4d29278f5b9b2f3ee2c2ed97c72e",
+      "repairedBlob": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+      "forwardRepairIds": [
+        "obsolete-expired-checkout-response"
+      ]
     },
     {
       "path": "app/api/internal/cron/personal-projection-drain/route.ts",
@@ -466,7 +470,11 @@
       "path": "tests/unit/billing-webhook-route.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "0a4928f9857c308b673ee1fdee3cb16a7e4606a3"
+      "sourceBlob": "0a4928f9857c308b673ee1fdee3cb16a7e4606a3",
+      "repairedBlob": "138a5be23c257dcd14d3e760d4e398eab1c0b94a",
+      "forwardRepairIds": [
+        "obsolete-expired-checkout-response"
+      ]
     },
     {
       "path": "tests/unit/oauth-server.test.ts",
@@ -530,6 +538,23 @@
         "lib/billing/projection.ts",
         "tests/unit/billing-projection.test.ts"
       ]
+    },
+    {
+      "id": "obsolete-expired-checkout-response",
+      "baseCandidate": "7e5305c5422681ebb1dbc4fa9289f4f90fc38c2a",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "approved",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174178518",
+      "scope": "Return 200/IGNORED only for CHECKOUT_OWNERSHIP_MISMATCH on checkout.session.expired, retain rejection logging, ownership guards, persistence and downstream drain behavior, with real-reconciliation regression coverage. No production change.",
+      "paths": [
+        "app/api/billing/stripe/webhook/route.ts",
+        "tests/unit/billing-webhook-route.test.ts"
+      ],
+      "resultBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+        "tests/unit/billing-webhook-route.test.ts": "138a5be23c257dcd14d3e760d4e398eab1c0b94a"
+      }
     }
   ]
 }
