@@ -160,6 +160,14 @@ function stateFromSubscription(
   }
   if (subscription.status === 'paused') return 'PAUSED_NO_PAYMENT_METHOD';
   if (subscription.status === 'trialing') return 'TRIALING';
+  if (subscription.status === 'past_due' || subscription.status === 'unpaid') {
+    const hasPaidHistory = Boolean(context.setupFeePaidAt)
+      || context.sotfQualifyingPaidCycles > 0;
+    // A first failed charge cannot inherit scheduled-cancellation access.
+    if (!hasPaidHistory && context.normalizedState !== 'PAYMENT_GRACE') {
+      return 'SUSPENDED_PAYMENT';
+    }
+  }
   if (hasScheduledPeriodEndCancellation(subscription)) return 'CANCEL_AT_PERIOD_END';
   if (subscription.status === 'active') {
     if (context.normalizedState === 'PAYMENT_GRACE' && !allowPaidRecovery) {

@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 72 selected source paths unchanged and retain original source provenance for six explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 70 selected source paths unchanged and retain original source provenance for eight explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -216,7 +216,11 @@
       "path": "lib/billing/reconciliation.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4"
+      "sourceBlob": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4",
+      "repairedBlob": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+      "forwardRepairIds": [
+        "first-unpaid-subscription-suspension"
+      ]
     },
     {
       "path": "lib/billing/store.ts",
@@ -474,7 +478,11 @@
       "path": "tests/unit/billing-reconciliation.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354"
+      "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354",
+      "repairedBlob": "3a63049bdf9c98f29da17114cc529653c0d8a634",
+      "forwardRepairIds": [
+        "first-unpaid-subscription-suspension"
+      ]
     },
     {
       "path": "tests/unit/billing-webhook-route.test.ts",
@@ -626,6 +634,27 @@
       },
       "resultBlobs": {
         "app/landing-motion.tsx": "6c362bf0035cdb1b95386c25d014f32d955a8068"
+      }
+    },
+    {
+      "id": "first-unpaid-subscription-suspension",
+      "baseCandidate": "c8b8c78e4e3cbf6d05aa5e4174deade88b883f4f",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769755",
+      "scope": "Map past_due/unpaid subscriptions with no paid history and no existing PAYMENT_GRACE to SUSPENDED_PAYMENT before scheduled-cancellation handling. Preserve existing paid-history and grace behavior. Cover both statuses, prior TRIALING/ACTIVE, invoice and subscription-update paths, and scheduled cancellation. No migration, production billing change or new authority path.",
+      "paths": [
+        "lib/billing/reconciliation.ts",
+        "tests/unit/billing-reconciliation.test.ts"
+      ],
+      "baseBlobs": {
+        "lib/billing/reconciliation.ts": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4",
+        "tests/unit/billing-reconciliation.test.ts": "dd35539e2200812a732a91f19d483d1afa6b8354"
+      },
+      "resultBlobs": {
+        "lib/billing/reconciliation.ts": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+        "tests/unit/billing-reconciliation.test.ts": "3a63049bdf9c98f29da17114cc529653c0d8a634"
       }
     }
   ]

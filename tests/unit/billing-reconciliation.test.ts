@@ -373,8 +373,62 @@ describe('Stripe billing reconciliation', () => {
       { stripe: test.stripe as unknown as Stripe, store: test.store, config },
     );
     expect(test.applied[0].startGraceAt).toBeNull();
-    expect(test.applied[0].normalizedState).toBe('PENDING_CHECKOUT');
+    expect(test.applied[0].normalizedState).toBe('SUSPENDED_PAYMENT');
   });
+
+  it.each(
+    (['TRIALING', 'ACTIVE'] as const).flatMap((prior) =>
+      ['past_due', 'unpaid'].flatMap((status) =>
+        ['invoice.payment_failed', 'customer.subscription.updated'].flatMap((eventType) =>
+          [false, true].map((cancelAtPeriodEnd) => ({ prior, status, eventType, cancelAtPeriodEnd })),
+        ),
+      ),
+    ),
+  )('suspends $prior without paid history on $status/$eventType/cancel=$cancelAtPeriodEnd', async ({ prior, status, eventType, cancelAtPeriodEnd }) => {
+    const context = { ...sotfContext, normalizedState: prior };
+    const test = setup(context);
+    const sub = subscription(context, { status, cancel_at_period_end: cancelAtPeriodEnd });
+    const failed = invoice(context, { status: 'open', amount_paid: 0 });
+    test.stripe.invoices.retrieve.mockResolvedValue(failed);
+    test.stripe.subscriptions.retrieve.mockResolvedValue(sub);
+
+    await reconcileStripeEvent(
+      event(eventType, eventType === 'invoice.payment_failed' ? failed : sub),
+      { stripe: test.stripe as unknown as Stripe, store: test.store, config },
+    );
+
+    expect(test.applied).toHaveLength(1);
+    expect(test.applied[0]).toMatchObject({
+      normalizedState: 'SUSPENDED_PAYMENT',
+      startGraceAt: null,
+      qualifyingPaidCycle: false,
+      clearGrace: false,
+    });
+  });
+
+  it.each([
+    { label: 'paid setup', context: { ...standardContext, normalizedState: 'ACTIVE' as const, setupFeePaidAt: '2027-01-01T00:00:00Z' } },
+    { label: 'paid SOTF cycle', context: { ...sotfContext, normalizedState: 'ACTIVE' as const, sotfQualifyingPaidCycles: 1 } },
+    { label: 'existing grace', context: { ...sotfContext, normalizedState: 'PAYMENT_GRACE' as const } },
+  ].flatMap((item) => ['past_due', 'unpaid'].map((status) => ({ ...item, status }))))(
+    'preserves $label state on a $status subscription update', async ({ context, status }) => {
+      const test = setup(context);
+      const sub = subscription(context, { status });
+      test.stripe.subscriptions.retrieve.mockResolvedValue(sub);
+
+      await reconcileStripeEvent(
+        event('customer.subscription.updated', sub),
+        { stripe: test.stripe as unknown as Stripe, store: test.store, config },
+      );
+
+      expect(test.applied[0]).toMatchObject({
+        normalizedState: context.normalizedState,
+        startGraceAt: null,
+        qualifyingPaidCycle: false,
+        clearGrace: false,
+      });
+    },
+  );
 
   it('records payment action required without incrementing paid cycles or granting access', async () => {
     const context = { ...standardContext, normalizedState: 'PAYMENT_GRACE' as const };
