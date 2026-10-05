@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 74 selected source paths unchanged and retain original source provenance for four explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 73 selected source paths unchanged and retain original source provenance for five explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -24,7 +24,11 @@
       "path": "app/account/page.tsx",
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "2e98148b6092dc8b6063c01a01d7441edf705267"
+      "sourceBlob": "2e98148b6092dc8b6063c01a01d7441edf705267",
+      "repairedBlob": "031b1ca068f7550e032654a87241f0d392ebd612",
+      "forwardRepairIds": [
+        "account-billing-read-containment"
+      ]
     },
     {
       "path": "app/api/billing/checkout/route.ts",
@@ -577,6 +581,29 @@
       "resultBlobs": {
         "lib/billing/projection.ts": "2bf5c23590644fa9781fbd26951ce21c995416c7",
         "tests/unit/billing-projection.test.ts": "fa03b056130498ee718802055f1c327dea947796"
+      }
+    },
+    {
+      "id": "account-billing-read-containment",
+      "baseCandidate": "3d561aac81dd22ec414e99ba60574475b0676c91",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769735",
+      "scope": "Keep the account page readable after billing store construction or lookup failure, show unavailable copy without billing actions, and emit a sanitized diagnostic. Preserve the identity gate and existing successful billing states. No auth, billing-write or production change.",
+      "paths": [
+        "app/account/page.tsx",
+        "tests/unit/account-page.test.tsx"
+      ],
+      "addedPaths": [
+        "tests/unit/account-page.test.tsx"
+      ],
+      "baseBlobs": {
+        "app/account/page.tsx": "2e98148b6092dc8b6063c01a01d7441edf705267"
+      },
+      "resultBlobs": {
+        "app/account/page.tsx": "031b1ca068f7550e032654a87241f0d392ebd612",
+        "tests/unit/account-page.test.tsx": "03794d2fb54b1228b41e316912f67cda44a67835"
       }
     }
   ]
