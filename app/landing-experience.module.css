@@ -15,7 +15,7 @@
 .pilotNote { color:#d8ddd9; }
 .signIn { border:1px solid #9ba6a388; padding:9px 24px; border-radius:4px; color:#f0f3ef; background:#07121b55; }
 .signIn:hover { border-color:var(--warm); }
-.heroSequence { position:relative; height:170svh; --hero-progress:0; }
+.heroSequence { position:relative; height:170svh; min-height:660px; --hero-progress:0; }
 .heroPinned { position:sticky; top:0; height:100svh; min-height:660px; overflow:hidden; isolation:isolate; }
 .heroImage { position:absolute; inset:0; z-index:-3; transform:scale(calc(1.035 + var(--hero-progress)*.045)) translateX(calc(var(--hero-progress)*-12px)); }
 .heroImage img { object-fit:cover; object-position:62% 43%; }
@@ -120,7 +120,7 @@
   .navActions { gap:12px; }
   .pilotNote { display:none; }
   .signIn { padding:7px 15px; font-size:12px; }
-  .heroSequence { height:145svh; }
+  .heroSequence { height:145svh; min-height:720px; }
   .heroPinned { min-height:720px; }
   .heroContent { left:24px; right:20px; bottom:198px; }
   .heroContent h1 { font-size:clamp(47px,8.7vw,65px); }
