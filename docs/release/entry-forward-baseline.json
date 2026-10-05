@@ -867,6 +867,28 @@
         "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql": "958d4669c2730f07745c3a2b97177effae46f759",
         "supabase/tests/non_billing_authority_exits.sql": "bac52b534e6e04e3262af38cb77c93c62598bbef"
       }
+    },
+    {
+      "id": "environment-configured-projection-scheduler",
+      "baseCandidate": "6cabf04ab9f8cd583b472fa84108a11eeaa99528",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped source preparation and direct approval of one isolated offline PostgreSQL/pg_cron attempt; no production configuration write, migration application or CI activation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769787",
+      "scope": "One unapplied forward migration changes only the existing named cron job command through cron.alter_job. Read entry_projection_drain_url and cron_secret from Vault, reject missing/blank or unsupported endpoint shape and missing/blank credentials before HTTP, and retain the fixed Personal route and timeout. No production fallback, new runtime object, job metadata change or historical rewrite. One offline PostgreSQL 17.6/pg_cron 1.6.4 attempt reproduced 21 failures of 27 before this repair and passed 27/27 afterward. Existing and unrelated job metadata were unchanged; cron execution was disabled and zero scheduler runs occurred. Tests substitute temporary Vault and HTTP capture fixtures into the stored command; actual Vault encryption, network delivery and production acceptance remain open. Production URL configuration must be separately established before rollout; historical replay still requires the separate outbound-isolation/startup prerequisite.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "bdd58422719e38e861fdd1139d2bd247c8f67e5f",
+        "supabase/tests/projection_scheduler_configuration.sql": "04d69dd102e9e2fad478fa77576cc5b4fe1dd823"
+      }
     }
   ]
 }
