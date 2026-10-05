@@ -72,7 +72,7 @@ export function ConversationExample() {
   const [required, setRequired] = useState(false);
   const [prepared, setPrepared] = useState(false);
   return <div className={styles.exampleArea}>
-    <div className={styles.interfaceSwitch} aria-label="Illustrated conversation interface">{(['Workspace','ChatGPT'] as const).map((label)=><button key={label} aria-pressed={interfaceName===label} onClick={()=>setInterfaceName(label)}>{label}</button>)}</div>
+    <div className={styles.interfaceSwitch} role="group" aria-label="Illustrated conversation interface">{(['Workspace','ChatGPT'] as const).map((label)=><button key={label} aria-pressed={interfaceName===label} onClick={()=>setInterfaceName(label)}>{label}</button>)}</div>
     <article className={styles.example} data-interface={interfaceName} aria-label="Fictional SOTF Bundle decision example">
       <header><span className={styles.conversationGlyph} aria-hidden="true">{interfaceName==='Workspace'?'↗':'◎'}</span><span>{interfaceName==='Workspace'?'Lead Emergence Workspace':'ChatGPT · SOTF Bundle'}<small>Fictional example · no account data</small></span><span className={styles.connectedDot} aria-hidden="true" /></header>
       <div className={styles.you}><small>You</small><p>This program role looks like a strong match. Should I pursue it?</p></div>

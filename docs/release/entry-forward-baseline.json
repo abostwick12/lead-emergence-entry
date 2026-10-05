@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 73 selected source paths unchanged and retain original source provenance for five explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 72 selected source paths unchanged and retain original source provenance for six explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -92,7 +92,11 @@
       "path": "app/landing-motion.tsx",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23"
+      "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23",
+      "repairedBlob": "6c362bf0035cdb1b95386c25d014f32d955a8068",
+      "forwardRepairIds": [
+        "interface-example-group-role"
+      ]
     },
     {
       "path": "app/oauth/consent/page.tsx",
@@ -604,6 +608,24 @@
       "resultBlobs": {
         "app/account/page.tsx": "031b1ca068f7550e032654a87241f0d392ebd612",
         "tests/unit/account-page.test.tsx": "03794d2fb54b1228b41e316912f67cda44a67835"
+      }
+    },
+    {
+      "id": "interface-example-group-role",
+      "baseCandidate": "ba9f31dd9a4fcb2209fbc58ce97f2b417b9411e6",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4179408058",
+      "scope": "Add the group role to the existing labelled interface selector. Preserve both button labels, pressed state and interaction logic. No runtime-data or production change.",
+      "paths": [
+        "app/landing-motion.tsx"
+      ],
+      "baseBlobs": {
+        "app/landing-motion.tsx": "55431cfa24de31469655e86139180b5658fcae4f"
+      },
+      "resultBlobs": {
+        "app/landing-motion.tsx": "6c362bf0035cdb1b95386c25d014f32d955a8068"
       }
     }
   ]
