@@ -823,6 +823,28 @@
         "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql": "d0d2b7b2d6ca3e03aeab14f0a6b4d57366fe6df8",
         "supabase/tests/reconciliation_null_guards.sql": "65dbe38f445c6615079f81368c9d9b658049b9a1"
       }
+    },
+    {
+      "id": "explicit-offer-eligibility-lifecycle",
+      "baseCandidate": "936f52abff27dadd576ff21496ceb09b575fdd6d",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL attempt; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769771",
+      "scope": "Allow the existing audited command to apply explicit non-pending updates to an offer-eligible entitlement by clearing only incompatible offer-only authority when the new source supplies no classified authority. Preserve explicit new authority, other authority kinds, pending offer eligibility, and the earlier automatic-conflict no-op protection. One unapplied forward definition, unchanged signature/privileges/applied migration history. Offline PostgreSQL reproduced 9 failures of 24 before this repair; candidate passed 24/24 plus the 16 existing automatic-provisioning assertions. Full Supabase/RLS/projection and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql",
+        "supabase/tests/offer_eligibility_lifecycle.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql",
+        "supabase/tests/offer_eligibility_lifecycle.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql": "a582327936d4c587c619f5fa61bfcc0c3d084289",
+        "supabase/tests/offer_eligibility_lifecycle.sql": "82c15ec3158377384a29e425274402333421a43b"
+      }
     }
   ]
 }
