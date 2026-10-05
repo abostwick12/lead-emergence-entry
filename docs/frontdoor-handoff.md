@@ -26,7 +26,9 @@ Ordinary public /login has the existing /workspaces destination chooser as its d
 
 Live production hostname routing, deployed callback behavior and entitlement-aware sign-in have not been exercised with a real user. The exact operational release requirement is to verify the published platform landing → shared sign-in → authorized chooser → each enabled destination with the existing owners before launch. No route cutover, deployment, hosted migration, identity change or entitlement grant was performed.
 
-## Validation and performance
+## Historical validation and performance
+
+The results below belong to the original `astra/lead-emergence-front-door` work, preserved in retained source `4127cec96379841e3741fd0f9997e10697b31cc7`. They are not validation of the current forward-baseline candidate in [Entry PR #19](https://github.com/abostwick12/lead-emergence-entry/pull/19). The 18 unit tests and 10 browser tests remain historical counts; use that PR's exact-head checks and review for current candidate evidence. `ef7fd32a573f2f03c0be24f50007ceed600406f2` above identifies the original starting commit, not a verified test-run SHA.
 
 Fresh `npm ci`, root typecheck, lint, 18 unit tests and the production build passed. Desktop/mobile acceptance also proves that the public CTA opens the canonical Entry `/login`, that its single credential form defaults to `/workspaces`, and that all shared sign-in CTA paths avoid product-specific continuations. The same suite covers the fictional recommendation change, scroll/pause behavior, requested playback, keyboard dismissal, reduced motion, missing media, data saver and width overflow.
 

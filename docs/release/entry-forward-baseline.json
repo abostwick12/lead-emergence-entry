@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 70 selected source paths unchanged and retain original source provenance for eight explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 69 selected source paths unchanged and retain original source provenance for nine explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -120,7 +120,11 @@
       "path": "docs/frontdoor-handoff.md",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "6cb2360a3d441a4aaef6302988dd3395c4445bdc"
+      "sourceBlob": "6cb2360a3d441a4aaef6302988dd3395c4445bdc",
+      "repairedBlob": "a8b7b4b94bf5dc9d6b2ff31ab367d32666ed6392",
+      "forwardRepairIds": [
+        "historical-frontdoor-evidence-label"
+      ]
     },
     {
       "path": "docs/frontdoor-performance.json",
@@ -655,6 +659,24 @@
       "resultBlobs": {
         "lib/billing/reconciliation.ts": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
         "tests/unit/billing-reconciliation.test.ts": "3a63049bdf9c98f29da17114cc529653c0d8a634"
+      }
+    },
+    {
+      "id": "historical-frontdoor-evidence-label",
+      "baseCandidate": "e42d8759f6f9279141495da015c4aaf2da6df150",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; documentation-only clarification, no production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769748",
+      "scope": "Label original front-door test and performance evidence as historical, preserve all original results, and distinguish the starting commit from a verified test-run SHA. No current validation or production acceptance claim is added.",
+      "paths": [
+        "docs/frontdoor-handoff.md"
+      ],
+      "baseBlobs": {
+        "docs/frontdoor-handoff.md": "d86c07aae23884b3788c487a6a8392e15a9edbaa"
+      },
+      "resultBlobs": {
+        "docs/frontdoor-handoff.md": "a8b7b4b94bf5dc9d6b2ff31ab367d32666ed6392"
       }
     }
   ]
