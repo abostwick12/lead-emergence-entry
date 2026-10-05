@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 68 selected source paths unchanged and retain original source provenance for ten explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 66 selected source paths unchanged and retain original source provenance for twelve explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -247,7 +247,11 @@
       "path": "lib/identity/automatic-personal.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "eb5a74c4e9c515e3c2ac7b7a3164d816ae814b1d"
+      "sourceBlob": "eb5a74c4e9c515e3c2ac7b7a3164d816ae814b1d",
+      "repairedBlob": "5e5b066f822739859ef37b42b439596bf10a1090",
+      "forwardRepairIds": [
+        "automatic-entitlement-conflict-preservation"
+      ]
     },
     {
       "path": "lib/oauth/server.ts",
@@ -439,7 +443,11 @@
       "path": "tests/unit/automatic-personal.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "466cf22526959ff298c424366ed9c9c4b5386739"
+      "sourceBlob": "466cf22526959ff298c424366ed9c9c4b5386739",
+      "repairedBlob": "9a262d8661df7c26335f0477b5b6d18d53d0e6ef",
+      "forwardRepairIds": [
+        "automatic-entitlement-conflict-preservation"
+      ]
     },
     {
       "path": "tests/unit/billing-checkout-route.test.ts",
@@ -718,6 +726,35 @@
       },
       "resultBlobs": {
         "app/landing-experience.module.css": "c33b37e6e46a1cd69b73ba868a889ae036dd76be"
+      }
+    },
+    {
+      "id": "automatic-entitlement-conflict-preservation",
+      "baseCandidate": "bade0405fee1db1bbaa4c6a2f5113184b763fb79",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 required scoped source changes. This prepares one forward migration for the existing RPC; hosted application is not authorized or performed.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769757",
+      "scope": "Make the existing setter insert-only for automatic prebilling provisioning, return the preserved row status on conflict without a change audit, and make the helper honor effective_status. Preserve explicit administrative updates, RPC signature and grants. One unapplied forward migration plus focused caller and pgTAP coverage; database execution and production acceptance remain open.",
+      "paths": [
+        "lib/identity/automatic-personal.ts",
+        "tests/unit/automatic-personal.test.ts",
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql",
+        "supabase/tests/automatic_personal_conflict.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql",
+        "supabase/tests/automatic_personal_conflict.sql"
+      ],
+      "baseBlobs": {
+        "lib/identity/automatic-personal.ts": "cad7e1dbf4fb05044dc77a60254eed372520e9c4",
+        "tests/unit/automatic-personal.test.ts": "1b25d1a8aa270a8e5083cb6c70eb8907fd18a567"
+      },
+      "resultBlobs": {
+        "lib/identity/automatic-personal.ts": "5e5b066f822739859ef37b42b439596bf10a1090",
+        "tests/unit/automatic-personal.test.ts": "9a262d8661df7c26335f0477b5b6d18d53d0e6ef",
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql": "66521f613bb09acff8d4ea8e70591dafc269e3ee",
+        "supabase/tests/automatic_personal_conflict.sql": "37300a884c74c0a27519577132c4cc9e79c8e3e9"
       }
     }
   ]

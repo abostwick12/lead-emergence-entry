@@ -61,6 +61,23 @@ describe('automatic PERSONAL entitlement', () => {
     });
   });
 
+  it.each(['PENDING', 'SUSPENDED', 'REVOKED'])('honors a concurrent %s entitlement returned by the setter', async (status) => {
+    rpc
+      .mockResolvedValueOnce({ data: null, error: null })
+      .mockResolvedValueOnce({ data: [{ effective_status: status }], error: null });
+
+    await expect(ensureAutomaticPersonalEntitlement(verifiedUser, 'PERSONAL')).resolves.toBe(false);
+    expect(rpc).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([{ data: null }, { data: [] }])('does not report activation without a returned entitlement row ($data)', async ({ data }) => {
+    rpc
+      .mockResolvedValueOnce({ data: null, error: null })
+      .mockResolvedValueOnce({ data, error: null });
+
+    await expect(ensureAutomaticPersonalEntitlement(verifiedUser, 'PERSONAL')).resolves.toBe(false);
+  });
+
   it.each(['PENDING', 'SUSPENDED', 'REVOKED'])('preserves an existing %s entitlement', async (status) => {
     rpc.mockResolvedValueOnce({ data: status, error: null });
 

@@ -28,7 +28,7 @@ export async function ensureAutomaticPersonalEntitlement(
   if (status === 'ACTIVE') return true;
   if (status !== null) return false;
 
-  const { error: setterError } = await service.rpc('set_entry_product_entitlement', {
+  const { data: result, error: setterError } = await service.rpc('set_entry_product_entitlement', {
     p_canonical_user_id: user.id,
     p_product: 'PERSONAL',
     p_status: 'ACTIVE',
@@ -36,5 +36,5 @@ export async function ensureAutomaticPersonalEntitlement(
     p_display_name: null,
   });
   if (setterError) throw new Error('PERSONAL entitlement could not be activated');
-  return true;
+  return result?.[0]?.effective_status === 'ACTIVE';
 }
