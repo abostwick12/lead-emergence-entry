@@ -143,6 +143,39 @@ function setup(context: BillingReconciliationContext | null) {
 describe('Stripe billing reconciliation', () => {
   beforeEach(() => vi.clearAllMocks());
 
+  it.each([
+    'checkout.session.completed', 'checkout.session.expired',
+    'customer.subscription.updated', 'invoice.paid',
+  ])('retains the verified account for duplicate %s lifecycle retries', async (eventType) => {
+    const test = setup(standardContext);
+    const sub = subscription(standardContext);
+    const session = {
+      id: standardContext.stripeCheckoutSessionId,
+      customer: standardContext.stripeCustomerId,
+      subscription: sub,
+      metadata: sub.metadata,
+      line_items: { data: [{ price: config.monthlyPriceId }, { price: config.setupPriceId }] },
+    };
+    test.stripe.checkout.sessions.retrieve.mockResolvedValue(session);
+    test.stripe.subscriptions.retrieve.mockResolvedValue(sub);
+    test.stripe.invoices.retrieve.mockResolvedValue(invoice(standardContext));
+    vi.mocked(test.store.apply).mockResolvedValue({
+      applicationResult: 'DUPLICATE', resultingState: 'ACTIVE',
+      effectiveState: 'ACTIVE', resultingPaidCycles: 0,
+    });
+    const object = eventType.startsWith('checkout.') ? session
+      : eventType.startsWith('customer.') ? sub : invoice(standardContext);
+    const result = await reconcileStripeEvent(event(eventType, object), {
+      stripe: test.stripe as unknown as Stripe, store: test.store, config,
+    });
+    expect(result).toMatchObject({
+      applicationResult: 'DUPLICATE', canonicalUserId: standardContext.canonicalUserId,
+    });
+    expect(test.store.apply).toHaveBeenCalledWith(expect.objectContaining({
+      canonicalUserId: standardContext.canonicalUserId,
+    }));
+  });
+
   it('fails closed for an unknown Stripe Customer', async () => {
     const test = setup(null);
     const sub = subscription(standardContext);

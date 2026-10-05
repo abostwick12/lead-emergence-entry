@@ -517,6 +517,38 @@ describe('Entry billing customer lifecycle', () => {
     expect(test.stripe.invoices.pay).not.toHaveBeenCalled();
   });
 
+  it.each([
+    { name: 'missing account', row: null },
+    { name: 'different account', row: { ...context, canonicalUserId: '00000000-0000-4000-8000-0000000000e2' } },
+  ])('rejects a $name in account-scoped removal without Stripe writes', async ({ row }) => {
+    const test = setup();
+    vi.mocked(test.store.resolveByCanonicalUser).mockResolvedValue(row);
+    await expect(drainPendingSotfDiscountRemovals({
+      stripe: test.stripe as unknown as Stripe, store: test.store, config,
+      canonicalUserId: context.canonicalUserId,
+    })).rejects.toMatchObject({ code: 'DISCOUNT_REMOVAL_OWNERSHIP_MISMATCH' });
+    expect(test.store.listPendingDiscountRemovals).not.toHaveBeenCalled();
+    expect(test.stripe.subscriptions.retrieve).not.toHaveBeenCalled();
+    expect(test.stripe.subscriptions.update).not.toHaveBeenCalled();
+    expect(test.store.recordDiscountRemovalAttempt).not.toHaveBeenCalled();
+  });
+
+  it('does not repeat a completed removal on a duplicate account event', async () => {
+    const test = setup();
+    vi.mocked(test.store.resolveByCanonicalUser).mockResolvedValue({
+      ...context, sotfQualifyingPaidCycles: 12, discountRemovalDue: true,
+      discountRemovedAt: '2026-10-01T00:00:00Z',
+    });
+    const result = await drainPendingSotfDiscountRemovals({
+      stripe: test.stripe as unknown as Stripe, store: test.store, config,
+      canonicalUserId: context.canonicalUserId,
+    });
+    expect(result).toEqual({ attempted: 0, succeeded: 0, failed: 0, errorCodes: [] });
+    expect(test.store.listPendingDiscountRemovals).not.toHaveBeenCalled();
+    expect(test.stripe.subscriptions.update).not.toHaveBeenCalled();
+    expect(test.store.recordDiscountRemovalAttempt).not.toHaveBeenCalled();
+  });
+
   it('removes only the expected founding discount after paid cycle 12 without proration', async () => {
     const test = setup();
     const candidate: SotfDiscountRemovalCandidate = {

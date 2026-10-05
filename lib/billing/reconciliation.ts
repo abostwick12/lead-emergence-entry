@@ -281,7 +281,7 @@ async function reconcileCheckoutEvent(
   stripe: Stripe,
   store: BillingReconciliationStore,
   config: BillingConfig,
-): Promise<ReconciliationApplication> {
+): Promise<ReconciliationApplication & { canonicalUserId: string }> {
   const eventSession = event.data.object as Stripe.Checkout.Session;
   const session = await stripe.checkout.sessions.retrieve(eventSession.id, {
     expand: ['line_items'],
@@ -308,7 +308,7 @@ async function reconcileCheckoutEvent(
   application.stripeCheckoutSessionId = session.id;
   if (event.type === 'checkout.session.expired') {
     application.reconciliationOutcome = 'IGNORED';
-    return store.apply(application);
+    return { ...await store.apply(application), canonicalUserId: context.canonicalUserId };
   }
 
   const subscriptionId = idOf(session.subscription);
@@ -321,7 +321,7 @@ async function reconcileCheckoutEvent(
     event.type !== 'customer.subscription.deleted',
   );
   attachSubscriptionState(application, subscription, context);
-  return store.apply(application);
+  return { ...await store.apply(application), canonicalUserId: context.canonicalUserId };
 }
 
 async function reconcileSubscriptionEvent(
@@ -329,7 +329,7 @@ async function reconcileSubscriptionEvent(
   stripe: Stripe,
   store: BillingReconciliationStore,
   config: BillingConfig,
-): Promise<ReconciliationApplication> {
+): Promise<ReconciliationApplication & { canonicalUserId: string }> {
   const eventSubscription = event.data.object as Stripe.Subscription;
   let subscription = event.type === 'customer.subscription.deleted'
     ? eventSubscription
@@ -364,7 +364,7 @@ async function reconcileSubscriptionEvent(
       || customerHasPaymentMethod,
     );
   }
-  return store.apply(application);
+  return { ...await store.apply(application), canonicalUserId: context.canonicalUserId };
 }
 
 async function reconcileInvoiceEvent(
@@ -372,7 +372,7 @@ async function reconcileInvoiceEvent(
   stripe: Stripe,
   store: BillingReconciliationStore,
   config: BillingConfig,
-): Promise<ReconciliationApplication> {
+): Promise<ReconciliationApplication & { canonicalUserId: string }> {
   const eventInvoice = event.data.object as Stripe.Invoice;
   const invoice = await stripe.invoices.retrieve(eventInvoice.id, {
     expand: ['lines.data.pricing.price_details.price'],
@@ -438,7 +438,7 @@ async function reconcileInvoiceEvent(
     attachSubscriptionState(application, subscription, context);
     application.paymentMethodRequired = true;
   }
-  return store.apply(application);
+  return { ...await store.apply(application), canonicalUserId: context.canonicalUserId };
 }
 
 export async function reconcileStripeEvent(
@@ -448,7 +448,7 @@ export async function reconcileStripeEvent(
     store: BillingReconciliationStore;
     config: BillingConfig;
   },
-): Promise<ReconciliationApplication | { applicationResult: 'UNSUPPORTED' }> {
+): Promise<(ReconciliationApplication & { canonicalUserId: string }) | { applicationResult: 'UNSUPPORTED' }> {
   if (!supportedEventTypes.has(event.type)) return { applicationResult: 'UNSUPPORTED' };
   if (event.type.startsWith('checkout.session.')) {
     return reconcileCheckoutEvent(event, dependencies.stripe, dependencies.store, dependencies.config);

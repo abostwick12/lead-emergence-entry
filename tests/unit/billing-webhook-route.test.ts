@@ -55,7 +55,10 @@ describe('POST /api/billing/stripe/webhook', () => {
     mocks.createStore.mockReturnValue({ kind: 'store' });
     mocks.createLifecycleStore.mockReturnValue({ kind: 'lifecycle-store' });
     mocks.constructEventAsync.mockResolvedValue({ id: 'evt_valid', type: 'invoice.paid' });
-    mocks.reconcileStripeEvent.mockResolvedValue({ applicationResult: 'APPLIED' });
+    mocks.reconcileStripeEvent.mockResolvedValue({
+      applicationResult: 'APPLIED',
+      canonicalUserId: '00000000-0000-4000-8000-000000000001',
+    });
     mocks.drainDiscountRemovals.mockResolvedValue({
       attempted: 0,
       succeeded: 0,
@@ -103,6 +106,93 @@ describe('POST /api/billing/stripe/webhook', () => {
     expect(response.status).toBe(503);
     expect(mocks.reconcileStripeEvent).toHaveBeenCalledTimes(1);
     expect(mocks.drainProjectionOutbox).toHaveBeenCalledTimes(1);
+  });
+
+  it('acknowledges unsupported events without attempting unrelated discount work', async () => {
+    mocks.reconcileStripeEvent.mockResolvedValue({ applicationResult: 'UNSUPPORTED' });
+    mocks.drainDiscountRemovals.mockRejectedValue(new Error('unrelated pending work failed'));
+    const response = await POST(request('t=1,v1=valid'));
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ received: true, result: 'UNSUPPORTED' });
+    expect(mocks.createLifecycleStore).not.toHaveBeenCalled();
+    expect(mocks.drainDiscountRemovals).not.toHaveBeenCalled();
+  });
+
+  describe('account isolation with real discount removal', () => {
+    const canonicalUserId = '00000000-0000-4000-8000-000000000001';
+    const lifecycleStore = {
+      resolveByCanonicalUser: vi.fn(),
+      listPendingDiscountRemovals: vi.fn(),
+      recordDiscountRemovalAttempt: vi.fn(),
+    };
+    const retrieveSubscription = vi.fn();
+    const updateSubscription = vi.fn();
+    const ownContext = {
+      canonicalUserId, selectedOffer: 'SOTF_FOUNDING_FELLOW',
+      stripeCustomerId: 'cus_own', stripeSubscriptionId: 'sub_own',
+      sotfQualifyingPaidCycles: 12, discountRemovalDue: true, discountRemovedAt: null,
+    };
+
+    beforeEach(async () => {
+      const original = await vi.importActual<typeof import('@/lib/billing/lifecycle')>(
+        '@/lib/billing/lifecycle',
+      );
+      mocks.drainDiscountRemovals.mockImplementation(original.drainPendingSotfDiscountRemovals);
+      mocks.createLifecycleStore.mockReturnValue(lifecycleStore);
+      mocks.getBillingConfig.mockReturnValue({ monthlyPriceId: 'price_monthly', sotfCouponId: 'coupon_sotf' });
+      mocks.getStripeClient.mockReturnValue({
+        webhooks: { constructEventAsync: mocks.constructEventAsync },
+        subscriptions: { retrieve: retrieveSubscription, update: updateSubscription },
+      });
+      lifecycleStore.resolveByCanonicalUser.mockResolvedValue(ownContext);
+      lifecycleStore.listPendingDiscountRemovals.mockResolvedValue([{
+        canonicalUserId: '00000000-0000-4000-8000-000000000002',
+        stripeCustomerId: 'cus_other', stripeSubscriptionId: 'sub_other',
+        sotfQualifyingPaidCycles: 12, discountRemovalAttemptCount: 4,
+      }]);
+      lifecycleStore.recordDiscountRemovalAttempt.mockResolvedValue(undefined);
+      retrieveSubscription.mockRejectedValue(new Error('subscription unavailable'));
+      updateSubscription.mockResolvedValue({ discounts: [] });
+    });
+
+    it.each(['APPLIED', 'DUPLICATE'])('returns 200 for %s when another account has failing pending work', async (applicationResult) => {
+      mocks.reconcileStripeEvent.mockResolvedValue({ applicationResult, canonicalUserId });
+      lifecycleStore.resolveByCanonicalUser.mockResolvedValue({ ...ownContext, discountRemovalDue: false });
+      const response = await POST(request('t=1,v1=valid'));
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ received: true, result: applicationResult });
+      expect(lifecycleStore.resolveByCanonicalUser).toHaveBeenCalledWith(canonicalUserId);
+      expect(lifecycleStore.listPendingDiscountRemovals).not.toHaveBeenCalled();
+      expect(retrieveSubscription).not.toHaveBeenCalled();
+      expect(lifecycleStore.recordDiscountRemovalAttempt).not.toHaveBeenCalled();
+    });
+
+    it('retries its own failed removal on duplicate delivery and acknowledges successful recovery', async () => {
+      const first = await POST(request('t=1,v1=valid'));
+      expect(first.status).toBe(503);
+      expect(lifecycleStore.recordDiscountRemovalAttempt).toHaveBeenLastCalledWith({
+        canonicalUserId, succeeded: false, errorCode: 'STRIPE_DISCOUNT_REMOVAL_FAILED',
+      });
+      mocks.reconcileStripeEvent.mockResolvedValue({ applicationResult: 'DUPLICATE', canonicalUserId });
+      retrieveSubscription.mockResolvedValue({
+        id: 'sub_own', customer: 'cus_own',
+        metadata: { canonical_user_id: canonicalUserId, commercial_offer: 'SOTF_FOUNDING_FELLOW' },
+        items: { data: [{ price: { id: 'price_monthly' } }] },
+        discounts: [{ id: 'di_own', source: { coupon: 'coupon_sotf' } }],
+      });
+      const retried = await POST(request('t=1,v1=valid'));
+      expect(retried.status).toBe(200);
+      expect(await retried.json()).toEqual({ received: true, result: 'DUPLICATE' });
+      expect(lifecycleStore.listPendingDiscountRemovals).not.toHaveBeenCalled();
+      expect(retrieveSubscription.mock.calls.every(([id]) => id === 'sub_own')).toBe(true);
+      expect(updateSubscription).toHaveBeenCalledWith(
+        'sub_own', { discounts: '', proration_behavior: 'none' },
+        { idempotencyKey: `remove-sotf-discount-${canonicalUserId}` },
+      );
+      expect(lifecycleStore.recordDiscountRemovalAttempt).toHaveBeenLastCalledWith({
+        canonicalUserId, succeeded: true, errorCode: null,
+      });
+    });
   });
 
   describe('checkout ownership with real reconciliation', () => {
@@ -206,6 +296,9 @@ describe('POST /api/billing/stripe/webhook', () => {
         normalizedState: null,
       }));
       expect(mocks.drainDiscountRemovals).toHaveBeenCalledTimes(1);
+      expect(mocks.drainDiscountRemovals).toHaveBeenCalledWith(expect.objectContaining({
+        canonicalUserId: context.canonicalUserId,
+      }));
       expect(mocks.drainProjectionOutbox).toHaveBeenCalledTimes(1);
     });
   });

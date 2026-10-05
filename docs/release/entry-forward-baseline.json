@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 66 selected source paths unchanged and retain original source provenance for twelve explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 64 selected source paths unchanged and retain original source provenance for fourteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -53,9 +53,10 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "1a1bdffcb37d4d29278f5b9b2f3ee2c2ed97c72e",
-      "repairedBlob": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+      "repairedBlob": "b3a00a055481b7fbe08294c42f25ffaeb6197f3b",
       "forwardRepairIds": [
-        "obsolete-expired-checkout-response"
+        "obsolete-expired-checkout-response",
+        "account-scoped-webhook-discount-retry"
       ]
     },
     {
@@ -207,7 +208,11 @@
       "path": "lib/billing/lifecycle.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "627133beb1600b43f8e38110118973fbb24595ac"
+      "sourceBlob": "627133beb1600b43f8e38110118973fbb24595ac",
+      "repairedBlob": "fcef81e710ae139d003a755142b9bc89c0acd38a",
+      "forwardRepairIds": [
+        "account-scoped-webhook-discount-retry"
+      ]
     },
     {
       "path": "lib/billing/projection.ts",
@@ -226,9 +231,10 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4",
-      "repairedBlob": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+      "repairedBlob": "37d5478fb7d3498b282879eaccab1ded50a08ba7",
       "forwardRepairIds": [
-        "first-unpaid-subscription-suspension"
+        "first-unpaid-subscription-suspension",
+        "account-scoped-webhook-discount-retry"
       ]
     },
     {
@@ -471,7 +477,11 @@
       "path": "tests/unit/billing-lifecycle.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f"
+      "sourceBlob": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f",
+      "repairedBlob": "956428367c96aee3243158103acb63f8fb4281b7",
+      "forwardRepairIds": [
+        "account-scoped-webhook-discount-retry"
+      ]
     },
     {
       "path": "tests/unit/billing-projection-cron-route.test.ts",
@@ -496,9 +506,10 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354",
-      "repairedBlob": "3a63049bdf9c98f29da17114cc529653c0d8a634",
+      "repairedBlob": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
       "forwardRepairIds": [
-        "first-unpaid-subscription-suspension"
+        "first-unpaid-subscription-suspension",
+        "account-scoped-webhook-discount-retry"
       ]
     },
     {
@@ -506,9 +517,10 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "0a4928f9857c308b673ee1fdee3cb16a7e4606a3",
-      "repairedBlob": "138a5be23c257dcd14d3e760d4e398eab1c0b94a",
+      "repairedBlob": "ea5874dbbb6171559074fb56283cf0c214551e83",
       "forwardRepairIds": [
-        "obsolete-expired-checkout-response"
+        "obsolete-expired-checkout-response",
+        "account-scoped-webhook-discount-retry"
       ]
     },
     {
@@ -755,6 +767,39 @@
         "tests/unit/automatic-personal.test.ts": "9a262d8661df7c26335f0477b5b6d18d53d0e6ef",
         "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql": "66521f613bb09acff8d4ea8e70591dafc269e3ee",
         "supabase/tests/automatic_personal_conflict.sql": "37300a884c74c0a27519577132c4cc9e79c8e3e9"
+      }
+    },
+    {
+      "id": "account-scoped-webhook-discount-retry",
+      "baseCandidate": "2548c81a5da80d05c1729e73e22b50f968010e50",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Expanded Phase 2 and 3 scoped implementation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769745",
+      "scope": "Carry the verified canonical account out of supported Stripe reconciliation and use the existing lifecycle lookup to drain only that account from its webhook. Unsupported events skip discount work. Preserve existing eligibility, ownership, non-proration, idempotency and per-account retry/recovery behavior; unrelated pending accounts cannot make this webhook fail. No migration, scheduler, new retry policy or production billing action.",
+      "paths": [
+        "app/api/billing/stripe/webhook/route.ts",
+        "lib/billing/lifecycle.ts",
+        "lib/billing/reconciliation.ts",
+        "tests/unit/billing-lifecycle.test.ts",
+        "tests/unit/billing-reconciliation.test.ts",
+        "tests/unit/billing-webhook-route.test.ts"
+      ],
+      "baseBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+        "lib/billing/lifecycle.ts": "627133beb1600b43f8e38110118973fbb24595ac",
+        "lib/billing/reconciliation.ts": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+        "tests/unit/billing-lifecycle.test.ts": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f",
+        "tests/unit/billing-reconciliation.test.ts": "3a63049bdf9c98f29da17114cc529653c0d8a634",
+        "tests/unit/billing-webhook-route.test.ts": "138a5be23c257dcd14d3e760d4e398eab1c0b94a"
+      },
+      "resultBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "b3a00a055481b7fbe08294c42f25ffaeb6197f3b",
+        "lib/billing/lifecycle.ts": "fcef81e710ae139d003a755142b9bc89c0acd38a",
+        "lib/billing/reconciliation.ts": "37d5478fb7d3498b282879eaccab1ded50a08ba7",
+        "tests/unit/billing-lifecycle.test.ts": "956428367c96aee3243158103acb63f8fb4281b7",
+        "tests/unit/billing-reconciliation.test.ts": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
+        "tests/unit/billing-webhook-route.test.ts": "ea5874dbbb6171559074fb56283cf0c214551e83"
       }
     }
   ]

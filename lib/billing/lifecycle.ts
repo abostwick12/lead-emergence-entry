@@ -307,7 +307,7 @@ export async function resumeSotfSubscriptionForUser(
 }
 
 async function completeOneDiscountRemoval(
-  candidate: SotfDiscountRemovalCandidate,
+  candidate: Omit<SotfDiscountRemovalCandidate, 'discountRemovalAttemptCount'>,
   dependencies: {
     stripe: Stripe;
     store: BillingLifecycleStore;
@@ -374,10 +374,34 @@ export async function drainPendingSotfDiscountRemovals(
     stripe: Stripe;
     store: BillingLifecycleStore;
     config: BillingConfig;
+    canonicalUserId?: string;
   },
   limit = 5,
 ): Promise<{ attempted: number; succeeded: number; failed: number; errorCodes: string[] }> {
-  const pending = await dependencies.store.listPendingDiscountRemovals(limit);
+  const pending: Omit<SotfDiscountRemovalCandidate, 'discountRemovalAttemptCount'>[] = [];
+  if (dependencies.canonicalUserId !== undefined) {
+    const context = await dependencies.store.resolveByCanonicalUser(dependencies.canonicalUserId);
+    if (!context || context.canonicalUserId !== dependencies.canonicalUserId) {
+      throw new BillingLifecycleError('DISCOUNT_REMOVAL_OWNERSHIP_MISMATCH', 503);
+    }
+    // Match the existing pending-removal predicate, scoped to the reconciled
+    // account so another account cannot consume this event's retries.
+    if (context.selectedOffer === 'SOTF_FOUNDING_FELLOW'
+      && context.sotfQualifyingPaidCycles === 12
+      && context.discountRemovalDue
+      && context.discountRemovedAt === null
+      && context.stripeCustomerId !== null
+      && context.stripeSubscriptionId !== null) {
+      pending.push({
+        canonicalUserId: context.canonicalUserId,
+        stripeCustomerId: context.stripeCustomerId,
+        stripeSubscriptionId: context.stripeSubscriptionId,
+        sotfQualifyingPaidCycles: context.sotfQualifyingPaidCycles,
+      });
+    }
+  } else {
+    pending.push(...await dependencies.store.listPendingDiscountRemovals(limit));
+  }
   let succeeded = 0;
   const errorCodes: string[] = [];
   for (const candidate of pending) {

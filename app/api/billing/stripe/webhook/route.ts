@@ -38,22 +38,25 @@ export async function POST(request: Request) {
       config,
     });
     let discountRemovalFailed = false;
-    try {
-      const discountRemoval = await drainPendingSotfDiscountRemovals({
-        stripe,
-        store: createEntryBillingLifecycleStore(),
-        config,
-      });
-      if (discountRemoval.failed > 0) {
-        discountRemovalFailed = true;
-        console.error('SOTF discount removal remains pending', {
-          failedCount: discountRemoval.failed,
-          reasons: discountRemoval.errorCodes,
+    if (result.applicationResult !== 'UNSUPPORTED') {
+      try {
+        const discountRemoval = await drainPendingSotfDiscountRemovals({
+          stripe,
+          store: createEntryBillingLifecycleStore(),
+          config,
+          canonicalUserId: result.canonicalUserId,
         });
+        if (discountRemoval.failed > 0) {
+          discountRemovalFailed = true;
+          console.error('SOTF discount removal remains pending', {
+            failedCount: discountRemoval.failed,
+            reasons: discountRemoval.errorCodes,
+          });
+        }
+      } catch {
+        discountRemovalFailed = true;
+        console.error('SOTF discount removal unavailable');
       }
-    } catch {
-      discountRemovalFailed = true;
-      console.error('SOTF discount removal unavailable');
     }
     try {
       const delivery = await drainConfiguredPersonalProjectionOutbox();
