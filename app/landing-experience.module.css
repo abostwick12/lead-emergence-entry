@@ -8,7 +8,7 @@
 .page :focus-visible { outline:2px solid #eac287; outline-offset:6px; }
 .skipLink { position:absolute; z-index:20; left:20px; top:-100px; padding:14px 22px; background:#e6eceb; color:#06121d; }
 .skipLink:focus { top:14px; }
-.nav { position:absolute; inset:0 0 auto; z-index:6; display:flex; align-items:center; justify-content:space-between; gap:20px; padding:26px clamp(22px,4.5vw,72px); background:linear-gradient(#02080baa,transparent); }
+.nav { position:absolute; inset:0 0 auto; z-index:6; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; padding:26px clamp(22px,4.5vw,72px); background:linear-gradient(#02080baa,transparent); }
 .wordmark { display:flex; align-items:center; gap:18px; color:#edf3f1; font-size:11px; letter-spacing:.38em; white-space:nowrap; }
 .wordmark svg { width:44px; height:30px; flex-shrink:0; }
 .navActions { display:flex; align-items:center; gap:30px; font-size:13px; }

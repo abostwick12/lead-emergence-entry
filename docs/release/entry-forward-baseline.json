@@ -81,9 +81,10 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "471d6d62fadf6eb1c48d3462c0f983d5f7e493c5",
-      "repairedBlob": "4c387bc622e4986cfef0acdc432ca91d6200983b",
+      "repairedBlob": "c33b37e6e46a1cd69b73ba868a889ae036dd76be",
       "forwardRepairIds": [
-        "hero-short-viewport-containment"
+        "hero-short-viewport-containment",
+        "navigation-text-growth-wrap"
       ]
     },
     {
@@ -699,6 +700,24 @@
       },
       "resultBlobs": {
         "app/landing-experience.module.css": "4c387bc622e4986cfef0acdc432ca91d6200983b"
+      }
+    },
+    {
+      "id": "navigation-text-growth-wrap",
+      "baseCandidate": "56f0f0415c06de52d95bfb19fcee650d5f77e52d",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174057451",
+      "scope": "Allow the existing navigation flex row to wrap when enlarged text no longer fits, keeping Sign In inside the viewport. Preserve its /login target, wordmark, normal-size layout and all prior repairs.",
+      "paths": [
+        "app/landing-experience.module.css"
+      ],
+      "baseBlobs": {
+        "app/landing-experience.module.css": "4c387bc622e4986cfef0acdc432ca91d6200983b"
+      },
+      "resultBlobs": {
+        "app/landing-experience.module.css": "c33b37e6e46a1cd69b73ba868a889ae036dd76be"
       }
     }
   ]
