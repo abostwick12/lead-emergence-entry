@@ -181,6 +181,57 @@ describe('Entry PERSONAL projection delivery', () => {
       .toEqual([item.deliveryId, item.deliveryId]);
   });
 
+  it.each(['success', 'http_error', 'transport_error'] as const)(
+    'continues the batch and preserves retry when status writes fail after %s', async (responseKind) => {
+      const later = { ...item, deliveryId: '00000000-0000-4000-8000-0000000000d2', projectionVersion: 42 };
+      const state = retryableStore([item, later]);
+      let failFirstWrites = true;
+      vi.mocked(state.store.markDelivered).mockImplementation(async (deliveryId) => {
+        if (failFirstWrites && deliveryId === item.deliveryId) throw new Error('private status persistence details');
+        state.delivered.push(deliveryId);
+      });
+      vi.mocked(state.store.markFailed).mockImplementation(async (deliveryId) => {
+        if (failFirstWrites && deliveryId === item.deliveryId) throw new Error('private status persistence details');
+        state.failures.push(deliveryId);
+      });
+      const fetchImpl = vi.fn<typeof fetch>(async (_input, init) => {
+        const deliveryId = JSON.parse(String(init?.body)).delivery_id;
+        if (failFirstWrites && deliveryId === item.deliveryId) {
+          if (responseKind === 'transport_error') throw new Error('private transport details');
+          if (responseKind === 'http_error') return new Response(null, { status: 503 });
+        }
+        return new Response(null, { status: 204 });
+      });
+      const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {});
+      try {
+        const first = await drainPersonalProjectionOutbox({
+          store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+        });
+        expect(first).toEqual({ claimed: 2, delivered: 1, failed: 1 });
+        expect(state.delivered).toEqual([later.deliveryId]);
+        expect(errorLog).toHaveBeenCalledExactlyOnceWith(
+          'Workspace projection delivery status unavailable', { deliveryId: item.deliveryId },
+        );
+
+        failFirstWrites = false;
+        const retry = await drainPersonalProjectionOutbox({
+          store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+        });
+        expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
+        expect(state.delivered).toEqual([later.deliveryId, item.deliveryId]);
+        expect(fetchImpl.mock.calls.map(([, init]) => JSON.parse(String(init?.body)).delivery_id))
+          .toEqual([item.deliveryId, later.deliveryId, item.deliveryId]);
+        const afterDelivery = await drainPersonalProjectionOutbox({
+          store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+        });
+        expect(afterDelivery).toEqual({ claimed: 0, delivered: 0, failed: 0 });
+        expect(fetchImpl).toHaveBeenCalledTimes(3);
+      } finally {
+        errorLog.mockRestore();
+      }
+    },
+  );
+
   it('does not redeliver an item after its successful delivery is recorded', async () => {
     const state = retryableStore([item]);
     const fetchImpl = vi.fn(async () => Response.json({ accepted: true }));

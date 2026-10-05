@@ -197,10 +197,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
-      "repairedBlob": "61590f9c1b0a7858bea7ae00e7dd541282ea3fd3",
+      "repairedBlob": "2bf5c23590644fa9781fbd26951ce21c995416c7",
       "forwardRepairIds": [
         "projection-transport-timeout",
-        "projection-response-cleanup"
+        "projection-response-cleanup",
+        "projection-status-write-containment"
       ]
     },
     {
@@ -454,10 +455,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
-      "repairedBlob": "df1c05d4899a6fb6f6165fd5f312d73e8a0dfc99",
+      "repairedBlob": "fa03b056130498ee718802055f1c327dea947796",
       "forwardRepairIds": [
         "projection-transport-timeout",
-        "projection-response-cleanup"
+        "projection-response-cleanup",
+        "projection-status-write-containment"
       ]
     },
     {
@@ -554,6 +556,27 @@
       "resultBlobs": {
         "app/api/billing/stripe/webhook/route.ts": "bd5469c4cc83ff1ef56a681e716da719c679656f",
         "tests/unit/billing-webhook-route.test.ts": "138a5be23c257dcd14d3e760d4e398eab1c0b94a"
+      }
+    },
+    {
+      "id": "projection-status-write-containment",
+      "baseCandidate": "b48d89dea12f9c1117e57d485b5d24b0f1796a35",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4179460691",
+      "scope": "Contain a failed failure-status write per delivery, log only the delivery ID, and continue the claimed batch. Regression coverage retains the same delivery ID on retry after success, HTTP error, and transport error. Database claim concurrency is not changed or accepted.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ],
+      "baseBlobs": {
+        "lib/billing/projection.ts": "61590f9c1b0a7858bea7ae00e7dd541282ea3fd3",
+        "tests/unit/billing-projection.test.ts": "df1c05d4899a6fb6f6165fd5f312d73e8a0dfc99"
+      },
+      "resultBlobs": {
+        "lib/billing/projection.ts": "2bf5c23590644fa9781fbd26951ce21c995416c7",
+        "tests/unit/billing-projection.test.ts": "fa03b056130498ee718802055f1c327dea947796"
       }
     }
   ]

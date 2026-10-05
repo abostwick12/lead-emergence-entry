@@ -143,7 +143,13 @@ export async function drainPersonalProjectionOutbox({
       await store.markDelivered(item.deliveryId);
       delivered += 1;
     } catch {
-      await store.markFailed(item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
+      try {
+        await store.markFailed(item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
+      } catch {
+        console.error('Workspace projection delivery status unavailable', {
+          deliveryId: item.deliveryId,
+        });
+      }
       failed += 1;
     }
   }
