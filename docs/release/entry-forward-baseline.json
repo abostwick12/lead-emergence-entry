@@ -889,6 +889,28 @@
         "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "bdd58422719e38e861fdd1139d2bd247c8f67e5f",
         "supabase/tests/projection_scheduler_configuration.sql": "04d69dd102e9e2fad478fa77576cc5b4fe1dd823"
       }
+    },
+    {
+      "id": "scheduler-remote-https-only",
+      "baseCandidate": "2851455aa0728bc31dc272ebd04f4169a9c2b128",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped source repair and direct approval of one isolated offline PostgreSQL/pg_cron test; no production configuration write, migration application or Entry merge.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4185651870",
+      "scope": "Tighten the existing unapplied scheduler candidate to accept HTTPS remote endpoints and HTTP only for exact localhost, 127.0.0.1 or [::1] with an optional numeric port. Preserve the fixed route and existing configuration/credential guards. The new SQL suite reproduced four failures of 35 in the previous candidate, then passed 35/35 with the correction, including external HTTP and localhost-lookalike rejection before the capture call and valid HTTPS/loopback controls. Real PostgreSQL 17.6/pg_cron 1.6.4, network none, cron execution disabled, zero scheduled runs, unchanged job metadata and unrelated command, container removed. Vault/HTTP capture fixtures do not establish encryption, network delivery or production acceptance. Historical applied migration and previous 27-assertion evidence remain unchanged.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "bdd58422719e38e861fdd1139d2bd247c8f67e5f",
+        "supabase/tests/projection_scheduler_configuration.sql": "04d69dd102e9e2fad478fa77576cc5b4fe1dd823"
+      },
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "6c6eeb0c9b7b5bee317dbdc3af67092c24f2d290",
+        "supabase/tests/projection_scheduler_configuration.sql": "ace3b27ea9ef428866f0c9dd970224d0329e653c"
+      }
     }
   ]
 }

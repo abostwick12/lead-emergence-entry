@@ -22,9 +22,12 @@ begin
         from vault.decrypted_secrets
         where name = 'entry_projection_drain_url'
       );
-      -- Require an HTTP(S) endpoint for this fixed route, without credentials,
-      -- whitespace, query or fragment. Resolve no production fallback.
-      if v_url is null or v_url !~ '^https?://[^/?#[:space:]@]+/api/internal/cron/personal-projection-drain$' then
+      -- Require HTTPS for remote endpoints; permit HTTP only on loopback.
+      -- Retain the fixed route and reject credentials, whitespace, query or fragment.
+      if v_url is null or (
+        v_url !~ '^https://[^/?#[:space:]@]+/api/internal/cron/personal-projection-drain$'
+        and v_url !~ '^http://(localhost|127[.]0[.]0[.]1|\[::1\])(:[0-9]+)?/api/internal/cron/personal-projection-drain$'
+      ) then
         raise exception 'Projection drain endpoint is missing or has an unsupported format.'
           using errcode = '22023';
       end if;

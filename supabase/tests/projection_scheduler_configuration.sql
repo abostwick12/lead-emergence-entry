@@ -2,7 +2,7 @@
 -- Replace only the Vault relation and HTTP call with pg_temp capture fixtures.
 -- No actual credential, HTTP request, scheduler tick or Vault mutation is used.
 begin;
-select plan(27);
+select plan(35);
 
 create temporary table scheduler_config(name text primary key, decrypted_secret text);
 create temporary table scheduler_requests(
@@ -56,6 +56,34 @@ where name='entry_projection_drain_url';
 select lives_ok($$select pg_temp.run_scheduler_command()$$,'An explicitly configured local HTTP endpoint is supported');
 select is((select url from scheduler_requests),'http://127.0.0.1:3300/api/internal/cron/personal-projection-drain',
   'Local configuration does not fall back to production');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='http://localhost/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select lives_ok($$select pg_temp.run_scheduler_command()$$,'Localhost HTTP without a port is supported');
+select is((select url from scheduler_requests),'http://localhost/api/internal/cron/personal-projection-drain',
+  'Localhost HTTP without a port reaches only its configured endpoint');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='http://[::1]:3300/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select lives_ok($$select pg_temp.run_scheduler_command()$$,'IPv6 loopback HTTP with a port is supported');
+select is((select url from scheduler_requests),'http://[::1]:3300/api/internal/cron/personal-projection-drain',
+  'IPv6 loopback HTTP with a port reaches only its configured endpoint');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='http://entry.fixture.example:8080/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','External HTTP is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'External HTTP sends no credential or HTTP request');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='http://localhost.fixture.example/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','A hostname resembling localhost is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'A hostname resembling localhost sends no credential or HTTP request');
 
 truncate scheduler_requests;
 update scheduler_config set decrypted_secret=' https://changed.fixture.example/api/internal/cron/personal-projection-drain '
