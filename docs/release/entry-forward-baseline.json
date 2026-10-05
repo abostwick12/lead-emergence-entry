@@ -801,6 +801,28 @@
         "tests/unit/billing-reconciliation.test.ts": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
         "tests/unit/billing-webhook-route.test.ts": "ea5874dbbb6171559074fb56283cf0c214551e83"
       }
+    },
+    {
+      "id": "null-safe-stripe-reconciliation",
+      "baseCandidate": "51c58a483bfadeb2ef20db0650d9e61f69e86280",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL test; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769773",
+      "scope": "Reject missing or mismatched Stripe customer ownership, a provided checkout without a matching stored checkout, and NULL qualifying paid amounts in the existing reconciliation RPC. Preserve optional omitted checkout, valid initial subscription binding, replay semantics, signature and privileges. One unapplied forward migration; the original applied migration remains unchanged. Offline PostgreSQL reproduced 8 failures of 19 on the original and passed 19 of 19 on the candidate; full Supabase and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql",
+        "supabase/tests/reconciliation_null_guards.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql",
+        "supabase/tests/reconciliation_null_guards.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql": "d0d2b7b2d6ca3e03aeab14f0a6b4d57366fe6df8",
+        "supabase/tests/reconciliation_null_guards.sql": "65dbe38f445c6615079f81368c9d9b658049b9a1"
+      }
     }
   ]
 }
