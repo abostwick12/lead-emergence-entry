@@ -845,6 +845,28 @@
         "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql": "a582327936d4c587c619f5fa61bfcc0c3d084289",
         "supabase/tests/offer_eligibility_lifecycle.sql": "82c15ec3158377384a29e425274402333421a43b"
       }
+    },
+    {
+      "id": "non-billing-authority-exit-projection",
+      "baseCandidate": "b8c4acf5ee90ebc1fb3863c83d627990b681299f",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL attempt; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769783",
+      "scope": "Publish a normalized REVOKED payload for the old non-billing authority when a PERSONAL entitlement leaves projectable authority/status or changes authority key; retain normal NEW projection and suppress NULL/legacy/non-PERSONAL inserts. One unapplied forward definition of the existing trigger, unchanged signature/privileges/applied history. Offline PostgreSQL reproduced 11 failures of 20 before this repair; candidate passed 20/20, automatic regression 16/16, offer regression 24/24 and live-definition receiver fixture 12/12 including stale replay. Receiver fixture is same-instance SQL, not network transport or hosted acceptance. No key moves, deletion cleanup, historical backfill, independent billing or receiver changes. Full Supabase/RLS and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql",
+        "supabase/tests/non_billing_authority_exits.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql",
+        "supabase/tests/non_billing_authority_exits.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql": "958d4669c2730f07745c3a2b97177effae46f759",
+        "supabase/tests/non_billing_authority_exits.sql": "bac52b534e6e04e3262af38cb77c93c62598bbef"
+      }
     }
   ]
 }
