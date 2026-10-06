@@ -1,0 +1,960 @@
+{
+  "purpose": "Source preservation for Phase 0.6; not deployment or production acceptance.",
+  "main": "0b278fe7254c86e18adcd1215af86d54e36f3411",
+  "retainedProductionSource": "4127cec96379841e3741fd0f9997e10697b31cc7",
+  "dependencyCandidate": "6854c08b99bf22136428c5f5461bae1891aa9064",
+  "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
+  "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
+  "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
+  "sourcePolicy": "Preserve 64 selected source paths unchanged and retain original source provenance for fourteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "environmentNamesAddedWithEmptyValues": [
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "STRIPE_INDIVIDUAL_MONTHLY_PRICE_ID",
+    "STRIPE_SETUP_PRICE_ID",
+    "STRIPE_SOTF_COUPON_ID",
+    "STRIPE_PORTAL_CONFIGURATION_ID",
+    "WORKSPACE_PERSONAL_PROJECTION_URL",
+    "WORKSPACE_PROJECTION_HMAC_SECRET",
+    "CRON_SECRET"
+  ],
+  "excludedRecoveryMigration": "supabase/migrations/20261001140000_reject_null_personal_projection_authority.sql",
+  "records": [
+    {
+      "path": "app/account/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "2e98148b6092dc8b6063c01a01d7441edf705267",
+      "repairedBlob": "031b1ca068f7550e032654a87241f0d392ebd612",
+      "forwardRepairIds": [
+        "account-billing-read-containment"
+      ]
+    },
+    {
+      "path": "app/api/billing/checkout/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "947ade8b17e6f5fd4890e0f02c7989940aed90f8"
+    },
+    {
+      "path": "app/api/billing/portal/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "28bcff9508290134669ed333b315cc7b73fc8726"
+    },
+    {
+      "path": "app/api/billing/resume/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d6256de2fa249ac1606277d919de796ffb428bc0"
+    },
+    {
+      "path": "app/api/billing/stripe/webhook/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "1a1bdffcb37d4d29278f5b9b2f3ee2c2ed97c72e",
+      "repairedBlob": "b3a00a055481b7fbe08294c42f25ffaeb6197f3b",
+      "forwardRepairIds": [
+        "obsolete-expired-checkout-response",
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "app/api/internal/cron/personal-projection-drain/route.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "5941b3b9d9dbbb5c64c4d0c74350e9e373e58be0"
+    },
+    {
+      "path": "app/globals.css",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0127ab09335529a80c9495916efb1a7c38cdd853"
+    },
+    {
+      "path": "app/icon.svg",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "995a258c1a51cf631e2b5ae2dbddb4269f40b358"
+    },
+    {
+      "path": "app/landing-experience.module.css",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "471d6d62fadf6eb1c48d3462c0f983d5f7e493c5",
+      "repairedBlob": "c33b37e6e46a1cd69b73ba868a889ae036dd76be",
+      "forwardRepairIds": [
+        "hero-short-viewport-containment",
+        "navigation-text-growth-wrap"
+      ]
+    },
+    {
+      "path": "app/landing-experience.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d8bed678972147cac1f6515a929520d235e771d4"
+    },
+    {
+      "path": "app/landing-motion.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23",
+      "repairedBlob": "6c362bf0035cdb1b95386c25d014f32d955a8068",
+      "forwardRepairIds": [
+        "interface-example-group-role"
+      ]
+    },
+    {
+      "path": "app/oauth/consent/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "56b09ea2fd4d2f6a4fb2e9855da38cb15a165d99"
+    },
+    {
+      "path": "app/signup/actions.ts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "7c452d740a8f370a83a744cf9280b6aeb12e8830"
+    },
+    {
+      "path": "app/workspaces/page.tsx",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "4a50febc229626c769c8a5d751a908aa79a78f42"
+    },
+    {
+      "path": "docs/frontdoor-handoff.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "6cb2360a3d441a4aaef6302988dd3395c4445bdc",
+      "repairedBlob": "a8b7b4b94bf5dc9d6b2ff31ab367d32666ed6392",
+      "forwardRepairIds": [
+        "historical-frontdoor-evidence-label"
+      ]
+    },
+    {
+      "path": "docs/frontdoor-performance.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "07d001ceb3142bb3475af23be2559f1bfffd02be"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f8743b3404ff5f7ee208bedf20d1f8120732776b"
+    },
+    {
+      "path": "film/CREATIVE-BRIEF.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "092f70bd880d80911e61aa9c89c2c4a694a4c60b"
+    },
+    {
+      "path": "film/README.md",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f3ceddadced20acca42478ee2ab0d46fa08f8f8a"
+    },
+    {
+      "path": "film/package-lock.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "203b9bcfa73131171886c3659ae98ee5f9f1e435"
+    },
+    {
+      "path": "film/package.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a65a9b6fd249c7d27dd0c4388a03a3c4370a3b28"
+    },
+    {
+      "path": "film/render-evidence.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "eb3a32c5ccf165637e8f7a2acdcd39dbec7e832d"
+    },
+    {
+      "path": "film/render.mjs",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "60c8efa1217d43732299400c0be34980689a5ea7"
+    },
+    {
+      "path": "film/src/index.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "51ed4dc917e4b29a5d656f3e12b4f14719156de0"
+    },
+    {
+      "path": "film/tsconfig.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a0cbe44d778db9b8afe5cb76c572765fefde525b"
+    },
+    {
+      "path": "lib/billing/checkout.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3dd5531d644b2fdd92cb511ce68d477575e0716b"
+    },
+    {
+      "path": "lib/billing/config.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "84b18b529ae8b3b4ada233ca99c3253f83f494ff"
+    },
+    {
+      "path": "lib/billing/lifecycle.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "627133beb1600b43f8e38110118973fbb24595ac",
+      "repairedBlob": "fcef81e710ae139d003a755142b9bc89c0acd38a",
+      "forwardRepairIds": [
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "lib/billing/projection.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
+      "repairedBlob": "2bf5c23590644fa9781fbd26951ce21c995416c7",
+      "forwardRepairIds": [
+        "projection-transport-timeout",
+        "projection-response-cleanup",
+        "projection-status-write-containment"
+      ]
+    },
+    {
+      "path": "lib/billing/reconciliation.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4",
+      "repairedBlob": "37d5478fb7d3498b282879eaccab1ded50a08ba7",
+      "forwardRepairIds": [
+        "first-unpaid-subscription-suspension",
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "lib/billing/store.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "ef238eeb06f827e0c98d5f5eccff56b9f3b49b49"
+    },
+    {
+      "path": "lib/billing/stripe.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d39bc2793ed4eff57cb42933db83cc3caed70baf"
+    },
+    {
+      "path": "lib/identity/automatic-personal.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "eb5a74c4e9c515e3c2ac7b7a3164d816ae814b1d",
+      "repairedBlob": "5e5b066f822739859ef37b42b439596bf10a1090",
+      "forwardRepairIds": [
+        "automatic-entitlement-conflict-preservation"
+      ]
+    },
+    {
+      "path": "lib/oauth/server.ts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "020309bc1708ce9106fece24002aeae901131480"
+    },
+    {
+      "path": "package-lock.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
+      "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e"
+    },
+    {
+      "path": "package.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
+      "sourceBlob": "85ecbaf0e0e61ff3b74ef2ad3c5a7638ac94aac2"
+    },
+    {
+      "path": "playwright.frontdoor.config.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "008fa9df1e6600ca09ff3b2cd21029b1d1f95da7"
+    },
+    {
+      "path": "public/brand/alignment.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "4b70e7ccd3190645fce83b3a9881da5e3669dcfe"
+    },
+    {
+      "path": "public/brand/leader-dusk-small.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "d366c96a996434822282b84020574675841a8e99"
+    },
+    {
+      "path": "public/brand/leader-dusk.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "c74619ae88150d2a5adfc62464488e603cabf8db"
+    },
+    {
+      "path": "public/brand/new-reality.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "925ba943d602e033fe7d45fb693019bde3f196cb"
+    },
+    {
+      "path": "public/brand/reframe.webp",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "2a96fe74d0178d487d456f6abb751ef3fed8bd39"
+    },
+    {
+      "path": "public/film/lead-emergence-hero-mobile.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "6fa9dd9f44a46d9218e6117289a65b91734a701c"
+    },
+    {
+      "path": "public/film/lead-emergence-hero.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "072ffbdbe0c2e74c3dd72d2ba638bf5a39de7703"
+    },
+    {
+      "path": "public/film/lead-emergence-seven-stages.mp4",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "554f32a88e4070b061b9d1a03fba4d7131e28376"
+    },
+    {
+      "path": "scripts/measure-frontdoor.mjs",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "a2f087aa6b5c9d5a065a563b586718f5426ff013"
+    },
+    {
+      "path": "supabase/migrations/20260919120000_entry_service_entitlement_status_read.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "fc3ba17a946dbc35c83fa84478771fce3bf3afca"
+    },
+    {
+      "path": "supabase/migrations/20260919180000_phase_2_2_billing_authority_foundation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "b14aaecef83185cc6c8083f8cf4412067e128771"
+    },
+    {
+      "path": "supabase/migrations/20260919200000_entry_checkout_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "62dbfcf3e978f112304cf2c50fe1964cc3a423d1"
+    },
+    {
+      "path": "supabase/migrations/20260919201000_correct_entry_checkout_session_column.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3a45cefd9f0c25b2006574e468102e0a495a66e6"
+    },
+    {
+      "path": "supabase/migrations/20260919210000_entry_stripe_reconciliation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "85ca3c208a40a49937f0fdfb22d491d59d7747fc"
+    },
+    {
+      "path": "supabase/migrations/20260919220000_sponsored_access_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "75e3e1bbe3acbfe3213348cb5f218e236556f1a5"
+    },
+    {
+      "path": "supabase/migrations/20260919230000_personal_projection_outbox.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "8c1e22dc7e704cd461005355a8e581fb89eea82d"
+    },
+    {
+      "path": "supabase/migrations/20260919232000_correct_personal_projection_delivery_state_cast.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "c606dbeaeb20f7d97b24ca908334f77e2c8358b0"
+    },
+    {
+      "path": "supabase/migrations/20260919240000_entry_customer_lifecycle.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "58f25ee62fd1c44a43331a29c62f32704ac71d92"
+    },
+    {
+      "path": "supabase/migrations/20260921210000_entry_projection_drain_scheduler.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "fdc73348b4ccb9466f076db032ef9b6de83d9bbd"
+    },
+    {
+      "path": "supabase/tests/entitlement_status_api.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "702a4b4f6e241cb012d08d0ff78971ab6744bf75"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_billing_foundation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "f3b00e487fd323ade2026553d946b31e2a8b7418"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_checkout_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0984bf10c88e3d2c25324b90a02996b817bf19b9"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_customer_lifecycle.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "faab209a2387bed11b2481909dc79217aec847bb"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_personal_projection_outbox.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "ed3114f11779009f427259a5f371e393dd7c9565"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_sponsored_access_authority.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "065b963f6483595076ba12a883ba46876d06431d"
+    },
+    {
+      "path": "supabase/tests/phase_2_2_stripe_reconciliation.sql",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "bcc6e41c091ebbeac614bb7ea1fb504dd6ed883e"
+    },
+    {
+      "path": "tests/browser/frontdoor.spec.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "378056a26a8ebf82adaef0a91af70d82651e41bd"
+    },
+    {
+      "path": "tests/unit/automatic-personal.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "466cf22526959ff298c424366ed9c9c4b5386739",
+      "repairedBlob": "9a262d8661df7c26335f0477b5b6d18d53d0e6ef",
+      "forwardRepairIds": [
+        "automatic-entitlement-conflict-preservation"
+      ]
+    },
+    {
+      "path": "tests/unit/billing-checkout-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "037ad72eda41fb189d5dc1ff8122863b5422ef32"
+    },
+    {
+      "path": "tests/unit/billing-checkout.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "bc395759aca24426e42354a11c79732f528bc2b9"
+    },
+    {
+      "path": "tests/unit/billing-lifecycle-routes.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "3856c9236c68d51df450fc910d9bb1ed9e8339e7"
+    },
+    {
+      "path": "tests/unit/billing-lifecycle.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f",
+      "repairedBlob": "956428367c96aee3243158103acb63f8fb4281b7",
+      "forwardRepairIds": [
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "tests/unit/billing-projection-cron-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
+      "sourceBlob": "6de594083d6a04deb5a57e225bb7cd88d6bd953a"
+    },
+    {
+      "path": "tests/unit/billing-projection.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
+      "repairedBlob": "fa03b056130498ee718802055f1c327dea947796",
+      "forwardRepairIds": [
+        "projection-transport-timeout",
+        "projection-response-cleanup",
+        "projection-status-write-containment"
+      ]
+    },
+    {
+      "path": "tests/unit/billing-reconciliation.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354",
+      "repairedBlob": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
+      "forwardRepairIds": [
+        "first-unpaid-subscription-suspension",
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "tests/unit/billing-webhook-route.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "0a4928f9857c308b673ee1fdee3cb16a7e4606a3",
+      "repairedBlob": "ea5874dbbb6171559074fb56283cf0c214551e83",
+      "forwardRepairIds": [
+        "obsolete-expired-checkout-response",
+        "account-scoped-webhook-discount-retry"
+      ]
+    },
+    {
+      "path": "tests/unit/oauth-server.test.ts",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "72ea94e2c19d86e5678c5f55aca5bfb95d70723b"
+    },
+    {
+      "path": "tests/unit/workspaces-empty-state.test.tsx",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "668831452b22cb78d088b857d3ac017ed7448bfe"
+    },
+    {
+      "path": "tsconfig.json",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "e019e177a4ad46c51688e69dedde825a628d2aa4"
+    },
+    {
+      "path": "vercel.json",
+      "relation": "production_only_preserve",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "20fc77e7e7cfe269f473bba59884e6ba05afe1af"
+    },
+    {
+      "path": "vitest.config.mts",
+      "relation": "substantive_difference_review",
+      "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
+      "sourceBlob": "8918c1c6ed972c68b967a505516b5ff773b77d4c"
+    }
+  ],
+  "forwardRepairs": [
+    {
+      "id": "projection-transport-timeout",
+      "baseCandidate": "e57fecbac7594234254ab3f9d2ada0ade2dd2fa1",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-03",
+      "authorization": "your approved for the repair",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769754",
+      "scope": "Add a 3000 ms per-request abort signal and regression coverage for cancellation, progression and retry; no whole-batch deadline or production change.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ],
+      "resultBlobs": {
+        "lib/billing/projection.ts": "1f21874af23425047ad79cae810c73cfa0f20e23",
+        "tests/unit/billing-projection.test.ts": "15d537e078908faba1134671b318a172d3cf8519"
+      }
+    },
+    {
+      "id": "projection-response-cleanup",
+      "baseCandidate": "4b6199302b792ccf9deb21ad494d41a48e19b2db",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-03",
+      "authorization": "the next repair is approved",
+      "authorizationSource": "https://sotfcoaching.slack.com/archives/C0C7AUR6YG0/p1791047792189449",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174057464",
+      "scope": "Cancel unused response bodies before recording HTTP results, retain bodyless responses and sanitized retry on cancellation rejection; preserve the existing timeout and retry semantics. No production change.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ]
+    },
+    {
+      "id": "obsolete-expired-checkout-response",
+      "baseCandidate": "7e5305c5422681ebb1dbc4fa9289f4f90fc38c2a",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "approved",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174178518",
+      "scope": "Return 200/IGNORED only for CHECKOUT_OWNERSHIP_MISMATCH on checkout.session.expired, retain rejection logging, ownership guards, persistence and downstream drain behavior, with real-reconciliation regression coverage. No production change.",
+      "paths": [
+        "app/api/billing/stripe/webhook/route.ts",
+        "tests/unit/billing-webhook-route.test.ts"
+      ],
+      "resultBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+        "tests/unit/billing-webhook-route.test.ts": "138a5be23c257dcd14d3e760d4e398eab1c0b94a"
+      }
+    },
+    {
+      "id": "projection-status-write-containment",
+      "baseCandidate": "b48d89dea12f9c1117e57d485b5d24b0f1796a35",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4179460691",
+      "scope": "Contain a failed failure-status write per delivery, log only the delivery ID, and continue the claimed batch. Regression coverage retains the same delivery ID on retry after success, HTTP error, and transport error. Database claim concurrency is not changed or accepted.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "tests/unit/billing-projection.test.ts"
+      ],
+      "baseBlobs": {
+        "lib/billing/projection.ts": "61590f9c1b0a7858bea7ae00e7dd541282ea3fd3",
+        "tests/unit/billing-projection.test.ts": "df1c05d4899a6fb6f6165fd5f312d73e8a0dfc99"
+      },
+      "resultBlobs": {
+        "lib/billing/projection.ts": "2bf5c23590644fa9781fbd26951ce21c995416c7",
+        "tests/unit/billing-projection.test.ts": "fa03b056130498ee718802055f1c327dea947796"
+      }
+    },
+    {
+      "id": "account-billing-read-containment",
+      "baseCandidate": "3d561aac81dd22ec414e99ba60574475b0676c91",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769735",
+      "scope": "Keep the account page readable after billing store construction or lookup failure, show unavailable copy without billing actions, and emit a sanitized diagnostic. Preserve the identity gate and existing successful billing states. No auth, billing-write or production change.",
+      "paths": [
+        "app/account/page.tsx",
+        "tests/unit/account-page.test.tsx"
+      ],
+      "addedPaths": [
+        "tests/unit/account-page.test.tsx"
+      ],
+      "baseBlobs": {
+        "app/account/page.tsx": "2e98148b6092dc8b6063c01a01d7441edf705267"
+      },
+      "resultBlobs": {
+        "app/account/page.tsx": "031b1ca068f7550e032654a87241f0d392ebd612",
+        "tests/unit/account-page.test.tsx": "03794d2fb54b1228b41e316912f67cda44a67835"
+      }
+    },
+    {
+      "id": "interface-example-group-role",
+      "baseCandidate": "ba9f31dd9a4fcb2209fbc58ce97f2b417b9411e6",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4179408058",
+      "scope": "Add the group role to the existing labelled interface selector. Preserve both button labels, pressed state and interaction logic. No runtime-data or production change.",
+      "paths": [
+        "app/landing-motion.tsx"
+      ],
+      "baseBlobs": {
+        "app/landing-motion.tsx": "55431cfa24de31469655e86139180b5658fcae4f"
+      },
+      "resultBlobs": {
+        "app/landing-motion.tsx": "6c362bf0035cdb1b95386c25d014f32d955a8068"
+      }
+    },
+    {
+      "id": "first-unpaid-subscription-suspension",
+      "baseCandidate": "c8b8c78e4e3cbf6d05aa5e4174deade88b883f4f",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769755",
+      "scope": "Map past_due/unpaid subscriptions with no paid history and no existing PAYMENT_GRACE to SUSPENDED_PAYMENT before scheduled-cancellation handling. Preserve existing paid-history and grace behavior. Cover both statuses, prior TRIALING/ACTIVE, invoice and subscription-update paths, and scheduled cancellation. No migration, production billing change or new authority path.",
+      "paths": [
+        "lib/billing/reconciliation.ts",
+        "tests/unit/billing-reconciliation.test.ts"
+      ],
+      "baseBlobs": {
+        "lib/billing/reconciliation.ts": "9b3c34bc9d08eaaecc9c737881ed25d2411cddb4",
+        "tests/unit/billing-reconciliation.test.ts": "dd35539e2200812a732a91f19d483d1afa6b8354"
+      },
+      "resultBlobs": {
+        "lib/billing/reconciliation.ts": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+        "tests/unit/billing-reconciliation.test.ts": "3a63049bdf9c98f29da17114cc529653c0d8a634"
+      }
+    },
+    {
+      "id": "historical-frontdoor-evidence-label",
+      "baseCandidate": "e42d8759f6f9279141495da015c4aaf2da6df150",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; documentation-only clarification, no production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769748",
+      "scope": "Label original front-door test and performance evidence as historical, preserve all original results, and distinguish the starting commit from a verified test-run SHA. No current validation or production acceptance claim is added.",
+      "paths": [
+        "docs/frontdoor-handoff.md"
+      ],
+      "baseBlobs": {
+        "docs/frontdoor-handoff.md": "d86c07aae23884b3788c487a6a8392e15a9edbaa"
+      },
+      "resultBlobs": {
+        "docs/frontdoor-handoff.md": "a8b7b4b94bf5dc9d6b2ff31ab367d32666ed6392"
+      }
+    },
+    {
+      "id": "hero-short-viewport-containment",
+      "baseCandidate": "4f671a7634dfef3be340fe9a5be8a9d2ef6b5818",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174057454",
+      "scope": "Give the existing hero sequence the same minimum height as its pinned child at desktop and mobile breakpoints, so the following narrative cannot cover its controls on short viewports. Preserve existing viewport heights, reduced-motion layout and interaction logic.",
+      "paths": [
+        "app/landing-experience.module.css"
+      ],
+      "baseBlobs": {
+        "app/landing-experience.module.css": "f6a2d1bed70d6396ec89d498e47edb15445bb78b"
+      },
+      "resultBlobs": {
+        "app/landing-experience.module.css": "4c387bc622e4986cfef0acdc432ca91d6200983b"
+      }
+    },
+    {
+      "id": "navigation-text-growth-wrap",
+      "baseCandidate": "56f0f0415c06de52d95bfb19fcee650d5f77e52d",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 scoped work continuation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4174057451",
+      "scope": "Allow the existing navigation flex row to wrap when enlarged text no longer fits, keeping Sign In inside the viewport. Preserve its /login target, wordmark, normal-size layout and all prior repairs.",
+      "paths": [
+        "app/landing-experience.module.css"
+      ],
+      "baseBlobs": {
+        "app/landing-experience.module.css": "4c387bc622e4986cfef0acdc432ca91d6200983b"
+      },
+      "resultBlobs": {
+        "app/landing-experience.module.css": "c33b37e6e46a1cd69b73ba868a889ae036dd76be"
+      }
+    },
+    {
+      "id": "automatic-entitlement-conflict-preservation",
+      "baseCandidate": "bade0405fee1db1bbaa4c6a2f5113184b763fb79",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Phase 2 and 3 required scoped source changes. This prepares one forward migration for the existing RPC; hosted application is not authorized or performed.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769757",
+      "scope": "Make the existing setter insert-only for automatic prebilling provisioning, return the preserved row status on conflict without a change audit, and make the helper honor effective_status. Preserve explicit administrative updates, RPC signature and grants. One unapplied forward migration plus focused caller and pgTAP coverage; database execution and production acceptance remain open.",
+      "paths": [
+        "lib/identity/automatic-personal.ts",
+        "tests/unit/automatic-personal.test.ts",
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql",
+        "supabase/tests/automatic_personal_conflict.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql",
+        "supabase/tests/automatic_personal_conflict.sql"
+      ],
+      "baseBlobs": {
+        "lib/identity/automatic-personal.ts": "cad7e1dbf4fb05044dc77a60254eed372520e9c4",
+        "tests/unit/automatic-personal.test.ts": "1b25d1a8aa270a8e5083cb6c70eb8907fd18a567"
+      },
+      "resultBlobs": {
+        "lib/identity/automatic-personal.ts": "5e5b066f822739859ef37b42b439596bf10a1090",
+        "tests/unit/automatic-personal.test.ts": "9a262d8661df7c26335f0477b5b6d18d53d0e6ef",
+        "supabase/migrations/20261005040500_preserve_concurrent_automatic_entitlements.sql": "66521f613bb09acff8d4ea8e70591dafc269e3ee",
+        "supabase/tests/automatic_personal_conflict.sql": "37300a884c74c0a27519577132c4cc9e79c8e3e9"
+      }
+    },
+    {
+      "id": "account-scoped-webhook-discount-retry",
+      "baseCandidate": "2548c81a5da80d05c1729e73e22b50f968010e50",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-04",
+      "authorization": "Expanded Phase 2 and 3 scoped implementation; no production mutation in this repair.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769745",
+      "scope": "Carry the verified canonical account out of supported Stripe reconciliation and use the existing lifecycle lookup to drain only that account from its webhook. Unsupported events skip discount work. Preserve existing eligibility, ownership, non-proration, idempotency and per-account retry/recovery behavior; unrelated pending accounts cannot make this webhook fail. No migration, scheduler, new retry policy or production billing action.",
+      "paths": [
+        "app/api/billing/stripe/webhook/route.ts",
+        "lib/billing/lifecycle.ts",
+        "lib/billing/reconciliation.ts",
+        "tests/unit/billing-lifecycle.test.ts",
+        "tests/unit/billing-reconciliation.test.ts",
+        "tests/unit/billing-webhook-route.test.ts"
+      ],
+      "baseBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "bd5469c4cc83ff1ef56a681e716da719c679656f",
+        "lib/billing/lifecycle.ts": "627133beb1600b43f8e38110118973fbb24595ac",
+        "lib/billing/reconciliation.ts": "1865d9463eb3c217caeb1dd813a8865eb02612a8",
+        "tests/unit/billing-lifecycle.test.ts": "05737f2c5c5aad53bbac4ee0a8ea8808e65acf3f",
+        "tests/unit/billing-reconciliation.test.ts": "3a63049bdf9c98f29da17114cc529653c0d8a634",
+        "tests/unit/billing-webhook-route.test.ts": "138a5be23c257dcd14d3e760d4e398eab1c0b94a"
+      },
+      "resultBlobs": {
+        "app/api/billing/stripe/webhook/route.ts": "b3a00a055481b7fbe08294c42f25ffaeb6197f3b",
+        "lib/billing/lifecycle.ts": "fcef81e710ae139d003a755142b9bc89c0acd38a",
+        "lib/billing/reconciliation.ts": "37d5478fb7d3498b282879eaccab1ded50a08ba7",
+        "tests/unit/billing-lifecycle.test.ts": "956428367c96aee3243158103acb63f8fb4281b7",
+        "tests/unit/billing-reconciliation.test.ts": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
+        "tests/unit/billing-webhook-route.test.ts": "ea5874dbbb6171559074fb56283cf0c214551e83"
+      }
+    },
+    {
+      "id": "null-safe-stripe-reconciliation",
+      "baseCandidate": "51c58a483bfadeb2ef20db0650d9e61f69e86280",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL test; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769773",
+      "scope": "Reject missing or mismatched Stripe customer ownership, a provided checkout without a matching stored checkout, and NULL qualifying paid amounts in the existing reconciliation RPC. Preserve optional omitted checkout, valid initial subscription binding, replay semantics, signature and privileges. One unapplied forward migration; the original applied migration remains unchanged. Offline PostgreSQL reproduced 8 failures of 19 on the original and passed 19 of 19 on the candidate; full Supabase and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql",
+        "supabase/tests/reconciliation_null_guards.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql",
+        "supabase/tests/reconciliation_null_guards.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005113000_null_safe_stripe_reconciliation.sql": "d0d2b7b2d6ca3e03aeab14f0a6b4d57366fe6df8",
+        "supabase/tests/reconciliation_null_guards.sql": "65dbe38f445c6615079f81368c9d9b658049b9a1"
+      }
+    },
+    {
+      "id": "explicit-offer-eligibility-lifecycle",
+      "baseCandidate": "936f52abff27dadd576ff21496ceb09b575fdd6d",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL attempt; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769771",
+      "scope": "Allow the existing audited command to apply explicit non-pending updates to an offer-eligible entitlement by clearing only incompatible offer-only authority when the new source supplies no classified authority. Preserve explicit new authority, other authority kinds, pending offer eligibility, and the earlier automatic-conflict no-op protection. One unapplied forward definition, unchanged signature/privileges/applied migration history. Offline PostgreSQL reproduced 9 failures of 24 before this repair; candidate passed 24/24 plus the 16 existing automatic-provisioning assertions. Full Supabase/RLS/projection and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql",
+        "supabase/tests/offer_eligibility_lifecycle.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql",
+        "supabase/tests/offer_eligibility_lifecycle.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005121500_offer_eligibility_lifecycle.sql": "a582327936d4c587c619f5fa61bfcc0c3d084289",
+        "supabase/tests/offer_eligibility_lifecycle.sql": "82c15ec3158377384a29e425274402333421a43b"
+      }
+    },
+    {
+      "id": "non-billing-authority-exit-projection",
+      "baseCandidate": "b8c4acf5ee90ebc1fb3863c83d627990b681299f",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped Phase 2/3 repair plus direct approval of one isolated offline PostgreSQL attempt; no hosted migration application or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769783",
+      "scope": "Publish a normalized REVOKED payload for the old non-billing authority when a PERSONAL entitlement leaves projectable authority/status or changes authority key; retain normal NEW projection and suppress NULL/legacy/non-PERSONAL inserts. One unapplied forward definition of the existing trigger, unchanged signature/privileges/applied history. Offline PostgreSQL reproduced 11 failures of 20 before this repair; candidate passed 20/20, automatic regression 16/16, offer regression 24/24 and live-definition receiver fixture 12/12 including stale replay. Receiver fixture is same-instance SQL, not network transport or hosted acceptance. No key moves, deletion cleanup, historical backfill, independent billing or receiver changes. Full Supabase/RLS and production acceptance remain open.",
+      "paths": [
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql",
+        "supabase/tests/non_billing_authority_exits.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql",
+        "supabase/tests/non_billing_authority_exits.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005130500_project_non_billing_authority_exits.sql": "958d4669c2730f07745c3a2b97177effae46f759",
+        "supabase/tests/non_billing_authority_exits.sql": "bac52b534e6e04e3262af38cb77c93c62598bbef"
+      }
+    },
+    {
+      "id": "environment-configured-projection-scheduler",
+      "baseCandidate": "6cabf04ab9f8cd583b472fa84108a11eeaa99528",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped source preparation and direct approval of one isolated offline PostgreSQL/pg_cron attempt; no production configuration write, migration application or CI activation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4173769787",
+      "scope": "One unapplied forward migration changes only the existing named cron job command through cron.alter_job. Read entry_projection_drain_url and cron_secret from Vault, reject missing/blank or unsupported endpoint shape and missing/blank credentials before HTTP, and retain the fixed Personal route and timeout. No production fallback, new runtime object, job metadata change or historical rewrite. One offline PostgreSQL 17.6/pg_cron 1.6.4 attempt reproduced 21 failures of 27 before this repair and passed 27/27 afterward. Existing and unrelated job metadata were unchanged; cron execution was disabled and zero scheduler runs occurred. Tests substitute temporary Vault and HTTP capture fixtures into the stored command; actual Vault encryption, network delivery and production acceptance remain open. Production URL configuration must be separately established before rollout; historical replay still requires the separate outbound-isolation/startup prerequisite.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "bdd58422719e38e861fdd1139d2bd247c8f67e5f",
+        "supabase/tests/projection_scheduler_configuration.sql": "04d69dd102e9e2fad478fa77576cc5b4fe1dd823"
+      }
+    },
+    {
+      "id": "scheduler-remote-https-only",
+      "baseCandidate": "2851455aa0728bc31dc272ebd04f4169a9c2b128",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Scoped source repair and direct approval of one isolated offline PostgreSQL/pg_cron test; no production configuration write, migration application or Entry merge.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4185651870",
+      "scope": "Tighten the existing unapplied scheduler candidate to accept HTTPS remote endpoints and HTTP only for exact localhost, 127.0.0.1 or [::1] with an optional numeric port. Preserve the fixed route and existing configuration/credential guards. The new SQL suite reproduced four failures of 35 in the previous candidate, then passed 35/35 with the correction, including external HTTP and localhost-lookalike rejection before the capture call and valid HTTPS/loopback controls. Real PostgreSQL 17.6/pg_cron 1.6.4, network none, cron execution disabled, zero scheduled runs, unchanged job metadata and unrelated command, container removed. Vault/HTTP capture fixtures do not establish encryption, network delivery or production acceptance. Historical applied migration and previous 27-assertion evidence remain unchanged.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "bdd58422719e38e861fdd1139d2bd247c8f67e5f",
+        "supabase/tests/projection_scheduler_configuration.sql": "04d69dd102e9e2fad478fa77576cc5b4fe1dd823"
+      },
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "6c6eeb0c9b7b5bee317dbdc3af67092c24f2d290",
+        "supabase/tests/projection_scheduler_configuration.sql": "ace3b27ea9ef428866f0c9dd970224d0329e653c"
+      }
+    },
+    {
+      "id": "scheduler-hostname-and-port-guard",
+      "baseCandidate": "ad5c78df5776869e55e88b2c54d8755b30771fd2",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Direct D27 approval for one isolated hostname/port SQL test and exact-head control-plane PR25 documentation merge; source correction through review only. No Entry merge or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4186054712",
+      "scope": "Correct only the existing unapplied scheduler guard to require a nonempty host-shaped HTTPS authority and optional one-to-five decimal-digit port in the range 1–65535 before reading the credential or issuing HTTP. Retain remote HTTPS and exact-loopback HTTP, fixed route, timeout and job metadata. This checks supported URL shape, not DNS reachability or comprehensive DNS/IPv6 syntax. One offline PostgreSQL/pg_cron attempt reproduced ten failures of 49 in the prior candidate and passed 49/49 after the correction. Historical applied migration and earlier evidence are unchanged.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "6c6eeb0c9b7b5bee317dbdc3af67092c24f2d290",
+        "supabase/tests/projection_scheduler_configuration.sql": "ace3b27ea9ef428866f0c9dd970224d0329e653c"
+      },
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "a9ec5855f39434bcf1bcb3f14d3bc80591892033",
+        "supabase/tests/projection_scheduler_configuration.sql": "6df9b09c96a75e4c7cf161179e5037d33b4af83b"
+      },
+      "offlineValidation": {
+        "startedAt": "2026-10-06T00:22:39.696Z",
+        "finishedAt": "2026-10-06T00:22:48.444Z",
+        "baselineFailed": 10,
+        "baselinePassed": 39,
+        "candidatePassed": 49,
+        "startAttempts": 1,
+        "image": "sha256:86a2e078779e5bdccda1f6f6c5063aa9779a322d1fface5fb408d051909b230f",
+        "containerId": "010ea2ccafd8193ca1301bbeb20447d6e6bdb040018bf58c0b740c7bdb3052b2",
+        "containerRemoved": true,
+        "fixtureHashes": {
+          "bootstrap": "7f272c615cfa12fcddde3d0e60ea5ff6ec92eac6fe41899ed7e2b8cc86a5a68b",
+          "baselineForward": "7516f67a4b471817d3a996422d8026dfee7000a8a6109b9724a6168ea026417a",
+          "forward": "e26a5e6d0221b834b80ae65e4700ddb92b54c814cae7940f49a9908b15662cab",
+          "tests": "f6b24dd4c2db768b53ed95f3618ab7f2039b5bcce9d4b00a7bcac00572552ad1"
+        },
+        "cronLaunchBefore": "off",
+        "cronLaunchAfter": "off",
+        "schedulerExecutions": 0,
+        "jobMetadataUnchanged": true,
+        "limits": "Real cached PostgreSQL/pg_cron with cron.launch_active_jobs=off before startup. Historical schedule statement only; pg_net and Vault are not installed. Tests substitute temporary Vault/HTTP capture fixtures into a copy of the stored command, so no encryption, real HTTP, credential, scheduler tick, full Supabase/CI or production acceptance is claimed. Existing job metadata and unrelated job are compared across one candidate application."
+      }
+    }
+  ]
+}
