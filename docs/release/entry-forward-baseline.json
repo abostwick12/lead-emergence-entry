@@ -911,6 +911,50 @@
         "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "6c6eeb0c9b7b5bee317dbdc3af67092c24f2d290",
         "supabase/tests/projection_scheduler_configuration.sql": "ace3b27ea9ef428866f0c9dd970224d0329e653c"
       }
+    },
+    {
+      "id": "scheduler-hostname-and-port-guard",
+      "baseCandidate": "ad5c78df5776869e55e88b2c54d8755b30771fd2",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-05",
+      "authorization": "Direct D27 approval for one isolated hostname/port SQL test and exact-head control-plane PR25 documentation merge; source correction through review only. No Entry merge or production mutation.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4186054712",
+      "scope": "Correct only the existing unapplied scheduler guard to require a nonempty host-shaped HTTPS authority and optional one-to-five decimal-digit port in the range 1–65535 before reading the credential or issuing HTTP. Retain remote HTTPS and exact-loopback HTTP, fixed route, timeout and job metadata. This checks supported URL shape, not DNS reachability or comprehensive DNS/IPv6 syntax. One offline PostgreSQL/pg_cron attempt reproduced ten failures of 49 in the prior candidate and passed 49/49 after the correction. Historical applied migration and earlier evidence are unchanged.",
+      "paths": [
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql",
+        "supabase/tests/projection_scheduler_configuration.sql"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "6c6eeb0c9b7b5bee317dbdc3af67092c24f2d290",
+        "supabase/tests/projection_scheduler_configuration.sql": "ace3b27ea9ef428866f0c9dd970224d0329e653c"
+      },
+      "resultBlobs": {
+        "supabase/migrations/20261005143000_environment_projection_scheduler.sql": "a9ec5855f39434bcf1bcb3f14d3bc80591892033",
+        "supabase/tests/projection_scheduler_configuration.sql": "6df9b09c96a75e4c7cf161179e5037d33b4af83b"
+      },
+      "offlineValidation": {
+        "startedAt": "2026-10-06T00:22:39.696Z",
+        "finishedAt": "2026-10-06T00:22:48.444Z",
+        "baselineFailed": 10,
+        "baselinePassed": 39,
+        "candidatePassed": 49,
+        "startAttempts": 1,
+        "image": "sha256:86a2e078779e5bdccda1f6f6c5063aa9779a322d1fface5fb408d051909b230f",
+        "containerId": "010ea2ccafd8193ca1301bbeb20447d6e6bdb040018bf58c0b740c7bdb3052b2",
+        "containerRemoved": true,
+        "fixtureHashes": {
+          "bootstrap": "7f272c615cfa12fcddde3d0e60ea5ff6ec92eac6fe41899ed7e2b8cc86a5a68b",
+          "baselineForward": "7516f67a4b471817d3a996422d8026dfee7000a8a6109b9724a6168ea026417a",
+          "forward": "e26a5e6d0221b834b80ae65e4700ddb92b54c814cae7940f49a9908b15662cab",
+          "tests": "f6b24dd4c2db768b53ed95f3618ab7f2039b5bcce9d4b00a7bcac00572552ad1"
+        },
+        "cronLaunchBefore": "off",
+        "cronLaunchAfter": "off",
+        "schedulerExecutions": 0,
+        "jobMetadataUnchanged": true,
+        "limits": "Real cached PostgreSQL/pg_cron with cron.launch_active_jobs=off before startup. Historical schedule statement only; pg_net and Vault are not installed. Tests substitute temporary Vault/HTTP capture fixtures into a copy of the stored command, so no encryption, real HTTP, credential, scheduler tick, full Supabase/CI or production acceptance is claimed. Existing job metadata and unrelated job are compared across one candidate application."
+      }
     }
   ]
 }

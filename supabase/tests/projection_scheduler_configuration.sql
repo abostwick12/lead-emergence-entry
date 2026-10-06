@@ -2,7 +2,7 @@
 -- Replace only the Vault relation and HTTP call with pg_temp capture fixtures.
 -- No actual credential, HTTP request, scheduler tick or Vault mutation is used.
 begin;
-select plan(35);
+select plan(49);
 
 create temporary table scheduler_config(name text primary key, decrypted_secret text);
 create temporary table scheduler_requests(
@@ -84,6 +84,55 @@ where name='entry_projection_drain_url';
 select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
   'Projection drain endpoint is missing or has an unsupported format.','A hostname resembling localhost is rejected');
 select is((select count(*) from scheduler_requests),0::bigint,'A hostname resembling localhost sends no credential or HTTP request');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://[::1]:443/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select lives_ok($$select pg_temp.run_scheduler_command()$$,'HTTPS bracketed IPv6 with a valid port is supported');
+select is((select url from scheduler_requests),'https://[::1]:443/api/internal/cron/personal-projection-drain',
+  'HTTPS bracketed IPv6 with a valid port reaches only its configured endpoint');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://entry.fixture.example:65535/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select lives_ok($$select pg_temp.run_scheduler_command()$$,'HTTPS maximum valid port is supported');
+select is((select url from scheduler_requests),'https://entry.fixture.example:65535/api/internal/cron/personal-projection-drain',
+  'HTTPS maximum valid port reaches only its configured endpoint');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://:443/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','HTTPS without a hostname is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'HTTPS without a hostname makes no HTTP call');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://entry.fixture.example:bad/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','A nonnumeric HTTPS port is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'A nonnumeric HTTPS port makes no HTTP call');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://entry.fixture.example:0/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','HTTPS port zero is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'HTTPS port zero makes no HTTP call');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='https://entry.fixture.example:65536/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','An out-of-range HTTPS port is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'An out-of-range HTTPS port makes no HTTP call');
+
+truncate scheduler_requests;
+update scheduler_config set decrypted_secret='http://127.0.0.1:65536/api/internal/cron/personal-projection-drain'
+where name='entry_projection_drain_url';
+select throws_ok($$select pg_temp.run_scheduler_command()$$,'22023',
+  'Projection drain endpoint is missing or has an unsupported format.','An out-of-range local HTTP port is rejected');
+select is((select count(*) from scheduler_requests),0::bigint,'An out-of-range local HTTP port makes no HTTP call');
 
 truncate scheduler_requests;
 update scheduler_config set decrypted_secret=' https://changed.fixture.example/api/internal/cron/personal-projection-drain '

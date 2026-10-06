@@ -16,6 +16,7 @@ begin
     declare
       v_url text;
       v_secret text;
+      v_port integer;
     begin
       v_url := (
         select btrim(decrypted_secret)
@@ -25,9 +26,16 @@ begin
       -- Require HTTPS for remote endpoints; permit HTTP only on loopback.
       -- Retain the fixed route and reject credentials, whitespace, query or fragment.
       if v_url is null or (
-        v_url !~ '^https://[^/?#[:space:]@]+/api/internal/cron/personal-projection-drain$'
-        and v_url !~ '^http://(localhost|127[.]0[.]0[.]1|\[::1\])(:[0-9]+)?/api/internal/cron/personal-projection-drain$'
+        v_url !~ '^https://([[:alnum:]][[:alnum:].-]*|\[[0-9A-Fa-f:.]+\])(:[0-9]{1,5})?/api/internal/cron/personal-projection-drain$'
+        and v_url !~ '^http://(localhost|127[.]0[.]0[.]1|\[::1\])(:[0-9]{1,5})?/api/internal/cron/personal-projection-drain$'
       ) then
+        raise exception 'Projection drain endpoint is missing or has an unsupported format.'
+          using errcode = '22023';
+      end if;
+
+      -- The shape check bounds the optional port to five decimal digits.
+      v_port := substring(v_url from ':([0-9]{1,5})/api/internal/cron/personal-projection-drain$')::integer;
+      if v_port is not null and v_port not between 1 and 65535 then
         raise exception 'Projection drain endpoint is missing or has an unsupported format.'
           using errcode = '22023';
       end if;
