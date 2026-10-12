@@ -19,6 +19,7 @@
     "status": "BLOCKED_CONFIGURATION_AND_HOSTNAME_UNPROVEN",
     "configurationProvisionedAndProjectMatched": false,
     "hostnameAssignedToPreview": false,
+    "personalProductHostnameBindingVerified": false,
     "rpcCatalogAndRolePrivilegesVerified": true,
     "rpcCatalogCheckedAt": "2026-10-12T16:47:40.454193+00:00",
     "dependencyControlsCheckedAt": "2026-10-12T16:50:53.696674+00:00",
@@ -57,6 +58,7 @@
   "approvalPrerequisites": [
     "Fresh exact source and overlap check; preserve the owner-cleared PR19 boundary",
     "Confirm proposed hostname availability and assignment scope",
+    "Confirm PERSONAL_PRODUCT_URL is assigned to the intended nonproduction Workspace deployment and verify its /auth/entry endpoint before deployment approval; an immutable Workspace URL or matching public Supabase origin alone is insufficient",
     "Confirm isolated publishable-key provisioning and project binding without disclosing its value",
     "Confirm Vercel configuration can be scoped to this Preview deployment/branch",
     "Check Entry-dev dependency RPC availability read-only before claiming functional consent",
