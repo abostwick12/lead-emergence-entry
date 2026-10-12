@@ -1,0 +1,7 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "codex/entry-dev-auth-boundary-draft": false
+    }
+  }
+}
