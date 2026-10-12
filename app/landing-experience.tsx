@@ -2,7 +2,6 @@ import Link from 'next/link';
 import styles from './landing-experience.module.css';
 
 const CONSULTING_URL = process.env.NEXT_PUBLIC_CONSULTING_URL || 'https://consulting.leademergence.com';
-const WORKSPACE_URL = process.env.NEXT_PUBLIC_WORKSPACE_URL || 'https://workspace.leademergence.com';
 
 const stages = [
   ['01', 'SEE', 'Start with reality.', 'Notice what is actually happening before reaching for a solution.'],
@@ -17,7 +16,7 @@ export function LandingExperience() {
     <main className={styles.page}>
       <header className={styles.nav}>
         <Link href="/" className={styles.wordmark} aria-label="Lead Emergence home"><i>Lead</i> Emergence<span>PEOPLE · PURPOSE · SYSTEMS</span></Link>
-        <nav aria-label="Main navigation"><a href="#approach">Approach</a><a href="#products">Products</a><Link className={styles.navButton} href="/login">Returning user <span aria-hidden="true">→</span></Link></nav>
+        <nav aria-label="Main navigation"><a href="#approach">Approach</a><a href="#products">Products</a><Link className={styles.navButton} href="/login">Sign in <span aria-hidden="true">→</span></Link></nav>
       </header>
 
       <section className={styles.hero} aria-labelledby="hero-title">
@@ -25,7 +24,7 @@ export function LandingExperience() {
         <p className={styles.eyebrow}>LEADERSHIP TECHNOLOGY</p>
         <h1 id="hero-title">Lead from reality,<br /><em>not reaction.</em></h1>
         <p className={styles.heroCopy}>Lead Emergence helps leaders see clearly, make better decisions, and build organizations where people, purpose, and systems can flourish together.</p>
-        <div className={styles.heroActions}><Link className={styles.primaryButton} href="/signup">Enter Lead Emergence <span aria-hidden="true">→</span></Link><a className={styles.textLink} href={`${CONSULTING_URL}/intake/consulting`}>Talk with a consultant <span aria-hidden="true">→</span></a></div>
+        <div className={styles.heroActions}><Link className={styles.primaryButton} href="/login">Sign in to Lead Emergence <span aria-hidden="true">→</span></Link><a className={styles.textLink} href={`${CONSULTING_URL}/intake/consulting`}>Talk with a consultant <span aria-hidden="true">→</span></a></div>
         <p className={styles.heroNote}><span aria-hidden="true">◆</span> One identity. Separate product permissions. Your data stays in the workspace it belongs to.</p>
       </section>
 
@@ -35,10 +34,10 @@ export function LandingExperience() {
       </section>
 
       <section className={styles.products} id="products" aria-labelledby="products-title">
-        <div className={styles.sectionIntro}><p className={styles.eyebrow}>CHOOSE YOUR NEXT STEP</p><h2 id="products-title">One practice. Two ways to enter.</h2><p>Start where you are. Move between products only when your role and authorization call for it.</p></div>
+        <div className={styles.sectionIntro}><p className={styles.eyebrow}>CHOOSE YOUR NEXT STEP</p><h2 id="products-title">One sign-in. The right place to continue.</h2><p>Lead Emergence checks your access once, then lets you choose among the products you are authorized to use.</p></div>
         <div className={styles.productGrid}>
-          <article className={styles.productCard}><div className={styles.cardIcon} aria-hidden="true">◎</div><p className={styles.eyebrow}>TRANSFORMATION</p><h3>Lead Emergence Consulting</h3><p>Work with a consultant to understand your organization, align the people doing the work, and make change traceable.</p><div className={styles.cardActions}><a className={styles.primaryButton} href={`${CONSULTING_URL}/intake/consulting`}>Start client intake <span aria-hidden="true">→</span></a><a className={styles.secondaryLink} href={`${CONSULTING_URL}/login`}>Consultant or client login</a></div></article>
-          <article className={`${styles.productCard} ${styles.workspaceCard}`}><div className={styles.cardIcon} aria-hidden="true">✦</div><p className={styles.eyebrow}>PERSONAL WORKSPACE</p><h3>Lead from your own workspace</h3><p>Build a durable personal operating system for leadership, reflection, and the next decision in front of you.</p><div className={styles.cardActions}><a className={styles.primaryButton} href={WORKSPACE_URL}>Open Workspace <span aria-hidden="true">→</span></a><Link className={styles.secondaryLink} href="/signup">Create your identity</Link></div></article>
+          <article className={styles.productCard}><div className={styles.cardIcon} aria-hidden="true">◎</div><p className={styles.eyebrow}>TRANSFORMATION</p><h3>Lead Emergence Consulting</h3><p>Work with a consultant to understand your organization, align the people doing the work, and make change traceable.</p><div className={styles.cardActions}><a className={styles.primaryButton} href={`${CONSULTING_URL}/intake/consulting`}>Start client intake <span aria-hidden="true">→</span></a><Link className={styles.secondaryLink} href="/login">Sign in to Lead Emergence</Link></div></article>
+          <article className={`${styles.productCard} ${styles.workspaceCard}`}><div className={styles.cardIcon} aria-hidden="true">✦</div><p className={styles.eyebrow}>PERSONAL WORKSPACE</p><h3>Lead from your own workspace</h3><p>Build a durable personal operating system for leadership, reflection, and the next decision in front of you.</p><div className={styles.cardActions}><Link className={styles.primaryButton} href="/login">Sign in to Lead Emergence <span aria-hidden="true">→</span></Link><Link className={styles.secondaryLink} href="/signup">Create your identity</Link></div></article>
         </div>
       </section>
 
