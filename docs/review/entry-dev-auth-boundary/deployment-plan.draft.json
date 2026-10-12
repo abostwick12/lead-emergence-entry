@@ -3,6 +3,7 @@
   "apply": false,
   "repository": "abostwick12/lead-emergence-entry",
   "sourceSha": "0b278fe7254c86e18adcd1215af86d54e36f3411",
+  "sourceShaMeaning": "Unchanged application baseline only; any deployment request must separately pin the exact final Auth-reviewed PR head, never a moving branch",
   "draftBranch": "codex/entry-dev-auth-boundary-draft",
   "team": "emergence-projects",
   "existingNonproductionProject": {
@@ -14,6 +15,17 @@
   "originProvisionedOrOwnershipVerified": false,
   "newDeploymentId": null,
   "newImmutableDeploymentUrl": null,
+  "approvalReadiness": {
+    "status": "BLOCKED_CONFIGURATION_AND_HOSTNAME_UNPROVEN",
+    "configurationProvisionedAndProjectMatched": false,
+    "hostnameAssignedToPreview": false,
+    "rpcCatalogAndRolePrivilegesVerified": true,
+    "rpcCatalogCheckedAt": "2026-10-12T16:47:40.454193+00:00",
+    "dependencyControlsCheckedAt": "2026-10-12T16:50:53.696674+00:00",
+    "exactHeadAuthReviewReceipt": "Required on the PR for the final immutable head; not established by a skipped draft review",
+    "evidence": "README.md#read-only-prerequisite-refresh--october-12-2026",
+    "limits": "Catalog/ACL/control presence is not successful login or consent. No project or linked shared variables exist in the inspected Vercel project; the proposed hostname is unassigned there. Cross-PR add/add reconciliation still needs the combined file retained before merge."
+  },
   "nonsecretBuildAndRuntimeConfiguration": {
     "NEXT_PUBLIC_SUPABASE_URL": "https://vnjdubrnmxvmsccxmhst.supabase.co",
     "APP_ORIGIN": "https://lead-emergence-entry-dev.vercel.app",

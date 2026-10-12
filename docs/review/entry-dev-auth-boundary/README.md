@@ -4,7 +4,7 @@ Status: **DRAFT. No deployment or Auth change authorized or performed.**
 
 ## Scope and owner clearance
 
-IN SCOPE: Andrew's October 12 `yes` clears isolated Entry-dev deployment/environment draft preparation alongside PR19. The subsequent instruction authorizes committing exactly these nine review files and opening a draft PR, subject to making no deployment or Auth change. It does not approve deployment, Auth mutation, merge, a real sign-in or OAuth consent. Branch `codex/entry-dev-auth-boundary-draft` starts at fresh Entry main `0b278fe7254c86e18adcd1215af86d54e36f3411`. Existing signup, recovery, front-door and PR19 worktrees are preserved. Only this review directory is changed; application code and existing configuration are unchanged.
+IN SCOPE: Andrew's October 12 `yes` clears isolated Entry-dev deployment/environment draft preparation alongside PR19. The subsequent instructions authorize the nine-file review packet, draft PR, the tenth file `vercel.json` to disable deployment for this branch, and this bounded README/configuration reconciliation plus prerequisite and exact-head Auth review. Deployment, Auth mutation, merge, real sign-in and OAuth consent remain unapproved. Branch `codex/entry-dev-auth-boundary-draft` starts at Entry main `0b278fe7254c86e18adcd1215af86d54e36f3411`. Existing signup, recovery, front-door and PR19 worktrees are preserved. Changes are limited to this review directory and the approved branch-specific root configuration; application source is unchanged.
 
 Canonical governance was read through signed-in GitHub, starting with AGENTS.md, followed by ROADMAP.md, PRODUCTION_STATE.md, DECISIONS.md, BACKLOG.md and state-refresh, assumption-challenge and scope-lock protocols. Current engineering authorization is Phase 2/3. This task supports the Entry sign-in boundary; it closes no customer release gate.
 
@@ -44,12 +44,58 @@ This corrects the demonstrated default destination so development authorization 
 
 Entry `/auth/callback` is Entry's login/session callback. `/auth/callback?next=%2Fupdate-password` is its exact recovery variant. A product provider's Supabase `/auth/v1/callback`, Workspace `/auth/callback/sign-in`, and an OAuth client's registered redirect URI serve different contracts. An eventual ChatGPT callback must be read from the actual approved client; it cannot be invented or replaced with Entry's session callback.
 
-ASSUMED / BLOCKER: project-matched publishable-key provisioning, dedicated hostname availability, required Entry-dev entitlement/MCP RPC availability, actual successful login, real consent, and exact client callback completion. A normal consent read can call `record_mcp_oauth_authorization_event` (`lib/oauth/request-classification.ts:25`), and approval can activate a grant (`app/api/oauth/decision/route.ts:34`); those are not read-only probes. They require a separately bounded execution approval. No client/authorization ID or user account is assumed suitable.
+BLOCKER: project-matched publishable-key provisioning and dedicated hostname assignment remain unverified. Required Entry-dev entitlement/MCP RPC catalog availability was subsequently checked below; successful login, real consent and exact client callback completion remain untested. A normal consent read can call `record_mcp_oauth_authorization_event` (`lib/oauth/request-classification.ts:25`), and approval can activate a grant (`app/api/oauth/decision/route.ts:34`); those are not read-only probes. They require a separately bounded execution approval. No client/authorization ID or user account is assumed suitable.
 
 No tests or builds were run and no dependencies installed. Read-only browser guards are supporting route evidence only. No customer, ChatGPT or release acceptance is claimed.
 
-Artifact validation: all three JSON files parse with PowerShell `ConvertFrom-Json`. `git status --porcelain --untracked-files=all` lists only this review directory; `git ls-files --modified --deleted` returns no tracked source changes. `git diff --check` fails with the pre-existing environment error `fatal: this operation must be run in a work tree`; it is not reported as passing. The initial unprivileged fetch could not write the shared external `FETCH_HEAD`; the approved scoped elevated fetch succeeded before worktree creation. The signup branch remains at its original HEAD with no source edits.
+Artifact validation: the three packet JSON files and root `vercel.json` parse with PowerShell `ConvertFrom-Json`. The current correction changes only this README, `deployment-plan.draft.json` and `vercel.json`; the application, library, Supabase and workflow source diff against the pinned main baseline is empty. The exact branch-only deployment-disable rule and shared schema declaration were checked. Scoped elevated `git diff --check` passes. The earlier unprivileged `git diff --check` failed with the environment error `fatal: this operation must be run in a work tree`; that is retained as an access-context failure, not a source validation failure. The initial unprivileged fetch could not write the shared external `FETCH_HEAD`; scoped elevated fetch succeeds. The signup branch remains at its original HEAD with no source edits.
 
 ## Review status and next boundary
 
-Nine-file commit and draft PR are authorized; no CodeRabbit review is complete. Publishing remains blocked until automatic deployment is demonstrably suppressed for this branch. Read-only inspection of the SSO-preview project's signed-in Vercel Git settings shows the Entry repository connected; Build and Deployment settings show Ignored Build Step = Automatic and change-based skipping disabled. There is no repository `vercel.json` at the pinned source. A documentation-only push must not be assumed deployment-free. No Git integration or build setting was changed. Review first the proposed nonproduction project/origin/configuration and unresolved prerequisites. Deployment approval, Auth approval, and any real login/consent execution remain separate scoped decisions. Current main source divergence and PR19's release blockers remain owned by that work; this draft imports none of its code or migrations. Canonical status/decision files were read but not changed.
+IN SCOPE — Published draft [PR20](https://github.com/abostwick12/lead-emergence-entry/pull/20) contains review commit `25a267440949ef9c17fecb557553f8a40ce16869` and the separately approved branch-deployment disable `f3f9847475ff562b52889a4a28f99d8373159941`. Publishing is complete. The post-publication branch inventory returned zero deployments. CodeRabbit explicitly skipped automatic review because the PR was a draft; its SUCCESS status was not an Auth review. The current correction requires a new exact-head review receipt, recorded on the PR after the final commit; no earlier review is reused.
+
+IN SCOPE — PR19 at `8673bcbec3d212ad66ba4e7bc2f46ab49ed8053b` adds only a `$schema` declaration in `vercel.json`. This branch preserves that exact declaration and adds only the previously approved branch-specific `git.deploymentEnabled` rule. The resulting configuration is the intended content resolution. A non-mutating `git merge-file --stdout` simulation against the empty common-base file returned exit 1: Git still sees an add/add conflict. It is not reported as a clean cross-PR merge. Both branches remain unchanged apart from this task's isolated branch. Before any future merge, the owner must reconcile the two additions by retaining this combined file; no PR19 code, migration, rebase or merge is adopted here.
+
+## Read-only prerequisite refresh — October 12, 2026
+
+CLAIM: the proposed Preview has enough pinned configuration and dependencies to request deployment approval. FALSIFIER: missing project-matched configuration or an unassigned dedicated hostname. FALSIFIER RESULT: the signed-in Vercel inventory has no project variables and no linked shared variables; its domain list contains only `lead-emergence-entry-sso-preview.vercel.app`, assigned to Production in the separate SSO-preview project. The proposed Entry-dev hostname is not assigned there. Therefore deployment approval is **BLOCKED**, not ready to present. An Add Domains form accepting the hostname text proves syntax only; it was canceled without submission and does not prove availability or ownership.
+
+VERIFIED — Signed-in [project General settings](https://vercel.com/emergence-projects/lead-emergence-entry-sso-preview/settings/general) display project ID `prj_kqi3BE9KJkJOJBWIDzd4JqZxMVnG`. [Project variables](https://vercel.com/emergence-projects/lead-emergence-entry-sso-preview/settings/environment-variables) display `No Environment Variables Added`; the Shared tab displays `No shared variables linked`. [Domains](https://vercel.com/emergence-projects/lead-emergence-entry-sso-preview/settings/domains) display the single existing default domain above. No values, credentials, variable associations or hostname assignments were changed. The authenticated connector's project/env/domain reads returned 404 with both slug and explicit team scope; the signed-in dashboard is the successful source, not an inference that the project was deleted.
+
+VERIFIED — Catalog-only SQL in `BEGIN READ ONLY` on [the pinned Entry-dev SQL editor](https://supabase.com/dashboard/project/vnjdubrnmxvmsccxmhst/sql/5e5fa029-763f-4b76-a363-f30f7b54f5bb) returned `transaction_read_only=on` at `2026-10-12T16:47:40.454193+00:00`. All four Entry source-call contracts are present, allow authenticated EXECUTE and deny anon EXECUTE; the respective authenticated schema USAGE checks are true:
+
+| RPC identity | Result | Definition MD5 |
+| --- | --- | --- |
+| `public.get_my_active_entry_products()` | `TABLE(product entry_identity.entry_product)` | `030ba58bfdcc0a5b4581dadd89bac7c6` |
+| `workspace.resolve_mcp_oauth_authorization(p_authorization_id text)` | `TABLE(request_class text, denial_code text, expected_redirect_uri text, requested_scopes text[], grant_active boolean)` | `82d9c15e723ac508a38ef2c310852dfa` |
+| `workspace.activate_mcp_oauth_grant(p_authorization_id text)` | `jsonb` | `cfae682352b446242a5e20a7c095be5a` |
+| `workspace.record_mcp_oauth_authorization_event(p_authorization_id text, p_event_type text, p_reason_code text)` | `void` | `0dac813622c4027aac4d0fee9211e784` |
+
+Reproducible catalog check (does not execute the RPCs):
+
+```sql
+begin read only;
+with expected(schema_name, function_name) as (values
+  ('public','get_my_active_entry_products'),
+  ('workspace','resolve_mcp_oauth_authorization'),
+  ('workspace','activate_mcp_oauth_grant'),
+  ('workspace','record_mcp_oauth_authorization_event')
+)
+select e.*, p.oid is not null as present,
+       pg_get_function_identity_arguments(p.oid) as arguments,
+       pg_get_function_result(p.oid) as result,
+       has_function_privilege('authenticated',p.oid,'execute') as authenticated_execute,
+       has_function_privilege('anon',p.oid,'execute') as anon_execute,
+       has_schema_privilege('authenticated',n.oid,'usage') as authenticated_schema_usage,
+       md5(pg_get_functiondef(p.oid)) as definition_md5
+from expected e
+left join pg_namespace n on n.nspname=e.schema_name
+left join pg_proc p on p.pronamespace=n.oid and p.proname=e.function_name;
+rollback;
+```
+
+VERIFIED — Subsequent read-only definition/catalog inspection at `2026-10-12T16:50:53.696674+00:00` found the private resolver, admission-event recorder, fingerprint and admission-control functions; `extensions.digest(text,text)` is present. Required relations `auth.oauth_authorizations`, `auth.oauth_clients`, `entry_identity.product_entitlements`, `workspace_private.mcp_oauth_resource_grants`, `workspace_private.mcp_oauth_admission_audit` and `workspace_private.product_settings` are present. Authenticated has SELECT and schema USAGE for the entitlement table used by the invoker RPC. The [Data API settings](https://supabase.com/dashboard/project/vnjdubrnmxvmsccxmhst/integrations/data_api/settings) show Data API enabled and checked exposed schemas `graphql_public`, `public`, `workspace`; `workspace_private` and `entry_identity` are not exposed directly.
+
+VERIFIED — Reading only the three named nonsecret `workspace_private.product_settings` entries returned `mcp_dynamic_admission_enabled=true`, `mcp_resource_uri=https://workspace.leademergence.com/api/mcp`, and `mcp_preview_resource_uri=https://lead-emergence-workspace-entry-dev.vercel.app/api/mcp`. The private resolver definition permits either configured resource and validates the actual client's exact registered redirect plus PKCE. This is catalog/control evidence, not full environment isolation, a suitable client binding, an entitled test identity or successful authorization. No authorization/client/grant/customer rows were selected and no application RPC was called.
+
+BLOCKER — Before presenting one Preview for deployment approval, obtain owner-confirmed hostname availability/assignment scope and secure project-matched Preview configuration for this branch (including the matching publishable key), then verify them read-only. Use one immutable commit SHA from the completed exact-head Auth review in the external approval request, not a moving branch name; the plan's `sourceSha` identifies the unchanged application baseline. Deployment acceptance, Auth approval and any real login/consent execution remain separate scoped decisions. Canonical status/decision files were read but not changed.
