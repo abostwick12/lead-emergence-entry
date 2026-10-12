@@ -1,0 +1,51 @@
+{
+  "status": "DRAFT_BLOCKED_UNTIL_DEPLOYMENT_PROVEN_AND_AUTH_APPROVED",
+  "apply": false,
+  "projectRef": "vnjdubrnmxvmsccxmhst",
+  "projectName": "lead-emergence-entry-dev",
+  "prerequisite": {
+    "approvedDeploymentId": null,
+    "approvedImmutableDeploymentUrl": null,
+    "approvedSourceSha": "0b278fe7254c86e18adcd1215af86d54e36f3411",
+    "provenDedicatedOrigin": null,
+    "bindingEvidence": null,
+    "separateAuthApproval": null
+  },
+  "before": {
+    "siteUrl": "https://entry.leademergence.com",
+    "authorizationPath": "/oauth/consent",
+    "redirectUrls": [
+      "https://cirqqhuvzekbvysiyedg.supabase.co/auth/v1/callback",
+      "https://le-entry-sso-dev-aug21.vercel.app/auth/callback",
+      "https://lead-emergence-entry-sso-preview-5s78c9op4-emergence-projects.vercel.app/auth/callback",
+      "https://lead-emergence-entry-sso-preview-git-45c287-emergence-projects.vercel.app/auth/callback",
+      "https://entry.leademergence.com/auth/callback",
+      "https://entry.leademergence.com/auth/callback?next=%2Fupdate-password",
+      "https://workspace.leademergence.com/auth/callback/sign-in"
+    ]
+  },
+  "proposedChange": {
+    "siteUrl": "https://lead-emergence-entry-dev.vercel.app",
+    "authorizationPath": "/oauth/consent",
+    "addExactRedirectUrls": [
+      "https://lead-emergence-entry-dev.vercel.app/auth/callback",
+      "https://lead-emergence-entry-dev.vercel.app/auth/callback?next=%2Fupdate-password"
+    ],
+    "removeRedirectUrls": [],
+    "expectedRedirectUrlCount": 9
+  },
+  "reviewLimits": [
+    "This is the smallest routing correction for the demonstrated default login/consent destination; it is not complete redirect-allowlist isolation.",
+    "The existing seven entries are retained pending client/consumer inventory. Explicit redirects to currently permitted Production endpoints remain possible.",
+    "Do not approve this add-only diff as full environment isolation. If full isolation is required, the Auth owner must identify supported nonproduction consumers and approve an exact replacement allowlist first.",
+    "Never apply if the before snapshot or approved deployment/hostname has drifted.",
+    "Do not change the Production Supabase projects, OAuth authorization path, client redirect registrations or provider settings."
+  ],
+  "acceptanceAfterSeparateAuthorization": [
+    "Dashboard displays the dedicated Entry-dev Site URL, unchanged /oauth/consent path and exactly the approved redirect list",
+    "An independently authorized normal Entry-dev OAuth attempt reaches the dedicated Entry login/consent using the same vnj project and preserves its continuation",
+    "The actual client callback matches that client's registered exact redirect URI; it is not assumed to equal Entry /auth/callback",
+    "Record only sanitized hosts/paths and result; omit authorization IDs, codes, tokens, PKCE material and cookies",
+    "No ChatGPT acceptance or completed authorization claim without the separately observed result"
+  ]
+}
