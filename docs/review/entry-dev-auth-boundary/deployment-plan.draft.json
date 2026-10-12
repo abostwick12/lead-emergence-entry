@@ -1,0 +1,76 @@
+{
+  "status": "DRAFT_NOT_AUTHORIZED_FOR_EXECUTION",
+  "apply": false,
+  "repository": "abostwick12/lead-emergence-entry",
+  "sourceSha": "0b278fe7254c86e18adcd1215af86d54e36f3411",
+  "sourceShaMeaning": "Unchanged application baseline only; any deployment request must separately pin the exact final Auth-reviewed PR head, never a moving branch",
+  "draftBranch": "codex/entry-dev-auth-boundary-draft",
+  "team": "emergence-projects",
+  "existingNonproductionProject": {
+    "id": "prj_kqi3BE9KJkJOJBWIDzd4JqZxMVnG",
+    "name": "lead-emergence-entry-sso-preview"
+  },
+  "deploymentTarget": "preview",
+  "proposedDedicatedOrigin": "https://lead-emergence-entry-dev.vercel.app",
+  "originProvisionedOrOwnershipVerified": false,
+  "newDeploymentId": null,
+  "newImmutableDeploymentUrl": null,
+  "approvalReadiness": {
+    "status": "BLOCKED_CONFIGURATION_AND_HOSTNAME_UNPROVEN",
+    "configurationProvisionedAndProjectMatched": false,
+    "hostnameAssignedToPreview": false,
+    "personalProductHostnameBindingVerified": false,
+    "rpcCatalogAndRolePrivilegesVerified": true,
+    "rpcCatalogCheckedAt": "2026-10-12T16:47:40.454193+00:00",
+    "dependencyControlsCheckedAt": "2026-10-12T16:50:53.696674+00:00",
+    "exactHeadAuthReviewReceipt": "Required on the PR for the final immutable head; not established by a skipped draft review",
+    "evidence": "README.md#read-only-prerequisite-refresh--october-12-2026",
+    "limits": "Catalog/ACL/control presence is not successful login or consent. No project or linked shared variables exist in the inspected Vercel project; the proposed hostname is unassigned there. Cross-PR add/add reconciliation still needs the combined file retained before merge."
+  },
+  "nonsecretBuildAndRuntimeConfiguration": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://vnjdubrnmxvmsccxmhst.supabase.co",
+    "APP_ORIGIN": "https://lead-emergence-entry-dev.vercel.app",
+    "ENTRY_ISSUER": "https://lead-emergence-entry-dev.vercel.app",
+    "PERSONAL_PRODUCT_URL": "https://lead-emergence-workspace-entry-dev.vercel.app"
+  },
+  "ownerProvisionedConfiguration": [
+    {
+      "name": "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+      "projectRef": "vnjdubrnmxvmsccxmhst",
+      "value": null,
+      "instruction": "Owner supplies the project-matched publishable key through the approved configuration store; do not copy Production credentials or record the value in evidence."
+    }
+  ],
+  "scope": [
+    "One Preview deployment of the pinned Entry source in the existing nonproduction project",
+    "Configuration limited to this draft branch/deployment, with no inherited Production credentials",
+    "Assign the proposed dedicated hostname only after verifying availability and ownership",
+    "Record immutable deployment ID, URL, source SHA, target and project after READY",
+    "Read-only login, missing-code callback and incomplete-consent checks before Auth approval"
+  ],
+  "excluded": [
+    "Production project prj_Sjv0ZfqFzf7dOOime4bEWZukmaCD and entry.leademergence.com",
+    "Supabase Auth settings, providers, clients, grants, users, entitlements and migrations",
+    "Real sign-in, password recovery delivery, OAuth registration or consent approval",
+    "Workspace source/deployment changes and PR19 adoption",
+    "Global Preview or Production environment edits, promotion, merge and application-code Git push; the separate nine-file documentation PR authorization does not authorize automatic deployment"
+  ],
+  "approvalPrerequisites": [
+    "Fresh exact source and overlap check; preserve the owner-cleared PR19 boundary",
+    "Confirm proposed hostname availability and assignment scope",
+    "Confirm PERSONAL_PRODUCT_URL is assigned to the intended nonproduction Workspace deployment and verify its /auth/entry endpoint before deployment approval; an immutable Workspace URL or matching public Supabase origin alone is insufficient",
+    "Confirm isolated publishable-key provisioning and project binding without disclosing its value",
+    "Confirm Vercel configuration can be scoped to this Preview deployment/branch",
+    "Check Entry-dev dependency RPC availability read-only before claiming functional consent",
+    "Obtain separate exact deployment approval; this document is not that approval"
+  ],
+  "postdeploymentEvidenceRequiredBeforeAuthApproval": [
+    "Immutable READY deployment ID/URL mapped to the approved source and nonproduction project",
+    "Public build/header evidence identifies vnjdubrnmxvmsccxmhst, plus matching nonsecret server configuration",
+    "Dedicated hostname resolves to that same immutable deployment",
+    "APP_ORIGIN equals the dedicated hostname origin",
+    "Login renders and missing-code /auth/callback stays on the dedicated origin",
+    "No Production Supabase endpoint appears in the inspected affected build/configuration",
+    "Fill auth-url-change.draft.json prerequisite deployment fields and obtain a separate Auth approval"
+  ]
+}
