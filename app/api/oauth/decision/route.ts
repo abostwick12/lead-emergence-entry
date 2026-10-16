@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { canAuthorizeProduct, oauthRedirectOrigin } from '@/lib/oauth/server';
+import { canAuthorizeProduct, safeProductOAuthRedirect } from '@/lib/oauth/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { isTrustedOAuthFormOrigin, safeExactOAuthRedirect, safeOAuthRedirect } from '@/lib/oauth/contracts';
+import { isTrustedOAuthFormOrigin, safeExactOAuthRedirect } from '@/lib/oauth/contracts';
 import { activateMcpOAuthGrant, recordMcpOAuthAdmissionEvent } from '@/lib/oauth/mcp-admission';
 import { classifyOAuthRequest } from '@/lib/oauth/request-classification';
 
@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Workspace authorization could not be activated' }, { status: 400 });
   }
   const destination = classification.kind === 'PRODUCT_HANDOFF'
-    ? safeOAuthRedirect(result.data.redirect_url, oauthRedirectOrigin(classification.product))
+    ? safeProductOAuthRedirect(result.data.redirect_url, classification.product)
     : classification.kind === 'WORKSPACE_MCP'
       ? safeExactOAuthRedirect(result.data.redirect_url, classification.mcp.expected_redirect_uri)
       : null;
