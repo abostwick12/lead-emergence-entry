@@ -1,5 +1,5 @@
 begin;
-select plan(36);
+select plan(39);
 
 select is(
   (select enabled from entry_identity.billing_cutover_control
@@ -77,6 +77,19 @@ select results_eq(
   array[1],
   'Claiming a pending projection records its first attempt'
 );
+select results_eq(
+  $$select count(*) from public.claim_entry_personal_projection_batch(10)$$,
+  array[0::bigint],
+  'An outstanding claim cannot be claimed again immediately'
+);
+update entry_identity.personal_projection_outbox
+set last_attempt_at = now() - interval '6 minutes'
+where delivery_id = (select delivery_id from claimed_projection);
+select results_eq(
+  $$select delivery_id from public.claim_entry_personal_projection_batch(10)$$,
+  array[(select delivery_id from claimed_projection)],
+  'An expired claim can retry with the same delivery identity'
+);
 select ok(
   public.mark_entry_personal_projection_delivery(
     (select delivery_id from claimed_projection),false,'WORKSPACE_TRANSPORT_UNAVAILABLE'
@@ -110,6 +123,12 @@ select results_eq(
   $$select delivery_id from public.claim_entry_personal_projection_batch(10)$$,
   array[(select delivery_id from claimed_projection)],
   'A later drain retries the exact same delivery identity'
+);
+select is(
+  (select last_error is null from entry_identity.personal_projection_outbox
+   where delivery_id = (select delivery_id from claimed_projection)),
+  true,
+  'A new claim clears the prior failure and restores its lease'
 );
 select ok(
   public.mark_entry_personal_projection_delivery(
