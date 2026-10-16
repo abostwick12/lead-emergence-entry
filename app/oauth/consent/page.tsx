@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { ensureAutomaticPersonalEntitlement } from '@/lib/identity/automatic-personal';
-import { canAuthorizeProduct, oauthProductForRedirect, oauthRedirectOrigin, requireOAuthEntryUser, safeOAuthContinuation } from '@/lib/oauth/server';
-import { safeExactOAuthRedirect, safeOAuthRedirect } from '@/lib/oauth/contracts';
+import { canAuthorizeProduct, oauthProductForRedirect, requireOAuthEntryUser, safeOAuthContinuation, safeProductOAuthRedirect } from '@/lib/oauth/server';
+import { safeExactOAuthRedirect } from '@/lib/oauth/contracts';
 import { classifyOAuthRequest } from '@/lib/oauth/request-classification';
 
 export default async function OAuthConsentPage({ searchParams }: { searchParams: Promise<{ authorization_id?: string }> }) {
@@ -13,7 +13,7 @@ export default async function OAuthConsentPage({ searchParams }: { searchParams:
   if (error || !details) return <main><div className="shell"><h1 className="serif">Unable to continue</h1><p>This authorization request is no longer available.</p></div></main>;
   if (!('authorization_id' in details)) {
     const product = oauthProductForRedirect(details.redirect_url);
-    const destination = product ? safeOAuthRedirect(details.redirect_url, oauthRedirectOrigin(product)) : null;
+    const destination = product ? safeProductOAuthRedirect(details.redirect_url, product) : null;
     if (product && destination) {
       await ensureAutomaticPersonalEntitlement(user, product);
       if (await canAuthorizeProduct(supabase, product)) redirect(destination.toString());
