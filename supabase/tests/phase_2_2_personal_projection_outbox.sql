@@ -1,5 +1,5 @@
 begin;
-select plan(39);
+select plan(46);
 
 select is(
   (select enabled from entry_identity.billing_cutover_control
@@ -21,6 +21,17 @@ select is(has_function_privilege('authenticated','public.claim_entry_personal_pr
   'Ordinary authenticated callers cannot drain projections');
 select is(has_function_privilege('anon','public.claim_entry_personal_projection_batch(integer)','execute'),false,
   'Anonymous callers cannot drain projections');
+select is(to_regprocedure('public.mark_entry_personal_projection_delivery(uuid, boolean, text)') is null,true,
+  'The unfenced delivery-result signature is removed');
+select is(has_function_privilege('service_role',
+  'public.mark_entry_personal_projection_delivery(uuid, integer, boolean, text)','execute'),true,
+  'The Entry service role can record a result for its claimed attempt');
+select is(has_function_privilege('authenticated',
+  'public.mark_entry_personal_projection_delivery(uuid, integer, boolean, text)','execute'),false,
+  'Ordinary authenticated callers cannot record projection results');
+select is(has_function_privilege('anon',
+  'public.mark_entry_personal_projection_delivery(uuid, integer, boolean, text)','execute'),false,
+  'Anonymous callers cannot record projection results');
 select results_eq(
   $$select pending_count from public.get_entry_personal_projection_lag()$$,
   array[0::bigint],
@@ -85,14 +96,39 @@ select results_eq(
 update entry_identity.personal_projection_outbox
 set last_attempt_at = now() - interval '6 minutes'
 where delivery_id = (select delivery_id from claimed_projection);
+create temporary table reclaimed_projection as
+select * from public.claim_entry_personal_projection_batch(10);
 select results_eq(
-  $$select delivery_id from public.claim_entry_personal_projection_batch(10)$$,
+  $$select delivery_id from reclaimed_projection$$,
   array[(select delivery_id from claimed_projection)],
   'An expired claim can retry with the same delivery identity'
 );
+select is(
+  public.mark_entry_personal_projection_delivery(
+    (select delivery_id from claimed_projection),(select attempts from claimed_projection),false,
+    'WORKSPACE_TRANSPORT_UNAVAILABLE'
+  ),false,
+  'An expired claim cannot record failure over a newer claim'
+);
+select is(
+  public.mark_entry_personal_projection_delivery(
+    (select delivery_id from claimed_projection),(select attempts from claimed_projection),true,null
+  ),false,
+  'An expired claim cannot record success over a newer claim'
+);
+select ok(
+  (select attempts = (select attempts from reclaimed_projection)
+      and delivery_state = 'PENDING'
+      and last_error is null
+      and delivered_at is null
+   from entry_identity.personal_projection_outbox
+   where delivery_id = (select delivery_id from claimed_projection)),
+  'Denied stale results leave the newer claim unchanged'
+);
 select ok(
   public.mark_entry_personal_projection_delivery(
-    (select delivery_id from claimed_projection),false,'WORKSPACE_TRANSPORT_UNAVAILABLE'
+    (select delivery_id from reclaimed_projection),(select attempts from reclaimed_projection),
+    false,'WORKSPACE_TRANSPORT_UNAVAILABLE'
   ),
   'A failed delivery result is persisted without rejecting canonical truth'
 );
@@ -119,8 +155,10 @@ select is(
   'ACTIVE',
   'Projection failure cannot roll back canonical billing truth'
 );
+create temporary table retried_projection as
+select * from public.claim_entry_personal_projection_batch(10);
 select results_eq(
-  $$select delivery_id from public.claim_entry_personal_projection_batch(10)$$,
+  $$select delivery_id from retried_projection$$,
   array[(select delivery_id from claimed_projection)],
   'A later drain retries the exact same delivery identity'
 );
@@ -132,7 +170,7 @@ select is(
 );
 select ok(
   public.mark_entry_personal_projection_delivery(
-    (select delivery_id from claimed_projection),true,null
+    (select delivery_id from retried_projection),(select attempts from retried_projection),true,null
   ),
   'A successful retry marks the projection delivered'
 );

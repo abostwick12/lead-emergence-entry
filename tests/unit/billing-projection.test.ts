@@ -1,9 +1,12 @@
 import { createHmac } from 'node:crypto';
+import { createClient } from '@supabase/supabase-js';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('server-only', () => ({}));
+vi.mock('@supabase/supabase-js', () => ({ createClient: vi.fn() }));
 
 import {
+  createEntryProjectionOutboxStore,
   drainPersonalProjectionOutbox,
   signPersonalProjection,
   type PersonalProjectionOutboxItem,
@@ -43,6 +46,34 @@ function retryableStore(initial: PersonalProjectionOutboxItem[]) {
 }
 
 describe('Entry PERSONAL projection delivery', () => {
+  it('passes each claimed attempt to the restricted result RPC', async () => {
+    const priorUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const priorSecret = process.env.SUPABASE_SECRET_KEY;
+    process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://entry.example.test';
+    process.env.SUPABASE_SECRET_KEY = 'local-test-secret';
+    const rpc = vi.fn(async () => ({ data: true, error: null }));
+    vi.mocked(createClient).mockReturnValue({ rpc } as unknown as ReturnType<typeof createClient>);
+    try {
+      const store = createEntryProjectionOutboxStore();
+      await store.markDelivered(item.deliveryId, 2);
+      await store.markFailed(item.deliveryId, 3, 'WORKSPACE_HTTP_503');
+      expect(rpc).toHaveBeenNthCalledWith(1, 'mark_entry_personal_projection_delivery', {
+        p_delivery_id: item.deliveryId, p_expected_attempt: 2,
+        p_delivered: true, p_sanitized_error: null,
+      });
+      expect(rpc).toHaveBeenNthCalledWith(2, 'mark_entry_personal_projection_delivery', {
+        p_delivery_id: item.deliveryId, p_expected_attempt: 3,
+        p_delivered: false, p_sanitized_error: 'WORKSPACE_HTTP_503',
+      });
+    } finally {
+      if (priorUrl === undefined) delete process.env.NEXT_PUBLIC_SUPABASE_URL;
+      else process.env.NEXT_PUBLIC_SUPABASE_URL = priorUrl;
+      if (priorSecret === undefined) delete process.env.SUPABASE_SECRET_KEY;
+      else process.env.SUPABASE_SECRET_KEY = priorSecret;
+      vi.mocked(createClient).mockReset();
+    }
+  });
+
   it('signs timestamp dot exact raw body with HMAC-SHA256', () => {
     const body = '{"exact":"body"}';
     const timestamp = '1789840800';
@@ -103,7 +134,7 @@ describe('Entry PERSONAL projection delivery', () => {
     expect(timeoutSignal?.reason.name).toBe('TimeoutError');
     expect(first).toEqual({ claimed: 2, delivered: 1, failed: 1 });
     expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(
-      item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE',
+      item.deliveryId, item.attempts, 'WORKSPACE_TRANSPORT_UNAVAILABLE',
     );
     expect(state.delivered).toEqual([later.deliveryId]);
 
@@ -143,7 +174,7 @@ describe('Entry PERSONAL projection delivery', () => {
     expect(events).toEqual(['cancelled', status === 200 ? 'delivered' : 'failed']);
     expect(result).toEqual({ claimed: 1, delivered: status === 200 ? 1 : 0, failed: status === 200 ? 0 : 1 });
     if (status === 503) {
-      expect(state.store.markFailed).toHaveBeenCalledWith(item.deliveryId, 'WORKSPACE_HTTP_503');
+      expect(state.store.markFailed).toHaveBeenCalledWith(item.deliveryId, item.attempts, 'WORKSPACE_HTTP_503');
     }
   });
 
@@ -154,7 +185,7 @@ describe('Entry PERSONAL projection delivery', () => {
       fetchImpl: vi.fn(async () => new Response(null, { status: 204 })),
     });
     expect(result).toEqual({ claimed: 1, delivered: 1, failed: 0 });
-    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId);
+    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId, item.attempts);
     expect(state.store.markFailed).not.toHaveBeenCalled();
   });
 
@@ -169,14 +200,14 @@ describe('Entry PERSONAL projection delivery', () => {
     });
     expect(cancel).toHaveBeenCalledOnce();
     expect(first).toEqual({ claimed: 1, delivered: 0, failed: 1 });
-    expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
+    expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, item.attempts, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
     expect(state.store.markDelivered).not.toHaveBeenCalled();
 
     const retry = await drainPersonalProjectionOutbox({
       store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
     });
     expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
-    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId);
+    expect(state.store.markDelivered).toHaveBeenCalledExactlyOnceWith(item.deliveryId, item.attempts);
     expect(fetchImpl.mock.calls.map(([, init]) => JSON.parse(String(init?.body)).delivery_id))
       .toEqual([item.deliveryId, item.deliveryId]);
   });
@@ -233,7 +264,7 @@ describe('Entry PERSONAL projection delivery', () => {
   );
 
   it('does not repeat a committed HTTP-failure status write when its response is lost', async () => {
-    const later = { ...item, deliveryId: '00000000-0000-4000-8000-0000000000d2', projectionVersion: 42 };
+    const later = { ...item, deliveryId: '00000000-0000-4000-8000-0000000000d2', projectionVersion: 42, attempts: 2 };
     const state = retryableStore([item, later]);
     vi.mocked(state.store.markFailed).mockImplementationOnce(async (deliveryId) => {
       state.failures.push(deliveryId);
@@ -248,9 +279,10 @@ describe('Entry PERSONAL projection delivery', () => {
         store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
       });
       expect(first).toEqual({ claimed: 2, delivered: 1, failed: 1 });
-      expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, 'WORKSPACE_HTTP_503');
+      expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, item.attempts, 'WORKSPACE_HTTP_503');
       expect(state.failures).toEqual([item.deliveryId]);
       expect(state.delivered).toEqual([later.deliveryId]);
+      expect(state.store.markDelivered).toHaveBeenCalledWith(later.deliveryId, later.attempts);
       expect(errorLog).toHaveBeenCalledExactlyOnceWith(
         'Workspace projection delivery status unavailable', { deliveryId: item.deliveryId },
       );
@@ -260,6 +292,7 @@ describe('Entry PERSONAL projection delivery', () => {
       });
       expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
       expect(state.delivered).toEqual([later.deliveryId, item.deliveryId]);
+      expect(state.store.markDelivered).toHaveBeenCalledWith(item.deliveryId, item.attempts);
     } finally {
       errorLog.mockRestore();
     }

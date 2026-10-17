@@ -17,8 +17,8 @@ export type PersonalProjectionOutboxItem = {
 
 export type PersonalProjectionOutboxStore = {
   claim(limit: number): Promise<PersonalProjectionOutboxItem[]>;
-  markDelivered(deliveryId: string): Promise<void>;
-  markFailed(deliveryId: string, sanitizedError: string): Promise<void>;
+  markDelivered(deliveryId: string, expectedAttempt: number): Promise<void>;
+  markFailed(deliveryId: string, expectedAttempt: number, sanitizedError: string): Promise<void>;
 };
 
 type ProjectionRow = {
@@ -42,9 +42,10 @@ function projectionServiceClient() {
 
 export function createEntryProjectionOutboxStore(): PersonalProjectionOutboxStore {
   const service = projectionServiceClient();
-  const mark = async (deliveryId: string, delivered: boolean, sanitizedError: string | null) => {
+  const mark = async (deliveryId: string, expectedAttempt: number, delivered: boolean, sanitizedError: string | null) => {
     const { data, error } = await service.rpc('mark_entry_personal_projection_delivery', {
       p_delivery_id: deliveryId,
+      p_expected_attempt: expectedAttempt,
       p_delivered: delivered,
       p_sanitized_error: sanitizedError,
     });
@@ -64,11 +65,11 @@ export function createEntryProjectionOutboxStore(): PersonalProjectionOutboxStor
         attempts: row.attempts,
       }));
     },
-    markDelivered(deliveryId) {
-      return mark(deliveryId, true, null);
+    markDelivered(deliveryId, expectedAttempt) {
+      return mark(deliveryId, expectedAttempt, true, null);
     },
-    markFailed(deliveryId, sanitizedError) {
-      return mark(deliveryId, false, sanitizedError);
+    markFailed(deliveryId, expectedAttempt, sanitizedError) {
+      return mark(deliveryId, expectedAttempt, false, sanitizedError);
     },
   };
 }
@@ -137,7 +138,7 @@ export async function drainPersonalProjectionOutbox({
       await response.body?.cancel();
       if (!response.ok) {
         try {
-          await store.markFailed(item.deliveryId, `WORKSPACE_HTTP_${response.status}`);
+          await store.markFailed(item.deliveryId, item.attempts, `WORKSPACE_HTTP_${response.status}`);
         } catch {
           console.error('Workspace projection delivery status unavailable', {
             deliveryId: item.deliveryId,
@@ -146,11 +147,11 @@ export async function drainPersonalProjectionOutbox({
         failed += 1;
         continue;
       }
-      await store.markDelivered(item.deliveryId);
+      await store.markDelivered(item.deliveryId, item.attempts);
       delivered += 1;
     } catch {
       try {
-        await store.markFailed(item.deliveryId, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
+        await store.markFailed(item.deliveryId, item.attempts, 'WORKSPACE_TRANSPORT_UNAVAILABLE');
       } catch {
         console.error('Workspace projection delivery status unavailable', {
           deliveryId: item.deliveryId,
