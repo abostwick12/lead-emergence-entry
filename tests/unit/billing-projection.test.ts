@@ -232,6 +232,39 @@ describe('Entry PERSONAL projection delivery', () => {
     },
   );
 
+  it('does not repeat a committed HTTP-failure status write when its response is lost', async () => {
+    const later = { ...item, deliveryId: '00000000-0000-4000-8000-0000000000d2', projectionVersion: 42 };
+    const state = retryableStore([item, later]);
+    vi.mocked(state.store.markFailed).mockImplementationOnce(async (deliveryId) => {
+      state.failures.push(deliveryId);
+      throw new Error('private status response detail');
+    });
+    const fetchImpl = vi.fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response(null, { status: 503 }))
+      .mockImplementation(async () => new Response(null, { status: 204 }));
+    const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      const first = await drainPersonalProjectionOutbox({
+        store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+      });
+      expect(first).toEqual({ claimed: 2, delivered: 1, failed: 1 });
+      expect(state.store.markFailed).toHaveBeenCalledExactlyOnceWith(item.deliveryId, 'WORKSPACE_HTTP_503');
+      expect(state.failures).toEqual([item.deliveryId]);
+      expect(state.delivered).toEqual([later.deliveryId]);
+      expect(errorLog).toHaveBeenCalledExactlyOnceWith(
+        'Workspace projection delivery status unavailable', { deliveryId: item.deliveryId },
+      );
+
+      const retry = await drainPersonalProjectionOutbox({
+        store: state.store, endpoint: 'https://workspace.test/projection', secret, fetchImpl,
+      });
+      expect(retry).toEqual({ claimed: 1, delivered: 1, failed: 0 });
+      expect(state.delivered).toEqual([later.deliveryId, item.deliveryId]);
+    } finally {
+      errorLog.mockRestore();
+    }
+  });
+
   it('does not redeliver an item after its successful delivery is recorded', async () => {
     const state = retryableStore([item]);
     const fetchImpl = vi.fn(async () => Response.json({ accepted: true }));
