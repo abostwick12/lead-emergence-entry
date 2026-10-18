@@ -1,5 +1,5 @@
 begin;
-select plan(46);
+select plan(51);
 
 select is(
   (select enabled from entry_identity.billing_cutover_control
@@ -21,8 +21,14 @@ select is(has_function_privilege('authenticated','public.claim_entry_personal_pr
   'Ordinary authenticated callers cannot drain projections');
 select is(has_function_privilege('anon','public.claim_entry_personal_projection_batch(integer)','execute'),false,
   'Anonymous callers cannot drain projections');
-select is(to_regprocedure('public.mark_entry_personal_projection_delivery(uuid, boolean, text)') is null,true,
-  'The unfenced delivery-result signature is removed');
+select is(to_regprocedure('public.mark_entry_personal_projection_delivery(uuid, boolean, text)') is not null,true,
+  'The deployed three-argument delivery-result signature remains callable during rollout');
+select is(has_function_privilege('service_role',
+  'public.mark_entry_personal_projection_delivery(uuid, boolean, text)','execute'),true,
+  'The deployed Entry caller can resolve the legacy result RPC during rollout');
+select is(has_function_privilege('authenticated',
+  'public.mark_entry_personal_projection_delivery(uuid, boolean, text)','execute'),false,
+  'Ordinary authenticated callers cannot invoke the legacy result RPC');
 select is(has_function_privilege('service_role',
   'public.mark_entry_personal_projection_delivery(uuid, integer, boolean, text)','execute'),true,
   'The Entry service role can record a result for its claimed attempt');
@@ -102,6 +108,30 @@ select results_eq(
   $$select delivery_id from reclaimed_projection$$,
   array[(select delivery_id from claimed_projection)],
   'An expired claim can retry with the same delivery identity'
+);
+grant select on reclaimed_projection to service_role;
+set local role service_role;
+select is(
+  public.mark_entry_personal_projection_delivery(
+    (select delivery_id from reclaimed_projection),true,null
+  ),false,
+  'The deployed three-argument caller cannot mark a newer claim delivered'
+);
+select is(
+  public.mark_entry_personal_projection_delivery(
+    (select delivery_id from reclaimed_projection),false,'WORKSPACE_TRANSPORT_UNAVAILABLE'
+  ),false,
+  'The deployed three-argument caller cannot mark a newer claim failed'
+);
+reset role;
+select ok(
+  (select attempts = (select attempts from reclaimed_projection)
+      and delivery_state = 'PENDING'
+      and last_error is null
+      and delivered_at is null
+   from entry_identity.personal_projection_outbox
+   where delivery_id = (select delivery_id from reclaimed_projection)),
+  'Legacy result attempts leave the newer claim unchanged'
 );
 select is(
   public.mark_entry_personal_projection_delivery(

@@ -58,9 +58,32 @@ begin
 end;
 $$;
 
+-- Keep the deployed three-argument caller fail-closed during rollout. It can
+-- still resolve the RPC, but cannot record a result without its claim attempt.
+create or replace function public.mark_entry_personal_projection_delivery(
+  p_delivery_id uuid,
+  p_delivered boolean,
+  p_sanitized_error text default null
+) returns boolean
+language plpgsql
+security invoker
+set search_path = ''
+as $$
+begin
+  if current_user not in ('service_role', 'postgres') then
+    raise exception 'Trusted Entry server identity is required.' using errcode = '42501';
+  end if;
+  return false;
+end;
+$$;
+
+revoke all on function public.mark_entry_personal_projection_delivery(uuid, boolean, text)
+  from public, anon, authenticated;
+grant execute on function public.mark_entry_personal_projection_delivery(uuid, boolean, text)
+  to service_role;
+
 -- A result from an expired claim must not update a newer claim of the same
--- delivery. Replace the old callable signature so the attempt is required.
-drop function public.mark_entry_personal_projection_delivery(uuid, boolean, text);
+-- delivery. Only the new signature can persist a fenced result.
 
 create function public.mark_entry_personal_projection_delivery(
   p_delivery_id uuid,
