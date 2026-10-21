@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 64 selected source paths unchanged and retain original source provenance for fourteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 63 selected source paths unchanged and retain original source provenance for fifteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -219,11 +219,12 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "a4da3b8cfd05d1e3ab41dc6e1e88cd8c1599e739",
-      "repairedBlob": "2bf5c23590644fa9781fbd26951ce21c995416c7",
+      "repairedBlob": "e3ad3e6bd98d26351ca4f4aec3823f2e1ae34866",
       "forwardRepairIds": [
         "projection-transport-timeout",
         "projection-response-cleanup",
-        "projection-status-write-containment"
+        "projection-status-write-containment",
+        "projection-claim-lease-and-attempt-fencing"
       ]
     },
     {
@@ -425,7 +426,11 @@
       "path": "supabase/tests/phase_2_2_personal_projection_outbox.sql",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "ed3114f11779009f427259a5f371e393dd7c9565"
+      "sourceBlob": "ed3114f11779009f427259a5f371e393dd7c9565",
+      "repairedBlob": "ad549912dee60a9dd8fe572d6df177d7cea3a856",
+      "forwardRepairIds": [
+        "projection-claim-lease-and-attempt-fencing"
+      ]
     },
     {
       "path": "supabase/tests/phase_2_2_sponsored_access_authority.sql",
@@ -494,11 +499,12 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "b7923f447443711eb4c4f18c093bdff58d3068dd",
-      "repairedBlob": "fa03b056130498ee718802055f1c327dea947796",
+      "repairedBlob": "9e54c07c12b9e8d8e83eded27326843b7ee82f96",
       "forwardRepairIds": [
         "projection-transport-timeout",
         "projection-response-cleanup",
-        "projection-status-write-containment"
+        "projection-status-write-containment",
+        "projection-claim-lease-and-attempt-fencing"
       ]
     },
     {
@@ -954,6 +960,35 @@
         "schedulerExecutions": 0,
         "jobMetadataUnchanged": true,
         "limits": "Real cached PostgreSQL/pg_cron with cron.launch_active_jobs=off before startup. Historical schedule statement only; pg_net and Vault are not installed. Tests substitute temporary Vault/HTTP capture fixtures into a copy of the stored command, so no encryption, real HTTP, credential, scheduler tick, full Supabase/CI or production acceptance is claimed. Existing job metadata and unrelated job are compared across one candidate application."
+      }
+    },
+    {
+      "id": "projection-claim-lease-and-attempt-fencing",
+      "baseCandidate": "8673bcbec3d212ad66ba4e7bc2f46ab49ed8053b",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-21",
+      "authorization": "Approved exact fast-forward of PR22's reviewed correction into PR19; no Entry merge, hosted migration or deployment.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4179460691",
+      "scope": "Integrate PR22's five commits through 0915c6b3b23b399eccf3cc4f3e5ecab25591a251. Lease pending Personal projection claims for five minutes, fence result writes to the claimed attempt with the restricted four-argument RPC, and keep the legacy three-argument result RPC fail closed during rollout. Preserve stable delivery IDs, batch continuation after failed status writes, and NULL-authority exclusion. The SQL fixture is an existing repaired source path; only the forward migration is newly added. Local saved evidence covers 52/52 focused and 390/390 ordinary database assertions plus 25/25 focused unit tests; it does not establish exactly-once delivery or production acceptance. No hosted SQL was applied.",
+      "paths": [
+        "lib/billing/projection.ts",
+        "supabase/migrations/20261016163232_lease_personal_projection_claims.sql",
+        "supabase/tests/phase_2_2_personal_projection_outbox.sql",
+        "tests/unit/billing-projection.test.ts"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261016163232_lease_personal_projection_claims.sql"
+      ],
+      "baseBlobs": {
+        "lib/billing/projection.ts": "2bf5c23590644fa9781fbd26951ce21c995416c7",
+        "supabase/tests/phase_2_2_personal_projection_outbox.sql": "ed3114f11779009f427259a5f371e393dd7c9565",
+        "tests/unit/billing-projection.test.ts": "fa03b056130498ee718802055f1c327dea947796"
+      },
+      "resultBlobs": {
+        "lib/billing/projection.ts": "e3ad3e6bd98d26351ca4f4aec3823f2e1ae34866",
+        "supabase/migrations/20261016163232_lease_personal_projection_claims.sql": "22586fe79a9d93902821a0d29b22cbfb2f85a06c",
+        "supabase/tests/phase_2_2_personal_projection_outbox.sql": "ad549912dee60a9dd8fe572d6df177d7cea3a856",
+        "tests/unit/billing-projection.test.ts": "9e54c07c12b9e8d8e83eded27326843b7ee82f96"
       }
     }
   ]
