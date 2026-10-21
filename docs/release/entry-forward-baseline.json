@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 63 selected source paths unchanged and retain original source provenance for fifteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 62 selected source paths unchanged and retain original source provenance for sixteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -270,7 +270,11 @@
       "path": "package-lock.json",
       "relation": "substantive_difference_review",
       "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
-      "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e"
+      "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e",
+      "repairedBlob": "d4cd799e4fa07eee296561fb26cd25d74b2a7a92",
+      "forwardRepairIds": [
+        "pr18-patchable-lockfile-resolutions"
+      ]
     },
     {
       "path": "package.json",
@@ -989,6 +993,24 @@
         "supabase/migrations/20261016163232_lease_personal_projection_claims.sql": "22586fe79a9d93902821a0d29b22cbfb2f85a06c",
         "supabase/tests/phase_2_2_personal_projection_outbox.sql": "ad549912dee60a9dd8fe572d6df177d7cea3a856",
         "tests/unit/billing-projection.test.ts": "9e54c07c12b9e8d8e83eded27326843b7ee82f96"
+      }
+    },
+    {
+      "id": "pr18-patchable-lockfile-resolutions",
+      "baseCandidate": "84a570231ef0fbc36278280a79988dbf818b57fc",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-21",
+      "authorization": "Approved local integration of compatible PR18 lockfile repair into PR19 candidate; no new braces workaround or publication.",
+      "scope": "Carry only the 33 lockfile package-resolution updates from PR18 local commit 547968532ac64ed1077c85e2d426a81622388700 into the PR19 candidate. Package declarations and scripts remain unchanged; PR18 owner checkout and its published branch are untouched. Preserve the original sourceCommit/sourceBlob and the existing unpatched braces chain.",
+      "paths": [
+        "package-lock.json"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "package-lock.json": "93b4a4478bb326232c9f5057422911c1f7b11a5d"
+      },
+      "resultBlobs": {
+        "package-lock.json": "d4cd799e4fa07eee296561fb26cd25d74b2a7a92"
       }
     }
   ]
