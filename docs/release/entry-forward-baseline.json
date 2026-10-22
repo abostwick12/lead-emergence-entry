@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 61 selected source paths unchanged and retain original source provenance for seventeen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 60 selected source paths unchanged and retain original source provenance for eighteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
