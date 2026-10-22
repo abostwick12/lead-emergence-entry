@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 62 selected source paths unchanged and retain original source provenance for sixteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 61 selected source paths unchanged and retain original source provenance for seventeen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -114,7 +114,11 @@
       "path": "app/signup/actions.ts",
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "7c452d740a8f370a83a744cf9280b6aeb12e8830"
+      "sourceBlob": "7c452d740a8f370a83a744cf9280b6aeb12e8830",
+      "repairedBlob": "fff422d5927f20534d3f16d0c15c860700bb8352",
+      "forwardRepairIds": [
+        "signup-error-message-redaction"
+      ]
     },
     {
       "path": "app/workspaces/page.tsx",
@@ -1011,6 +1015,24 @@
       },
       "resultBlobs": {
         "package-lock.json": "d4cd799e4fa07eee296561fb26cd25d74b2a7a92"
+      }
+    },
+    {
+      "id": "signup-error-message-redaction",
+      "baseCandidate": "3576de8c07b0a92488675c2c16c457b4cc3728f7",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-22",
+      "authorization": "Approved local source-only privacy edit; no push or production acceptance.",
+      "scope": "Remove the raw error.message field from signup error logging while preserving the other logged error metadata and user-facing redirect. Local provenance update only; no push or production acceptance.",
+      "paths": [
+        "app/signup/actions.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "app/signup/actions.ts": "00281af6b29109de9d6095e67154e3537f1ae06d"
+      },
+      "resultBlobs": {
+        "app/signup/actions.ts": "fff422d5927f20534d3f16d0c15c860700bb8352"
       }
     }
   ]

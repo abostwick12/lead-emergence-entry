@@ -16,7 +16,6 @@ export async function signUp(formData: FormData) {
       name: error.name,
       code: error.code,
       status: error.status,
-      message: error.message,
     });
     redirect('/signup?error=unable_to_create');
   }
