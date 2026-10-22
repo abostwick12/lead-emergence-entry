@@ -1034,6 +1034,28 @@
       "resultBlobs": {
         "app/signup/actions.ts": "fff422d5927f20534d3f16d0c15c860700bb8352"
       }
+    },
+    {
+      "id": "projection-claim-retry-fairness",
+      "baseCandidate": "5216520876d0740de5fd3a38c38a5fa6893a4c5b",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-22",
+      "authorization": "Approved bounded local receiver-contract investigation and reviewable correction; no push, hosted SQL, merge or deployment.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4347878773",
+      "scope": "One new forward-only replacement of the existing claim function, changing only pending-row priority to oldest last attempt (or creation), then attempts and projection version. Preserve eligibility, five-minute lease, SKIP LOCKED, signature, privileges, returned version ordering and result fencing. Leave the existing lease migration and PR16-owned projection fixture unchanged. A separate rolled-back pgTAP fixture exercises ten failing old deliveries, newer healthy progress with limit one, stable retry IDs and tied timestamp priorities through the actual RPCs. Local source preparation only; execution and production acceptance remain separate gates.",
+      "paths": [
+        "supabase/migrations/20261022115749_fair_personal_projection_claims.sql",
+        "supabase/tests/personal_projection_claim_fairness.sql"
+      ],
+      "addedPaths": [
+        "supabase/migrations/20261022115749_fair_personal_projection_claims.sql",
+        "supabase/tests/personal_projection_claim_fairness.sql"
+      ],
+      "baseBlobs": {},
+      "resultBlobs": {
+        "supabase/migrations/20261022115749_fair_personal_projection_claims.sql": "af413593c749ca5b41cb2e881946c8dad1769151",
+        "supabase/tests/personal_projection_claim_fairness.sql": "978d0b87380a4705e7b0e49e32c2bf7156bc5486"
+      }
     }
   ]
 }
