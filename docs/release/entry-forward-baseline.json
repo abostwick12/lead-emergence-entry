@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 60 selected source paths unchanged and retain original source provenance for eighteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 59 selected source paths unchanged and retain original source provenance for nineteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -82,10 +82,11 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "471d6d62fadf6eb1c48d3462c0f983d5f7e493c5",
-      "repairedBlob": "c33b37e6e46a1cd69b73ba868a889ae036dd76be",
+      "repairedBlob": "0b2a01b5492d3d7b2b3080d539710b388cf9bc94",
       "forwardRepairIds": [
         "hero-short-viewport-containment",
-        "navigation-text-growth-wrap"
+        "navigation-text-growth-wrap",
+        "landing-motion-control-wrap"
       ]
     },
     {
@@ -99,9 +100,10 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23",
-      "repairedBlob": "6c362bf0035cdb1b95386c25d014f32d955a8068",
+      "repairedBlob": "2419b60e73c36cf3b3a06e2a21b2d118edf14b36",
       "forwardRepairIds": [
-        "interface-example-group-role"
+        "interface-example-group-role",
+        "landing-recommendation-status"
       ]
     },
     {
@@ -461,7 +463,12 @@
       "path": "tests/browser/frontdoor.spec.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "378056a26a8ebf82adaef0a91af70d82651e41bd"
+      "sourceBlob": "378056a26a8ebf82adaef0a91af70d82651e41bd",
+      "repairedBlob": "108810d821279e0b79a04671b37e1ceb23e8f4d1",
+      "forwardRepairIds": [
+        "landing-motion-control-wrap",
+        "landing-recommendation-status"
+      ]
     },
     {
       "path": "tests/unit/automatic-personal.test.ts",
@@ -1060,6 +1067,50 @@
       "resultBlobs": {
         "supabase/migrations/20261022115749_fair_personal_projection_claims.sql": "af413593c749ca5b41cb2e881946c8dad1769151",
         "supabase/tests/personal_projection_claim_fairness.sql": "978d0b87380a4705e7b0e49e32c2bf7156bc5486"
+      }
+    },
+    {
+      "id": "landing-motion-control-wrap",
+      "baseCandidate": "f269681b544c536b86eca01c5d666379d121fca7",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-22",
+      "authorization": "Approved bounded landing-accessibility correction; no merge or release.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4354107790",
+      "scope": "Allow both existing hero motion-control rows to wrap below 760px and move the mobile hero copy clear of those controls at doubled text size. Preserve control labels, destinations, keyboard behavior, film dialog and stage progression. Add local narrow and short viewport browser assertions.",
+      "paths": [
+        "app/landing-experience.module.css",
+        "tests/browser/frontdoor.spec.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "app/landing-experience.module.css": "c33b37e6e46a1cd69b73ba868a889ae036dd76be",
+        "tests/browser/frontdoor.spec.ts": "b9d720b2a40671b3cab3dfd569d3367650598461"
+      },
+      "resultBlobs": {
+        "app/landing-experience.module.css": "0b2a01b5492d3d7b2b3080d539710b388cf9bc94",
+        "tests/browser/frontdoor.spec.ts": "108810d821279e0b79a04671b37e1ceb23e8f4d1"
+      }
+    },
+    {
+      "id": "landing-recommendation-status",
+      "baseCandidate": "f269681b544c536b86eca01c5d666379d121fca7",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-22",
+      "authorization": "Approved bounded landing-accessibility correction; no merge or release.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4353075047",
+      "scope": "Expose the existing changing recommendation as an ARIA status region and assert its MAYBE/NO updates by keyboard without changing the decision content or logic.",
+      "paths": [
+        "app/landing-motion.tsx",
+        "tests/browser/frontdoor.spec.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "app/landing-motion.tsx": "6c362bf0035cdb1b95386c25d014f32d955a8068",
+        "tests/browser/frontdoor.spec.ts": "b9d720b2a40671b3cab3dfd569d3367650598461"
+      },
+      "resultBlobs": {
+        "app/landing-motion.tsx": "2419b60e73c36cf3b3a06e2a21b2d118edf14b36",
+        "tests/browser/frontdoor.spec.ts": "108810d821279e0b79a04671b37e1ceb23e8f4d1"
       }
     },
     {

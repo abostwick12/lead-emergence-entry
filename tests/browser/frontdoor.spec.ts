@@ -10,6 +10,80 @@ test('public sign in uses the canonical Entry form and defaults to the chooser',
   await expect(page.locator('input[type="password"]')).toHaveCount(1);
 });
 
+test('hero controls remain clear and keyboard operable with enlarged text', async ({ page }) => {
+  for (const viewport of [{ width: 320, height: 568 }, { width: 667, height: 375 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+    await page.evaluate(() => {
+      const hero = document.querySelector<HTMLElement>('section[aria-labelledby="hero-title"]');
+      if (!hero) throw new Error('Hero is missing');
+      const text = [...hero.querySelectorAll<HTMLElement>('p, h1, a, button, li, span')];
+      const sizes = text.map(element => Number.parseFloat(getComputedStyle(element).fontSize));
+      text.forEach((element, index) => { element.style.fontSize = `${sizes[index] * 2}px`; });
+    });
+
+    const layout = await page.evaluate(() => {
+      const hero = document.querySelector<HTMLElement>('[class*="heroPinned"]');
+      const copy = document.querySelector<HTMLElement>('[class*="heroContent"]');
+      const row = document.querySelector<HTMLElement>('[class*="motionControls"]');
+      const buttons = row?.querySelector<HTMLElement>('div');
+      if (!hero || !copy || !row || !buttons) throw new Error('Hero layout is missing');
+      const bounds = (element: Element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+      };
+      return {
+        rowWrap: getComputedStyle(row).flexWrap,
+        buttonWrap: getComputedStyle(buttons).flexWrap,
+        hero: bounds(hero),
+        copy: bounds(copy),
+        controls: [...row.querySelectorAll('a, button')].map(bounds),
+      };
+    });
+    expect(layout.rowWrap).toBe('wrap');
+    expect(layout.buttonWrap).toBe('wrap');
+    expect(layout.controls[0].top).toBeGreaterThanOrEqual(layout.copy.bottom + 12);
+    for (const control of layout.controls) {
+      expect(control.left).toBeGreaterThanOrEqual(layout.hero.left);
+      expect(control.right).toBeLessThanOrEqual(layout.hero.right);
+      expect(control.bottom).toBeLessThanOrEqual(layout.hero.bottom);
+    }
+
+    const jump = page.getByRole('link', { name: /Scroll into the work/ });
+    const watch = page.getByRole('button', { name: 'Watch the film' });
+    const motion = page.getByRole('button', { name: /visual motion/ });
+    await jump.focus();
+    await expect(jump).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(watch).toBeFocused();
+    await page.keyboard.press('Tab');
+    await expect(motion).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(motion).toHaveAttribute('aria-pressed', 'true');
+    await page.keyboard.press('Shift+Tab');
+    await expect(watch).toBeFocused();
+    await page.route('**/*.mp4', route => route.abort());
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('dialog', { name: /Lead Emergence/ })).toBeVisible();
+    await page.keyboard.press('Escape');
+  }
+});
+
+test('the decision recommendation is announced as status when changed', async ({ page }) => {
+  await page.goto('/');
+  await page.waitForLoadState('networkidle');
+  const status = page.getByRole('status');
+  const requirement = page.getByRole('checkbox', { name: /decision ownership is non-negotiable/ });
+  await expect(status).toContainText('MAYBE');
+  await requirement.focus();
+  await page.keyboard.press('Space');
+  await expect(requirement).toBeChecked();
+  await expect(status).toContainText('NO');
+  await page.keyboard.press('Space');
+  await expect(status).toContainText('MAYBE');
+});
+
 test('one public front door, concrete example, and no initial film request', async ({ page }, testInfo) => {
   const media: string[] = []; const errors: string[] = [];
   page.on('request', request => { if (request.url().includes('.mp4')) media.push(request.url()); });

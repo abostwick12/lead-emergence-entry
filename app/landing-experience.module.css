@@ -122,7 +122,7 @@
   .signIn { padding:7px 15px; font-size:12px; }
   .heroSequence { height:145svh; min-height:720px; }
   .heroPinned { min-height:720px; }
-  .heroContent { left:24px; right:20px; bottom:198px; }
+  .heroContent { left:24px; right:20px; bottom:260px; }
   .heroContent h1 { font-size:clamp(47px,8.7vw,65px); }
   .heroImage img { object-position:65% center; }
   .heroShade { background:linear-gradient(0deg,#05101a 2%,#05101a88 35%,#05101a00 74%),linear-gradient(90deg,#030b1366,#030b1300); }
@@ -182,7 +182,7 @@
 .filmDialog button { background:transparent; border:1px solid #73848b; color:inherit; padding:7px 12px; font-size:12px; }
 .filmDialog video { width:100%; max-height:70svh; }
 .filmDialog p { font-size:11px; color:#b6c7d2; margin-top:12px; }
-@media(max-width:760px) { .motionControls>div { gap:12px; } .motionControls { letter-spacing:0; } .heroVideo { object-position:center; } }
+@media(max-width:760px) { .motionControls>div { width:100%; flex-wrap:wrap; gap:2px 16px; } .motionControls { flex-wrap:wrap; align-items:flex-start; gap:2px 12px; letter-spacing:0; } .heroVideo { object-position:center; } }
 @media(prefers-reduced-motion:reduce) { .heroVideo { display:none; } }
 
 @media(max-width:760px) { .heroImage { transform:none; } }
