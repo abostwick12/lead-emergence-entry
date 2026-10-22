@@ -275,16 +275,21 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
       "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e",
-      "repairedBlob": "d4cd799e4fa07eee296561fb26cd25d74b2a7a92",
+      "repairedBlob": "e6ecd22fadeee12fa8ecd98dec31356aa6a31f94",
       "forwardRepairIds": [
-        "pr18-patchable-lockfile-resolutions"
+        "pr18-patchable-lockfile-resolutions",
+        "pr18-next-16-4-1-security-update"
       ]
     },
     {
       "path": "package.json",
       "relation": "substantive_difference_review",
       "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
-      "sourceBlob": "85ecbaf0e0e61ff3b74ef2ad3c5a7638ac94aac2"
+      "sourceBlob": "85ecbaf0e0e61ff3b74ef2ad3c5a7638ac94aac2",
+      "repairedBlob": "1a84a39d27b7b8f6c879600739b5601e1e9f4078",
+      "forwardRepairIds": [
+        "pr18-next-16-4-1-security-update"
+      ]
     },
     {
       "path": "playwright.frontdoor.config.ts",
@@ -1055,6 +1060,27 @@
       "resultBlobs": {
         "supabase/migrations/20261022115749_fair_personal_projection_claims.sql": "af413593c749ca5b41cb2e881946c8dad1769151",
         "supabase/tests/personal_projection_claim_fairness.sql": "978d0b87380a4705e7b0e49e32c2bf7156bc5486"
+      }
+    },
+    {
+      "id": "pr18-next-16-4-1-security-update",
+      "baseCandidate": "0b367ad9d6773410ca14bb78dd18f9298303cc41",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-22",
+      "authorization": "Approved local integration of reviewed PR18 commit 80afdd1 into PR19, with clean installation, unit, lint, typecheck, build and both audits; no push, merge, deployment or hosted change.",
+      "scope": "Carry only the Next.js 16.4.1 and paired ESLint package declarations and the matching twelve resolved Next-family lockfile entries from reviewed PR18 commit 80afdd1bbcc0863d4fb9e3df2a672a06bdfbad9b into PR19. Preserve prior compatible lockfile resolutions and the PR16 cron-test correction. Do not change runtime, SQL, or unrelated dependency versions.",
+      "paths": [
+        "package.json",
+        "package-lock.json"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "package.json": "6430bb4b6001d382da2cecccb5d511ac6c3f0de2",
+        "package-lock.json": "d4cd799e4fa07eee296561fb26cd25d74b2a7a92"
+      },
+      "resultBlobs": {
+        "package.json": "1a84a39d27b7b8f6c879600739b5601e1e9f4078",
+        "package-lock.json": "e6ecd22fadeee12fa8ecd98dec31356aa6a31f94"
       }
     }
   ]
