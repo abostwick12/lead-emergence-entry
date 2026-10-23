@@ -70,6 +70,64 @@ test('hero controls remain clear and keyboard operable with enlarged text', asyn
   }
 });
 
+test('hero heading and controls remain scroll reachable with enlarged text', async ({ page }) => {
+  for (const reducedMotion of [false, true]) {
+    await page.emulateMedia({ reducedMotion: reducedMotion ? 'reduce' : 'no-preference' });
+    for (const viewport of [{ width: 320, height: 568 }, { width: 375, height: 667 }, { width: 390, height: 844 }, { width: 667, height: 375 }]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+      await page.evaluate(() => {
+        const hero = document.querySelector<HTMLElement>('section[aria-labelledby="hero-title"]');
+        if (!hero) throw new Error('Hero is missing');
+        for (const element of hero.querySelectorAll<HTMLElement>('p, h1, a, button, li, span')) {
+          element.style.fontSize = `${Number.parseFloat(getComputedStyle(element).fontSize) * 2}px`;
+        }
+      });
+
+      const heading = page.getByRole('heading', { name: /Before you decide/ });
+      await heading.evaluate(element => element.scrollIntoView({ block: 'start' }));
+      const headingVisibility = await heading.evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { top: rect.top, bottom: rect.bottom, viewportHeight: innerHeight };
+      });
+      expect(headingVisibility.top).toBeGreaterThanOrEqual(-1);
+      expect(headingVisibility.top).toBeLessThan(headingVisibility.viewportHeight);
+      await heading.evaluate(element => element.scrollIntoView({ block: 'end' }));
+      const headingEnd = await heading.evaluate((element) => element.getBoundingClientRect().bottom);
+      expect(headingEnd).toBeGreaterThan(0);
+      expect(headingEnd).toBeLessThanOrEqual(viewport.height + 1);
+
+      const signIn = page.getByRole('link', { name: 'Sign In', exact: true }).first();
+      const controls = [
+        page.getByRole('link', { name: /Scroll into the work/ }),
+        page.getByRole('button', { name: 'Watch the film' }),
+        ...(!reducedMotion ? [page.getByRole('button', { name: /visual motion/ })] : []),
+      ];
+      await signIn.focus();
+      for (const control of controls) {
+        await page.keyboard.press('Tab');
+        await expect(control).toBeFocused();
+        const visibility = await control.evaluate((element) => {
+          const rect = element.getBoundingClientRect();
+          const point = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+          return {
+            top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right,
+            viewportHeight: innerHeight, viewportWidth: innerWidth,
+            unobscured: point === element || element.contains(point),
+          };
+        });
+        expect(visibility.top).toBeGreaterThanOrEqual(0);
+        expect(visibility.bottom).toBeLessThanOrEqual(visibility.viewportHeight);
+        expect(visibility.left).toBeGreaterThanOrEqual(0);
+        expect(visibility.right).toBeLessThanOrEqual(visibility.viewportWidth);
+        expect(visibility.unobscured).toBe(true);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  }
+});
+
 test('the decision recommendation is announced as status when changed', async ({ page }) => {
   await page.goto('/');
   await page.waitForLoadState('networkidle');

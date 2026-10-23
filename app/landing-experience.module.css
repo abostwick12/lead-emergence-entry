@@ -120,16 +120,16 @@
   .navActions { gap:12px; }
   .pilotNote { display:none; }
   .signIn { padding:7px 15px; font-size:12px; }
-  .heroSequence { height:145svh; min-height:720px; }
-  .heroPinned { min-height:720px; }
-  .heroContent { left:24px; right:20px; bottom:260px; }
+  .heroSequence { height:auto; min-height:0; }
+  .heroPinned { position:relative; height:auto; min-height:100svh; display:flex; flex-direction:column; justify-content:flex-end; gap:24px; padding:clamp(150px,42svh,360px) 24px 24px; overflow:visible; }
+  .heroContent { position:relative; inset:auto; width:100%; }
   .heroContent h1 { font-size:clamp(47px,8.7vw,65px); }
   .heroImage img { object-position:65% center; }
   .heroShade { background:linear-gradient(0deg,#05101a 2%,#05101a88 35%,#05101a00 74%),linear-gradient(90deg,#030b1366,#030b1300); }
   .heroLine { font-size:19px; max-width:290px; }
   .stageName { font-size:10px; letter-spacing:.13em; }
   .stagePhrase { max-width:290px; font-size:12px; }
-  .heroBottom { left:24px; right:24px; bottom:20px; }
+  .heroBottom { position:relative; inset:auto; width:100%; }
   .stageLine { gap:5px; }
   .stageLine li { font-size:7px; letter-spacing:.04em; padding-top:16px; }
   .motionControls { font-size:10px; }
