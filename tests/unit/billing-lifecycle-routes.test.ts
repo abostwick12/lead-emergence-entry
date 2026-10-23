@@ -27,6 +27,7 @@ vi.mock('@/lib/billing/lifecycle', async (importOriginal) => {
 
 import { POST as portalPost } from '@/app/api/billing/portal/route';
 import { POST as resumePost } from '@/app/api/billing/resume/route';
+import { BillingLifecycleError } from '@/lib/billing/lifecycle';
 
 function request(path: string, body = '') {
   return new Request(`https://entry.example.test${path}`, {
@@ -78,6 +79,17 @@ describe('Entry billing lifecycle routes', () => {
     );
   });
 
+  it.each([
+    new BillingLifecycleError('PORTAL_CONFIGURATION_POLICY_MISMATCH', 503),
+    new Error('private Stripe failure details'),
+  ])('returns Portal form failures to the account without exposing details', async (error) => {
+    mocks.createPortalSessionForUser.mockRejectedValue(error);
+    const response = await portalPost(request('/api/billing/portal'));
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe('https://entry.example.test/account?billing=portal-error');
+    expect(response.headers.get('location')).not.toContain(error.message);
+  });
+
   it('rejects a browser-supplied Subscription ID', async () => {
     const response = await resumePost(request(
       '/api/billing/resume',
@@ -106,5 +118,36 @@ describe('Entry billing lifecycle routes', () => {
       '00000000-0000-4000-8000-0000000000e1',
       expect.objectContaining({ stripe: { kind: 'stripe' }, store: { kind: 'store' } }),
     );
+  });
+
+  it('returns a missing-payment-method failure to the account with an actionable status', async () => {
+    mocks.resumeSotfSubscriptionForUser.mockRejectedValue(
+      new BillingLifecycleError('USABLE_PAYMENT_METHOD_REQUIRED', 409),
+    );
+    const response = await resumePost(request('/api/billing/resume'));
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe(
+      'https://entry.example.test/account?resume=payment-method-required',
+    );
+  });
+
+  it.each([
+    new BillingLifecycleError('SUBSCRIPTION_OWNERSHIP_MISMATCH', 409),
+    new Error('private Stripe failure details'),
+  ])('returns other resume failures to the account without exposing details', async (error) => {
+    mocks.resumeSotfSubscriptionForUser.mockRejectedValue(error);
+    const response = await resumePost(request('/api/billing/resume'));
+    expect(response.status).toBe(303);
+    expect(response.headers.get('location')).toBe('https://entry.example.test/account?resume=failed');
+    expect(response.headers.get('location')).not.toContain(error.message);
+  });
+
+  it('preserves origin rejection before the billing lifecycle runs', async () => {
+    const response = await resumePost(new Request('https://entry.example.test/api/billing/resume', {
+      method: 'POST',
+      headers: { origin: 'https://other.example.test' },
+    }));
+    expect(response.status).toBe(403);
+    expect(mocks.resumeSotfSubscriptionForUser).not.toHaveBeenCalled();
   });
 });

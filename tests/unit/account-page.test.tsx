@@ -17,6 +17,10 @@ vi.mock('@/lib/identity/server', () => ({
 
 import AccountPage from '@/app/account/page';
 
+async function renderAccount(searchParams: { billing?: string; resume?: string } = {}) {
+  return renderToStaticMarkup(await AccountPage({ searchParams: Promise.resolve(searchParams) }));
+}
+
 const billing: BillingLifecycleContext = {
   canonicalUserId: 'synthetic-user', selectedOffer: 'SOTF_FOUNDING_FELLOW',
   stripeCustomerId: 'cus_fixture', stripeSubscriptionId: 'sub_fixture',
@@ -42,7 +46,7 @@ describe('account billing availability', () => {
       if (failure === 'store construction') mocks.createEntryBillingLifecycleStore.mockImplementation(() => { throw error; });
       else mocks.resolveByCanonicalUser.mockRejectedValue(error);
 
-      const markup = renderToStaticMarkup(await AccountPage());
+      const markup = await renderAccount();
 
       expect(markup).toContain('<h2>Profile</h2>');
       expect(markup).toContain('<h2>Product access</h2>');
@@ -57,7 +61,7 @@ describe('account billing availability', () => {
   );
 
   it('retains the empty billing state after a successful lookup', async () => {
-    const markup = renderToStaticMarkup(await AccountPage());
+    const markup = await renderAccount();
     expect(markup).toContain('No customer-managed Stripe billing relationship');
     expect(markup).not.toContain('Billing is temporarily unavailable');
     expect(markup).not.toContain('/api/billing/portal');
@@ -66,7 +70,7 @@ describe('account billing availability', () => {
 
   it('retains billing and resume actions for a known paused subscription', async () => {
     mocks.resolveByCanonicalUser.mockResolvedValue(billing);
-    const markup = renderToStaticMarkup(await AccountPage());
+    const markup = await renderAccount();
     expect(markup).toContain('/api/billing/portal');
     expect(markup).toContain('/api/billing/resume');
     expect(markup).not.toContain('Billing is temporarily unavailable');
@@ -75,8 +79,26 @@ describe('account billing availability', () => {
   it('keeps the identity gate outside billing failure handling', async () => {
     const error = new Error('identity redirect');
     mocks.requireCanonicalIdentity.mockRejectedValue(error);
-    await expect(AccountPage()).rejects.toBe(error);
+    await expect(AccountPage({ searchParams: Promise.resolve({}) })).rejects.toBe(error);
     expect(mocks.createEntryBillingLifecycleStore).not.toHaveBeenCalled();
     expect(mocks.resolveByCanonicalUser).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    [{ resume: 'payment-method-required' }, 'Use Update payment method, then try resuming your subscription again.'],
+    [{ resume: 'failed' }, 'We could not resume your subscription. Please try again shortly.'],
+    [{ billing: 'portal-error' }, 'We could not open billing. Please try again shortly.'],
+  ])('shows a fixed billing form failure message', async (params, message) => {
+    mocks.resolveByCanonicalUser.mockResolvedValue(billing);
+    const markup = await renderAccount(params);
+    expect(markup).toContain(`<p role="alert">${message}</p>`);
+    expect(markup).toContain('<h2>Profile</h2>');
+    expect(markup).toContain('/api/billing/portal');
+  });
+
+  it('ignores unrecognized billing status text', async () => {
+    const markup = await renderAccount({ resume: 'private failure details' });
+    expect(markup).not.toContain('private failure details');
+    expect(markup).not.toContain('role="alert"');
   });
 });

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getBillingConfig } from '@/lib/billing/config';
-import { createPortalSessionForUser, BillingLifecycleError } from '@/lib/billing/lifecycle';
+import { createPortalSessionForUser } from '@/lib/billing/lifecycle';
 import { createEntryBillingLifecycleStore } from '@/lib/billing/store';
 import { getStripeClient } from '@/lib/billing/stripe';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -35,10 +35,7 @@ export async function POST(request: Request) {
       config,
     });
     return NextResponse.redirect(session.url, 303);
-  } catch (portalError) {
-    if (portalError instanceof BillingLifecycleError) {
-      return NextResponse.json({ error: portalError.code }, { status: portalError.status });
-    }
-    return NextResponse.json({ error: 'Customer Portal unavailable' }, { status: 503 });
+  } catch {
+    return NextResponse.redirect(`${config.entryOrigin}/account?billing=portal-error`, 303);
   }
 }

@@ -37,9 +37,10 @@ export async function POST(request: Request) {
     const resumeStatus = result.disposition === 'ALREADY_RESUMED' ? 'already-resumed' : 'requested';
     return NextResponse.redirect(`${config.entryOrigin}/account?resume=${resumeStatus}`, 303);
   } catch (resumeError) {
-    if (resumeError instanceof BillingLifecycleError) {
-      return NextResponse.json({ error: resumeError.code }, { status: resumeError.status });
-    }
-    return NextResponse.json({ error: 'Subscription resume unavailable' }, { status: 503 });
+    const resumeStatus = resumeError instanceof BillingLifecycleError
+      && resumeError.code === 'USABLE_PAYMENT_METHOD_REQUIRED'
+      ? 'payment-method-required'
+      : 'failed';
+    return NextResponse.redirect(`${config.entryOrigin}/account?resume=${resumeStatus}`, 303);
   }
 }
