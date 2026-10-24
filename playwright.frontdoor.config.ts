@@ -1,0 +1,2 @@
+import { defineConfig, devices } from '@playwright/test';
+export default defineConfig({ testDir: './tests/browser', testMatch: 'frontdoor.spec.ts', fullyParallel: false, workers: 1, timeout: 40000, use: { baseURL: process.env.FRONTDOOR_URL ?? 'http://localhost:3109', trace: 'retain-on-failure' }, projects: [{ name: 'desktop', use: { ...devices['Desktop Chrome'], channel: 'chrome', viewport: { width: 1440, height: 1000 } } }, { name: 'mobile', use: { ...devices['Pixel 7'], channel: 'chrome' } }] });
