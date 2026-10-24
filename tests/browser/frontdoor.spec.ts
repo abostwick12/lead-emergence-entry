@@ -200,6 +200,30 @@ test('scroll film seeks, pauses, and yields to ordinary scrolling', async ({ pag
   await expect(page.getByRole('heading', { name: 'Everything starts with the leader.' })).toBeVisible();
 });
 
+test('loaded hero video unmounts on narrow resize while paused or off-screen', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop', 'The transition must start with a desktop-loaded video');
+  for (const state of ['paused', 'off-screen'] as const) {
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.goto('/');
+    await page.evaluate(() => window.scrollTo(0, 90));
+    const film = page.locator('video[aria-hidden="true"]');
+    await expect(film).toHaveAttribute('data-ready', 'true');
+
+    if (state === 'paused') {
+      await page.getByRole('button', { name: 'Pause visual motion' }).click();
+    } else {
+      await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
+      await expect.poll(() => page.locator('section[aria-labelledby="hero-title"]').evaluate(
+        element => element.getBoundingClientRect().bottom,
+      )).toBeLessThan(0);
+    }
+
+    await page.setViewportSize({ width: state === 'paused' ? 760 : 390, height: 1000 });
+    await expect(film).toHaveCount(0);
+    await expect(page.locator('[class*="heroImage"] img')).toHaveCount(1);
+  }
+});
+
 test('reduced motion and blocked media preserve the complete story', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const media: string[] = [];

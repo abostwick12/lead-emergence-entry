@@ -33,6 +33,9 @@ export function HeroSequence({ stages }: { stages: readonly Stage[] }) {
         root.current.style.setProperty('--hero-progress', '0');
         return;
       }
+      if (window.innerWidth <= 760) {
+        setVideoSrc(undefined); setReady(false);
+      }
       if (paused) return;
       const bounds = root.current.getBoundingClientRect();
       if (bounds.bottom <= 0 || bounds.top >= window.innerHeight) return;
