@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 59 selected source paths unchanged and retain original source provenance for nineteen explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 56 selected source paths unchanged and retain original source provenance for 22 explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -111,7 +111,11 @@
       "path": "app/oauth/consent/page.tsx",
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "56b09ea2fd4d2f6a4fb2e9855da38cb15a165d99"
+      "sourceBlob": "56b09ea2fd4d2f6a4fb2e9855da38cb15a165d99",
+      "repairedBlob": "28356f4b6cea16c040ed9d4b86a0d3f3364a9c0a",
+      "forwardRepairIds": [
+        "oauth-provisioning-exception-entitlement-gate"
+      ]
     },
     {
       "path": "app/signup/actions.ts",
@@ -271,7 +275,11 @@
       "path": "lib/oauth/server.ts",
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "020309bc1708ce9106fece24002aeae901131480"
+      "sourceBlob": "020309bc1708ce9106fece24002aeae901131480",
+      "repairedBlob": "f1a82f6cf40ee5ec03e285c0275e092734225a4a",
+      "forwardRepairIds": [
+        "oauth-provisioning-exception-entitlement-gate"
+      ]
     },
     {
       "path": "package-lock.json",
@@ -555,7 +563,11 @@
       "path": "tests/unit/oauth-server.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "72ea94e2c19d86e5678c5f55aca5bfb95d70723b"
+      "sourceBlob": "72ea94e2c19d86e5678c5f55aca5bfb95d70723b",
+      "repairedBlob": "69e0b743eab062a3f69ca30575cabaab993d9aa5",
+      "forwardRepairIds": [
+        "oauth-provisioning-exception-entitlement-gate"
+      ]
     },
     {
       "path": "tests/unit/workspaces-empty-state.test.tsx",
@@ -583,6 +595,35 @@
     }
   ],
   "forwardRepairs": [
+    {
+      "id": "oauth-provisioning-exception-entitlement-gate",
+      "baseCandidate": "5aafd45ab5329b312e0c71bd9767e13fa2a2b194",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-24",
+      "authorization": "PR19 owns the narrow local provisioning-exception correction despite PR21 overlap; preserve PR21 branch and checkout, with no push or hosted change.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4347210396",
+      "scope": "Catch only automatic PERSONAL provisioning failures in OAuth start and consent, then rely on the existing authoritative active-product entitlement read. Deny absent entitlement and fail closed on unreadable entitlement. Preserve identity, redirect, origin, and MCP checks; log only a fixed message. Add focused failure and success controls for start and consent; do not import PR21 callback restrictions.",
+      "paths": [
+        "app/oauth/consent/page.tsx",
+        "lib/oauth/server.ts",
+        "tests/unit/oauth-server.test.ts",
+        "tests/unit/oauth-consent-page.test.tsx"
+      ],
+      "addedPaths": [
+        "tests/unit/oauth-consent-page.test.tsx"
+      ],
+      "baseBlobs": {
+        "app/oauth/consent/page.tsx": "02128e07d72eaca38668c27cb8829a9c81cb2be9",
+        "lib/oauth/server.ts": "11d5ac59dbeddf8f6122a205593090cba3c854e5",
+        "tests/unit/oauth-server.test.ts": "e2bf43cebc7705d6278a7d297cbece0f44942f39"
+      },
+      "resultBlobs": {
+        "app/oauth/consent/page.tsx": "28356f4b6cea16c040ed9d4b86a0d3f3364a9c0a",
+        "lib/oauth/server.ts": "f1a82f6cf40ee5ec03e285c0275e092734225a4a",
+        "tests/unit/oauth-server.test.ts": "69e0b743eab062a3f69ca30575cabaab993d9aa5",
+        "tests/unit/oauth-consent-page.test.tsx": "317e6e9e220622a341c30efde29e736a2e54a1da"
+      }
+    },
     {
       "id": "projection-transport-timeout",
       "baseCandidate": "e57fecbac7594234254ab3f9d2ada0ade2dd2fa1",

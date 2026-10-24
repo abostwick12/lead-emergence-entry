@@ -40,7 +40,13 @@ export async function canAuthorizeProduct(supabase: Awaited<ReturnType<typeof cr
 
 export async function createProductOAuthStart(product: OAuthProduct) {
   const { supabase, user } = await requireOAuthEntryUserForProduct(product);
-  if (product === 'PERSONAL') await ensureAutomaticPersonalEntitlement(user, 'PERSONAL');
+  if (product === 'PERSONAL') {
+    try {
+      await ensureAutomaticPersonalEntitlement(user, 'PERSONAL');
+    } catch {
+      console.error('Automatic PERSONAL entitlement provisioning unavailable');
+    }
+  }
   if (!await canAuthorizeProduct(supabase, product)) return null;
   return productOAuthStartUrl(productUrl(product));
 }

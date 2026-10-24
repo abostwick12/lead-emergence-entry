@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mocks = vi.hoisted(() => ({
   createSupabaseServerClient: vi.fn(),
@@ -31,7 +31,10 @@ describe('product OAuth start', () => {
     mocks.createSupabaseServerClient.mockResolvedValue({ auth: { getUser: mocks.getUser } });
     mocks.getUser.mockResolvedValue({ data: { user: verifiedUser }, error: null });
     mocks.ensureAutomaticPersonalEntitlement.mockResolvedValue(true);
+    vi.spyOn(console, 'error').mockImplementation(() => {});
   });
+
+  afterEach(() => vi.restoreAllMocks());
 
   it('ensures an authenticated PERSONAL entitlement before authorization', async () => {
     mocks.getActiveProducts.mockResolvedValue(['PERSONAL']);
@@ -50,6 +53,35 @@ describe('product OAuth start', () => {
     await expect(createProductOAuthStart('PERSONAL')).resolves.toBeNull();
 
     expect(mocks.ensureAutomaticPersonalEntitlement).toHaveBeenCalledWith(verifiedUser, 'PERSONAL');
+    expect(mocks.getActiveProducts).toHaveBeenCalledTimes(1);
+  });
+
+  it('continues after provisioning failure only when the authoritative entitlement is active', async () => {
+    mocks.ensureAutomaticPersonalEntitlement.mockRejectedValue(new Error('private provisioning details'));
+    mocks.getActiveProducts.mockResolvedValue(['PERSONAL']);
+
+    await expect(createProductOAuthStart('PERSONAL')).resolves.toBe('https://workspace.example.test/auth/entry');
+
+    expect(mocks.getActiveProducts).toHaveBeenCalledTimes(1);
+    expect(console.error).toHaveBeenCalledExactlyOnceWith('Automatic PERSONAL entitlement provisioning unavailable');
+  });
+
+  it('denies after provisioning failure when authoritative entitlement is absent', async () => {
+    mocks.ensureAutomaticPersonalEntitlement.mockRejectedValue(new Error('private provisioning details'));
+    mocks.getActiveProducts.mockResolvedValue([]);
+
+    await expect(createProductOAuthStart('PERSONAL')).resolves.toBeNull();
+
+    expect(mocks.getActiveProducts).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not authorize after provisioning failure when entitlement cannot be read', async () => {
+    const readError = new Error('entitlement read unavailable');
+    mocks.ensureAutomaticPersonalEntitlement.mockRejectedValue(new Error('private provisioning details'));
+    mocks.getActiveProducts.mockRejectedValue(readError);
+
+    await expect(createProductOAuthStart('PERSONAL')).rejects.toBe(readError);
+
     expect(mocks.getActiveProducts).toHaveBeenCalledTimes(1);
   });
 

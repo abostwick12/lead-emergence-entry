@@ -15,7 +15,11 @@ export default async function OAuthConsentPage({ searchParams }: { searchParams:
     const product = oauthProductForRedirect(details.redirect_url);
     const destination = product ? safeOAuthRedirect(details.redirect_url, oauthRedirectOrigin(product)) : null;
     if (product && destination) {
-      await ensureAutomaticPersonalEntitlement(user, product);
+      try {
+        await ensureAutomaticPersonalEntitlement(user, product);
+      } catch {
+        console.error('Automatic PERSONAL entitlement provisioning unavailable');
+      }
       if (await canAuthorizeProduct(supabase, product)) redirect(destination.toString());
     }
 
@@ -24,7 +28,11 @@ export default async function OAuthConsentPage({ searchParams }: { searchParams:
       ? safeExactOAuthRedirect(details.redirect_url, classification.mcp.expected_redirect_uri)
       : null;
     if (mcpDestination) {
-      await ensureAutomaticPersonalEntitlement(user, classification.product);
+      try {
+        await ensureAutomaticPersonalEntitlement(user, classification.product);
+      } catch {
+        console.error('Automatic PERSONAL entitlement provisioning unavailable');
+      }
       if (await canAuthorizeProduct(supabase, 'PERSONAL')) redirect(mcpDestination.toString());
     }
 
@@ -33,7 +41,11 @@ export default async function OAuthConsentPage({ searchParams }: { searchParams:
 
   const classification = await classifyOAuthRequest(supabase, authorizationId, details.client.id);
   const product = classification.product;
-  await ensureAutomaticPersonalEntitlement(user, product);
+  try {
+    await ensureAutomaticPersonalEntitlement(user, product);
+  } catch {
+    console.error('Automatic PERSONAL entitlement provisioning unavailable');
+  }
   const entitled = Boolean(product) && await canAuthorizeProduct(supabase, product!);
   const isMcp = classification.kind === 'WORKSPACE_MCP';
   const productName = product === 'PERSONAL' ? 'Workspace' : product === 'CONSULTING' ? 'Consulting' : 'this product';
