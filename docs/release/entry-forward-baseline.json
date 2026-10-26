@@ -542,10 +542,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "dd35539e2200812a732a91f19d483d1afa6b8354",
-      "repairedBlob": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb",
+      "repairedBlob": "fd8b65b8453287792e07f19a09ffe15f0e55c9cc",
       "forwardRepairIds": [
         "first-unpaid-subscription-suspension",
-        "account-scoped-webhook-discount-retry"
+        "account-scoped-webhook-discount-retry",
+        "flexible-cancellation-clock-test"
       ]
     },
     {
@@ -1196,6 +1197,26 @@
       "resultBlobs": {
         "package.json": "1a84a39d27b7b8f6c879600739b5601e1e9f4078",
         "package-lock.json": "e6ecd22fadeee12fa8ecd98dec31356aa6a31f94"
+      }
+    },
+    {
+      "id": "flexible-cancellation-clock-test",
+      "baseCandidate": "f3a1c1ea69eebb6a8fe2e93c67457cd57777d23f",
+      "repairCommit": "eae866a353423b7e431c94be3520eef0c5f94e7f",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-26",
+      "authorization": "Approved bounded local-only PR19 clock-test correction; no push or hosted action.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4347210438",
+      "scope": "Pin the positive flexible cancellation test before its fixed boundary, restore real timers in finally, and assert no fake-timer leak in the preserved expired-boundary negative case. Runtime code and existing assertions remain unchanged.",
+      "paths": [
+        "tests/unit/billing-reconciliation.test.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "tests/unit/billing-reconciliation.test.ts": "d1732efe9d53f8aaf14383b4c5b78d378bfe3ddb"
+      },
+      "resultBlobs": {
+        "tests/unit/billing-reconciliation.test.ts": "fd8b65b8453287792e07f19a09ffe15f0e55c9cc"
       }
     }
   ]
