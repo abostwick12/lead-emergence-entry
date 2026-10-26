@@ -514,21 +514,27 @@ describe('Stripe billing reconciliation', () => {
   });
 
   it('normalizes exact flexible period-end cancellation and retains its boundary', async () => {
-    const test = setup(standardContext);
-    const scheduled = subscription(standardContext, {
-      billing_mode: { type: 'flexible', updated_at: 1_800_000_000 },
-      cancel_at: 1_802_592_000,
-    });
-    test.stripe.subscriptions.retrieve.mockResolvedValue(scheduled);
-    await reconcileStripeEvent(
-      event('customer.subscription.updated', scheduled),
-      { stripe: test.stripe as unknown as Stripe, store: test.store, config },
-    );
-    expect(test.applied[0]).toMatchObject({
-      normalizedState: 'CANCEL_AT_PERIOD_END',
-      cancelAtPeriodEnd: true,
-      currentPeriodEndsAt: '2027-02-14T08:00:00.000Z',
-    });
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(new Date(1_800_000_100 * 1000));
+      const test = setup(standardContext);
+      const scheduled = subscription(standardContext, {
+        billing_mode: { type: 'flexible', updated_at: 1_800_000_000 },
+        cancel_at: 1_802_592_000,
+      });
+      test.stripe.subscriptions.retrieve.mockResolvedValue(scheduled);
+      await reconcileStripeEvent(
+        event('customer.subscription.updated', scheduled),
+        { stripe: test.stripe as unknown as Stripe, store: test.store, config },
+      );
+      expect(test.applied[0]).toMatchObject({
+        normalizedState: 'CANCEL_AT_PERIOD_END',
+        cancelAtPeriodEnd: true,
+        currentPeriodEndsAt: '2027-02-14T08:00:00.000Z',
+      });
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it.each([
@@ -552,6 +558,7 @@ describe('Stripe billing reconciliation', () => {
   });
 
   it('does not treat an expired flexible period boundary as a scheduled cancellation', async () => {
+    expect(vi.isFakeTimers()).toBe(false);
     const periodEnd = Math.floor(Date.now() / 1000) - 1;
     const test = setup(standardContext);
     const expiredCancellation = subscription(standardContext, {
