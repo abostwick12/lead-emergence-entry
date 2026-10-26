@@ -6,7 +6,7 @@
   "reusedCronTestFrom": "6e233cdd8c2a8bcce5432c71fd9316d655b9a223",
   "deploymentObservedAt": "2026-10-03T15:18:36.0256359Z",
   "deployment": "dpl_2NGPuAYkZrpo4h5gpRyUNXBovA6k",
-  "sourcePolicy": "Preserve 56 selected source paths unchanged and retain original source provenance for 22 explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
+  "sourcePolicy": "Preserve 53 selected source paths unchanged and retain original source provenance for 25 explicitly approved forward-repair paths below, allowing Git CRLF/LF normalization; dependency pair from reviewed PR18 and cron expectation from PR16. Keep main bytes for 52 line-ending-only, three identical, and two governance paths. Preserve main environment example with new empty configuration names; do not copy retained environment values, local metadata, or generated tsconfig.tsbuildinfo. The prior 79-path selection included that generated cache; it is explicitly excluded here.",
   "environmentNamesAddedWithEmptyValues": [
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
@@ -25,9 +25,10 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "2e98148b6092dc8b6063c01a01d7441edf705267",
-      "repairedBlob": "031b1ca068f7550e032654a87241f0d392ebd612",
+      "repairedBlob": "d5706555a8219792450ffdbb005cdd630c5e9a99",
       "forwardRepairIds": [
-        "account-billing-read-containment"
+        "account-billing-read-containment",
+        "billing-form-failure-return-to-account"
       ]
     },
     {
@@ -40,13 +41,21 @@
       "path": "app/api/billing/portal/route.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "28bcff9508290134669ed333b315cc7b73fc8726"
+      "sourceBlob": "28bcff9508290134669ed333b315cc7b73fc8726",
+      "repairedBlob": "8a196949361b1494ed2bca38e677d026bf3aacea",
+      "forwardRepairIds": [
+        "billing-form-failure-return-to-account"
+      ]
     },
     {
       "path": "app/api/billing/resume/route.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "d6256de2fa249ac1606277d919de796ffb428bc0"
+      "sourceBlob": "d6256de2fa249ac1606277d919de796ffb428bc0",
+      "repairedBlob": "3eedceb6d1e72782ee1c9975aaa6decc59c9890b",
+      "forwardRepairIds": [
+        "billing-form-failure-return-to-account"
+      ]
     },
     {
       "path": "app/api/billing/stripe/webhook/route.ts",
@@ -101,10 +110,11 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "0c4907bf57e76e9667d8993b0dd2776389d1bf23",
-      "repairedBlob": "2419b60e73c36cf3b3a06e2a21b2d118edf14b36",
+      "repairedBlob": "29acfbcf454845087305441ed5154c3b527b490a",
       "forwardRepairIds": [
         "interface-example-group-role",
-        "landing-recommendation-status"
+        "landing-recommendation-status",
+        "landing-video-narrow-resize-cleanup"
       ]
     },
     {
@@ -286,10 +296,11 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
       "sourceBlob": "3416c3481673f91778316eca8754edf3b039b46e",
-      "repairedBlob": "e6ecd22fadeee12fa8ecd98dec31356aa6a31f94",
+      "repairedBlob": "6b97383b107461e1f754264c5b21b2865ba432d0",
       "forwardRepairIds": [
         "pr18-patchable-lockfile-resolutions",
-        "pr18-next-16-4-1-security-update"
+        "pr18-next-16-4-1-security-update",
+        "pr18-undici-zod-lockfile-integration"
       ]
     },
     {
@@ -473,11 +484,12 @@
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
       "sourceBlob": "378056a26a8ebf82adaef0a91af70d82651e41bd",
-      "repairedBlob": "3241413568d2ca4b77a7ff6db2656821b805e203",
+      "repairedBlob": "37b66e720f0a6df3fb2632e200c0f2315168c4cc",
       "forwardRepairIds": [
         "landing-motion-control-wrap",
         "landing-recommendation-status",
-        "landing-hero-normal-flow-reachability"
+        "landing-hero-normal-flow-reachability",
+        "landing-video-narrow-resize-cleanup"
       ]
     },
     {
@@ -506,7 +518,11 @@
       "path": "tests/unit/billing-lifecycle-routes.test.ts",
       "relation": "production_only_preserve",
       "sourceCommit": "4127cec96379841e3741fd0f9997e10697b31cc7",
-      "sourceBlob": "3856c9236c68d51df450fc910d9bb1ed9e8339e7"
+      "sourceBlob": "3856c9236c68d51df450fc910d9bb1ed9e8339e7",
+      "repairedBlob": "d411c98b3e140b7c66891b8298c19f155a30e5a5",
+      "forwardRepairIds": [
+        "billing-form-failure-return-to-account"
+      ]
     },
     {
       "path": "tests/unit/billing-lifecycle.test.ts",
@@ -1217,6 +1233,83 @@
       },
       "resultBlobs": {
         "tests/unit/billing-reconciliation.test.ts": "fd8b65b8453287792e07f19a09ffe15f0e55c9cc"
+      }
+    },
+    {
+      "id": "billing-form-failure-return-to-account",
+      "baseCandidate": "f8dbc0fb08e7af34062480c47ea80255ebde549d",
+      "repairCommit": "081504401630c5f9ddbfcd526ada169cdaf174af",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-26",
+      "authorization": "Approved manifest-only reconciliation of seven identified current-blob mismatches; this entry records an existing published correction and makes no source change.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4347210361",
+      "reviewEvidence": "https://github.com/abostwick12/lead-emergence-entry/pull/19#issuecomment-6365300919",
+      "scope": "Record the published PR19 correction that redirects billing form failures to account status notices without returning raw JSON or private exception details; the account-page and route tests cover the behavior.",
+      "paths": [
+        "app/account/page.tsx",
+        "app/api/billing/portal/route.ts",
+        "app/api/billing/resume/route.ts",
+        "tests/unit/account-page.test.tsx",
+        "tests/unit/billing-lifecycle-routes.test.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "app/account/page.tsx": "031b1ca068f7550e032654a87241f0d392ebd612",
+        "app/api/billing/portal/route.ts": "28bcff9508290134669ed333b315cc7b73fc8726",
+        "app/api/billing/resume/route.ts": "d6256de2fa249ac1606277d919de796ffb428bc0",
+        "tests/unit/account-page.test.tsx": "03794d2fb54b1228b41e316912f67cda44a67835",
+        "tests/unit/billing-lifecycle-routes.test.ts": "3856c9236c68d51df450fc910d9bb1ed9e8339e7"
+      },
+      "resultBlobs": {
+        "app/account/page.tsx": "d5706555a8219792450ffdbb005cdd630c5e9a99",
+        "app/api/billing/portal/route.ts": "8a196949361b1494ed2bca38e677d026bf3aacea",
+        "app/api/billing/resume/route.ts": "3eedceb6d1e72782ee1c9975aaa6decc59c9890b",
+        "tests/unit/account-page.test.tsx": "12709a36dbfb8d3e4550cf547dd6ef70d8b9c549",
+        "tests/unit/billing-lifecycle-routes.test.ts": "d411c98b3e140b7c66891b8298c19f155a30e5a5"
+      }
+    },
+    {
+      "id": "landing-video-narrow-resize-cleanup",
+      "baseCandidate": "081504401630c5f9ddbfcd526ada169cdaf174af",
+      "repairCommit": "40a1425651f7ead7238b202b5737c8067c607e72",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-26",
+      "authorization": "Approved manifest-only reconciliation of seven identified current-blob mismatches; this entry records an existing published correction and makes no source change.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4359774515",
+      "reviewEvidence": "https://github.com/abostwick12/lead-emergence-entry/pull/19#issuecomment-6383355486",
+      "scope": "Record the published PR19 correction that unmounts a loaded hero video on narrow resize even when paused or off-screen, with browser regression coverage.",
+      "paths": [
+        "app/landing-motion.tsx",
+        "tests/browser/frontdoor.spec.ts"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "app/landing-motion.tsx": "2419b60e73c36cf3b3a06e2a21b2d118edf14b36",
+        "tests/browser/frontdoor.spec.ts": "3241413568d2ca4b77a7ff6db2656821b805e203"
+      },
+      "resultBlobs": {
+        "app/landing-motion.tsx": "29acfbcf454845087305441ed5154c3b527b490a",
+        "tests/browser/frontdoor.spec.ts": "37b66e720f0a6df3fb2632e200c0f2315168c4cc"
+      }
+    },
+    {
+      "id": "pr18-undici-zod-lockfile-integration",
+      "baseCandidate": "40a1425651f7ead7238b202b5737c8067c607e72",
+      "repairCommit": "5aafd45ab5329b312e0c71bd9767e13fa2a2b194",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-26",
+      "authorization": "Approved manifest-only reconciliation of seven identified current-blob mismatches; this entry records an existing published correction and makes no source change.",
+      "reviewEvidence": "https://github.com/abostwick12/lead-emergence-entry/pull/19#issuecomment-6387495863",
+      "scope": "Record PR19 integration of reviewed PR18 Undici 8.12.3 and Zod 4.6.7 resolved lock entries; package.json and application source were unchanged in this commit.",
+      "paths": [
+        "package-lock.json"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "package-lock.json": "e6ecd22fadeee12fa8ecd98dec31356aa6a31f94"
+      },
+      "resultBlobs": {
+        "package-lock.json": "6b97383b107461e1f754264c5b21b2865ba432d0"
       }
     }
   ]
