@@ -308,9 +308,10 @@
       "relation": "substantive_difference_review",
       "sourceCommit": "6854c08b99bf22136428c5f5461bae1891aa9064",
       "sourceBlob": "85ecbaf0e0e61ff3b74ef2ad3c5a7638ac94aac2",
-      "repairedBlob": "1a84a39d27b7b8f6c879600739b5601e1e9f4078",
+      "repairedBlob": "effed5d1964dfee1c5a873bad79f503e9d17c2db",
       "forwardRepairIds": [
-        "pr18-next-16-4-1-security-update"
+        "pr18-next-16-4-1-security-update",
+        "pr19-frontdoor-e2e-script-config"
       ]
     },
     {
@@ -1333,6 +1334,26 @@
       "resultBlobs": {
         "supabase/migrations/20261027212556_order_personal_projection_claims_per_user.sql": "b65aac5092538755768f3dcc87cf6a99f443e52e",
         "supabase/tests/personal_projection_claim_fairness.sql": "6ae041b02e22c9271e456167b97c0439b3cece19"
+      }
+    },
+    {
+      "id": "pr19-frontdoor-e2e-script-config",
+      "baseCandidate": "94a555c0c44a54b3bf049172ae891e7acda97864",
+      "repairCommit": "c81d812571b897d6b54d9f6603c636a675448a51",
+      "approvedBy": "Andrew",
+      "approvedOn": "2026-10-28",
+      "authorization": "Approved PR19 ownership of the bounded package.json test-script correction, coordinated with PR18 dependency ownership; no publication or hosted change.",
+      "reviewFinding": "https://github.com/abostwick12/lead-emergence-entry/pull/19#discussion_r4399073417",
+      "scope": "Load the existing front-door Playwright config from the test:e2e script so the command discovers only the intended desktop and mobile browser cases, preserving PR18 dependency versions and lockfile content.",
+      "paths": [
+        "package.json"
+      ],
+      "addedPaths": [],
+      "baseBlobs": {
+        "package.json": "1a84a39d27b7b8f6c879600739b5601e1e9f4078"
+      },
+      "resultBlobs": {
+        "package.json": "effed5d1964dfee1c5a873bad79f503e9d17c2db"
       }
     }
   ]
