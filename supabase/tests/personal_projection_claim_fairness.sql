@@ -192,7 +192,7 @@ select lives_ok(
   )$$, 'The supported command replaces internal with sponsored authority');
 reset role;
 select results_eq(
-  $$select projection_data->>'entitlement_status' || ':' || projection_data->>'authority_kind'
+  $$select (projection_data->>'entitlement_status') || ':' || (projection_data->>'authority_kind')
     from entry_identity.personal_projection_outbox
     where canonical_user_id='00000000-0000-4000-8000-00000000fc01'
     order by projection_version offset 1$$,
@@ -231,7 +231,7 @@ select ok((select public.mark_entry_personal_projection_delivery(
 create temporary table authority_activate as select * from public.claim_entry_personal_projection_batch(10);
 reset role;
 select results_eq(
-  $$select projection_data->>'entitlement_status' || ':' || projection_data->>'authority_kind'
+  $$select (projection_data->>'entitlement_status') || ':' || (projection_data->>'authority_kind')
     from authority_activate$$,
   $$values ('ACTIVE:SPONSORED_ACCESS'::text)$$,
   'New authority activates only after old-key revocation is delivered');
