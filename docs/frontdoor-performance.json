@@ -1,0 +1,54 @@
+{
+  "measuredAt": "2026-09-07T15:10:55.756Z",
+  "environment": "Local production build in headless Chrome on Windows. Synthetic lab measurements, not field or physical-device results.",
+  "results": [
+    {
+      "profile": "1440px desktop; unthrottled loopback",
+      "lcpMs": 532,
+      "lcpElement": "<h1 id=\"hero-title\">Before you decide<br>what to do,</h1>",
+      "lcpUrl": "",
+      "lcpSize": 194740,
+      "initialEncodedBytes": 206485,
+      "resourceCount": 15,
+      "longTasks": [
+        73
+      ],
+      "overflow": false,
+      "videoRequests": 0,
+      "scroll": {
+        "elapsedSeconds": 2.613,
+        "mainThreadTaskSeconds": 0.16651700000000003,
+        "scriptSeconds": 0.018358,
+        "layoutSeconds": 0.004741999999999996,
+        "mainThreadBusyFraction": 0.06372636815920399,
+        "gpuProcessCpuSeconds": 1.546807,
+        "hardwareGpuUtilization": "Not exposed by this headless test; GPU-process CPU time is not GPU utilization."
+      },
+      "videoRequestsAfterScroll": 1
+    },
+    {
+      "profile": "390px mobile emulation; 4x CPU slowdown; 1.6 Mbps; 100ms RTT",
+      "lcpMs": 1024,
+      "lcpElement": "<h1 id=\"hero-title\">Before you decide<br>what to do,</h1>",
+      "lcpUrl": "",
+      "lcpSize": 66690,
+      "initialEncodedBytes": 181568,
+      "resourceCount": 15,
+      "longTasks": [
+        221
+      ],
+      "overflow": false,
+      "videoRequests": 0,
+      "scroll": {
+        "elapsedSeconds": 3.247,
+        "mainThreadTaskSeconds": 1.0512000000000001,
+        "scriptSeconds": 0.147701,
+        "layoutSeconds": 0.044928000000000023,
+        "mainThreadBusyFraction": 0.3237449953803511,
+        "gpuProcessCpuSeconds": 0.1875309999999999,
+        "hardwareGpuUtilization": "Not exposed by this headless test; GPU-process CPU time is not GPU utilization."
+      },
+      "videoRequestsAfterScroll": 0
+    }
+  ]
+}

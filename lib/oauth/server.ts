@@ -2,6 +2,7 @@ import 'server-only';
 
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { ensureAutomaticPersonalEntitlement } from '@/lib/identity/automatic-personal';
 import { getActiveProducts } from '@/lib/identity/server';
 import { productUrl } from '@/lib/handoff/claims';
 import { productOAuthStartUrl, uniqueConfiguredProduct, uniqueOAuthRedirectProduct } from '@/lib/oauth/contracts';
@@ -38,7 +39,14 @@ export async function canAuthorizeProduct(supabase: Awaited<ReturnType<typeof cr
 }
 
 export async function createProductOAuthStart(product: OAuthProduct) {
-  const { supabase } = await requireOAuthEntryUserForProduct(product);
+  const { supabase, user } = await requireOAuthEntryUserForProduct(product);
+  if (product === 'PERSONAL') {
+    try {
+      await ensureAutomaticPersonalEntitlement(user, 'PERSONAL');
+    } catch {
+      console.error('Automatic PERSONAL entitlement provisioning unavailable');
+    }
+  }
   if (!await canAuthorizeProduct(supabase, product)) return null;
   return productOAuthStartUrl(productUrl(product));
 }
