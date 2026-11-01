@@ -27,3 +27,13 @@ Entry contains no product domain data and no global roles. Entitlements mean onl
 ## Consequences
 
 The ecosystem gets a coherent one-login UX while products retain authorization independence. Handoffs require explicit product contracts and key distribution. Existing products and users are not migrated by this ADR.
+
+## Current connection and entitlement clarification — 2026-11-01
+
+This preserves the original decision: Entry entitlement is product-entry
+eligibility, not proof of payment or product-local access. The intended
+third-party service-connection ownership and Workspace entitlement model are
+described in the [canonical connection, authorization, and entitlement
+model](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/CONNECTION_AUTHORIZATION_ENTITLEMENT_MODEL.md),
+which does not attest every current implementation. This note records no new
+durable decision and leaves existing access conditions unchanged.

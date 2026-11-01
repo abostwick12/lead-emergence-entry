@@ -32,3 +32,13 @@ Personal. Each product has a separate client ID, exact callback origin, product
 destination, and entitlement check. See
 `docs/architecture/entry-consulting-handoff.md` and
 `docs/architecture/entry-workspace-sso.md`.
+
+## Connection and subscription boundary
+
+An Entry `ACTIVE` product entitlement permits an identity to begin a product
+authorization flow; it does not establish paid subscription or product-data
+access. Workspace applies its own authorization and applicable subscription
+entitlement rules. The intended client model places third-party service
+connections in the client's ChatGPT account; this summary does not attest every
+current implementation. See the [canonical connection, authorization, and
+entitlement model](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/CONNECTION_AUTHORIZATION_ENTITLEMENT_MODEL.md).
