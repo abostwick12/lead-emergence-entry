@@ -73,3 +73,20 @@ A production merge, hosted provider change, secret entry, synthetic Production c
 The dedicated Vercel project `lead-emergence-entry` (`prj_Sjv0ZfqFzf7dOOime4bEWZukmaCD`) now owns the verified DNS-only custom domain `https://entry.leademergence.com`. It is connected to `abostwick12/lead-emergence-entry`, uses `main` as its eventual production branch, and is pinned to Next.js on Node `24.x`. Its Production configuration contains the exact Entry, Workspace, Consulting, Ministry, and Supabase Auth origins plus a newly generated, environment-specific RSA handoff keypair and redemption secret. Credential values exist only in Vercel's secret/config store.
 
 Connecting the repository caused Vercel's first Git build, deployment `dpl_9Ys7K8fSZHwEnqa5gdpwGgAByzSe`, to be classified automatically as Production and assigned the new aliases. Because its Supabase URL/keys and Personal/Consulting OAuth client IDs are intentionally absent, the project was immediately paused; `https://entry.leademergence.com` now returns Vercel's `503 DEPLOYMENT_PAUSED` with HSTS. Do not unpause or promote traffic until the distinct production Entry identity project, reviewed Entry migrations, exact Auth redirects/OAuth clients, and synthetic acceptance are complete and separately authorized. The only current Entry backend remains the isolated development project `vnjdubrnmxvmsccxmhst`; `www.leademergence.com` remains the Ministry application and was not repurposed.
+
+## Current connection and entitlement interpretation
+
+Here, “connector authorization” means authorization to the Workspace resource;
+it is separate from third-party service OAuth. Under the intended client model,
+the client manages Gmail, Slack, Google Calendar, and other service connections
+in their own ChatGPT account. This statement describes intended ownership and
+does not attest current implementation: legacy native integration routes or
+credential records may remain, and this document does not establish whether
+they are active or deployed.
+
+An active `PERSONAL` Entry entitlement permits beginning the flow; it does not
+prove paid subscription entitlement, current Workspace access, or permission to
+Workspace records. No Entry entitlement or Workspace grant establishes the
+health of a third-party service connection. See the [canonical connection,
+authorization, and entitlement model](https://github.com/abostwick12/lead-emergence-control-plane/blob/main/docs/CONNECTION_AUTHORIZATION_ENTITLEMENT_MODEL.md)
+for applicable subscription exceptions, intended ownership, and evidence limits.
